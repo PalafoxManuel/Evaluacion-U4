@@ -1,6 +1,6 @@
 <?php 
 
-include_once "config.php";
+include_once "/config.php";
 
 if (session_status() === PHP_SESSION_NONE) {
     session_start();
@@ -10,7 +10,7 @@ if (isset($_POST['action'])) {
     $authController = new AuthController();
     
     switch ($_POST['action']) {
-        case 'access':
+        case 'login':
             if (isset($_POST['global_token'], $_SESSION['global_token']) && $_POST['global_token'] === $_SESSION['global_token']) {
                 $email = strip_tags($_POST['email']);
                 $password = strip_tags($_POST['password']);

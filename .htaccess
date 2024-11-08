@@ -1,16 +1,21 @@
 Options +FollowSymLinks -MultiViews -Indexes
 RewriteEngine on
 
+# Rutas para páginas
+RewriteRule ^login/?$ app/views/login.php [L]
+RewriteRule ^home/?$ app/views/home.php [L]
+RewriteRule ^products/?$ app/views/products/index.php [L]
+RewriteRule ^products/create/?$ app/views/products/create.php [L]
+RewriteRule ^products/([^/]+)/?$ app/views/products/details.php [L]
 
-#páginas
-RewriteRule ^login?$ index.php
-RewriteRule ^home/?$ views/home.php
-RewriteRule ^products/?$ views/products/index.php
-RewriteRule ^products/create/?$ views/products/create.php
-RewriteRule ^products/([^/]+)/?$ views/products/details.php
-
-
-
-#controladores
-RewriteRule ^auth?$ app/AuthController.php
-RewriteRule ^products?$ app/ProductController.php
+# Rutas para controladores
+RewriteRule ^auth/?$ app/users/AuthController.php [L]
+RewriteRule ^clients/?$ app/users/ClientsController.php [L]
+RewriteRule ^users/?$ app/users/UsersController.php [L]
+RewriteRule ^products/?$ app/products/ProductController.php [L]
+RewriteRule ^categories/?$ app/products/CategoriesController.php [L]
+RewriteRule ^tags/?$ app/products/TagsController.php [L]
+RewriteRule ^brands/?$ app/products/BrandsController.php [L]
+RewriteRule ^catalogs/?$ app/sales/CatalogsController.php [L]
+RewriteRule ^coupons/?$ app/sales/CouponsController.php [L]
+RewriteRule ^orders/?$ app/sales/OrdersController.php [L]

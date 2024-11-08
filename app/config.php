@@ -3,8 +3,8 @@ if (!isset($_SESSION)) {
     session_start();
 }
 
-// BASE PATH Definido en .env
+// BASE PATH definido en .env
 if (!defined('BASE_PATH')) {
-    define('BASE_PATH', getenv('BASE_PATH') ?: 'http://default-path/');
+    define('BASE_PATH', getenv('BASE_PATH') ?: 'http://localhost/EVALUACION-U4/');
 }
 ?>

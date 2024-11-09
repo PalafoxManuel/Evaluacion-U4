@@ -1,6 +1,6 @@
 <?php 
 
-include_once "/config.php";
+include_once "../config.php";
 
 if (session_status() === PHP_SESSION_NONE) {
     session_start();
@@ -11,19 +11,22 @@ if (isset($_POST['action'])) {
     
     switch ($_POST['action']) {
         case 'login':
-            if (isset($_POST['global_token'], $_SESSION['global_token']) && $_POST['global_token'] === $_SESSION['global_token']) {
+            if (isset($_POST['global_token'], $_SESSION['global_token']) 
+                && $_POST['global_token'] === $_SESSION['global_token']) {
                 $email = strip_tags($_POST['email']);
                 $password = strip_tags($_POST['password']);
                 $authController->login($email, $password);
             } else {
-                die('Solicitud no válida: Token de seguridad no coincide.');
+                echo json_encode(['error' => 'Token de seguridad no coincide.']);
+                http_response_code(400);
             }
             break;
         case 'logout':
             $authController->logout();
             break;
         default:
-            die('Acción no válida.');
+            echo json_encode(['error' => 'Acción no válida.']);
+            http_response_code(400);
     }
 }
 
@@ -54,12 +57,17 @@ class AuthController {
         if (isset($response->data->name)) {
             $_SESSION['user_data'] = $response->data;
             $_SESSION['user_id'] = $response->data->id;
-            header('Location: ' . BASE_PATH . 'home');
-            exit();
+            echo json_encode([
+                'success' => true,
+                'message' => 'Inicio de sesión exitoso',
+                'user_data' => $response->data
+            ]);
         } else {
-            $_SESSION['login_error'] = "Credenciales incorrectas. Inténtalo de nuevo.";
-            header('Location: ' . BASE_PATH . 'login');
-            exit();
+            echo json_encode([
+                'success' => false,
+                'message' => 'Credenciales incorrectas. Inténtalo de nuevo.'
+            ]);
+            http_response_code(401);
         }
     }
 
@@ -69,8 +77,14 @@ class AuthController {
         }
         session_unset();
         session_destroy();
-        header("Location: " . BASE_PATH . "login"); 
-        exit();
+        echo json_encode(['success' => true, 'message' => 'Sesión cerrada correctamente']);
+    }
+
+    public function globalToken() {
+        if (!isset($_SESSION['global_token'])) {
+            $_SESSION['global_token'] = bin2hex(random_bytes(32));
+        }
+        return $_SESSION['global_token'];
     }
 }
 ?>

@@ -1,5 +1,6 @@
 Options +FollowSymLinks -MultiViews -Indexes
 RewriteEngine on
+RewriteBase /EVALUACION-U4/
 
 # Rutas para páginas
 RewriteRule ^login/?$ app/views/login.php [L]

@@ -24,6 +24,19 @@ if (isset($_POST['action'])) {
         case 'logout':
             $authController->logout();
             break;
+        case 'register':
+            $name = strip_tags($_POST['name']);
+            $lastname = strip_tags($_POST['lastname']);
+            $email = strip_tags($_POST['email']);
+            $phone_number = strip_tags($_POST['phone_number']);
+            $created_by = strip_tags($_POST['created_by']);
+            $role = strip_tags($_POST['role']);
+            $password = strip_tags($_POST['password']);
+            $profile_photo_file = $_FILES['profile_photo_file'];
+            $authController->register($name, $lastname, $email, 
+            $phone_number, $created_by, $role, $password, 
+            $profile_photo_file);
+            break;
         default:
             echo json_encode(['error' => 'Acción no válida.']);
             http_response_code(400);
@@ -78,6 +91,42 @@ class AuthController {
         session_unset();
         session_destroy();
         echo json_encode(['success' => true, 'message' => 'Sesión cerrada correctamente']);
+    }
+
+    public function register($name, $lastname, $email, $phone_number, $created_by, $role, $password, $profile_photo_file) {
+
+        $curl = curl_init();
+
+        $postData = [
+            'name' => $name,
+            'lastname' => $lastname,
+            'email' => $email,
+            'phone_number' => $phone_number,
+            'created_by' => $created_by,
+            'role' => $role,
+            'password' => $password,
+            'profile_photo_file' => new CURLFile($profile_photo_file['tmp_name'], $profile_photo_file['type'], $profile_photo_file['name'])
+        ];
+
+        curl_setopt_array($curl, [
+            CURLOPT_URL => 'https://crud.jonathansoto.mx/api/register',
+            CURLOPT_RETURNTRANSFER => true,
+            CURLOPT_POST => true,
+            CURLOPT_POSTFIELDS => $postData,
+            CURLOPT_HTTPHEADER => ['Content-Type: multipart/form-data'],
+        ]);
+
+        $response = curl_exec($curl);
+        curl_close($curl);
+        $response = json_decode($response);
+
+        if (isset($response->code) && $response->code == 4) {
+            echo json_encode(['success' => true, 'message' => 'Usuario registrado exitosamente']);
+        } else {
+            $errorMsg = $response->message ?? 'Error desconocido';
+            echo json_encode(['error' => $errorMsg]);
+            http_response_code(400);
+        }
     }
 
     public function globalToken() {

@@ -150,9 +150,36 @@ class UsersController{
 
     }
 
-    public function remove(){
-
-    }
+    public function remove($userId) {
+        $curl = curl_init();
+    
+        curl_setopt_array($curl, array(
+            CURLOPT_URL => 'https://crud.jonathansoto.mx/api/users/' . $userId,
+            CURLOPT_RETURNTRANSFER => true,
+            CURLOPT_ENCODING => '',
+            CURLOPT_MAXREDIRS => 10,
+            CURLOPT_TIMEOUT => 0,
+            CURLOPT_FOLLOWLOCATION => true,
+            CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
+            CURLOPT_CUSTOMREQUEST => 'DELETE',
+            CURLOPT_HTTPHEADER => array(
+                'Authorization: Bearer ' . $_SESSION['user_data']->token
+            ),
+        ));
+    
+        $response = curl_exec($curl);
+        curl_close($curl);
+    
+        $responseData = json_decode($response, true);
+    
+        if (isset($responseData['code']) && $responseData['code'] === 2) {
+            echo json_encode(['success' => true, 'message' => $responseData['message']]);
+        } else {
+            $errorMsg = $responseData['message'] ?? 'Error desconocido';
+            echo json_encode(['success' => false, 'error' => $errorMsg]);
+            http_response_code(400);
+        }
+    }    
 }
 
 ?>

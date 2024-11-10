@@ -20,3 +20,25 @@ RewriteRule ^brands/?$ app/products/BrandsController.php [L]
 RewriteRule ^catalogs/?$ app/sales/CatalogsController.php [L]
 RewriteRule ^coupons/?$ app/sales/CouponsController.php [L]
 RewriteRule ^orders/?$ app/sales/OrdersController.php [L]
+
+# Registrar nuevo producto
+RewriteRule ^products/add_product/?$ views/products/add_product.php [L]
+# Modificar producto
+RewriteRule ^products/edit_product/?$ views/products/edit_product.php [L]
+# Ver lista de presentaciones
+RewriteRule ^products/presentation/?$ views/products/presentation.php [L]
+# Crear nueva presentación
+RewriteRule ^products/add_presentation/?$ views/products/add_presentation.php [L]
+# Modificar presentación
+RewriteRule ^products/edit_presentation/?$ views/products/edit_presentation.php [L]
+# Ver detalles de la presentación
+RewriteRule ^products/([^/]+)/?$ views/products/details_presentation.php [L]
+# Ver detalles del producto
+RewriteRule ^products/([^/]+)/?$ views/products/details.php [L]
+# Registrar nuevo usuario
+RewriteRule ^users/add_users/?$ views/users/add_users.php [L]
+# Modificar usuario
+RewriteRule ^users/edit_users/?$ views/users/edit_users.php [L]
+# Ver detalles del usuario
+RewriteRule ^users/([^/]+)/?$ views/users/details.php [L]
+

@@ -29,15 +29,37 @@ if (isset($_POST['action'])) {
             break;
 
         case 'update_user':
-            
+            $id = strip_tags($_POST['id']);
+            $name = strip_tags($_POST['name']);
+            $lastname = strip_tags($_POST['lastname']);
+            $email = strip_tags($_POST['email']);
+            $phone_number = strip_tags($_POST['phone_number']);
+            $created_by = strip_tags($_POST['created_by']);
+            $role = strip_tags($_POST['role']);
+            $password = strip_tags($_POST['password']);
+            $UsersController->update($id, $name, $lastname, $email, $phone_number, $created_by, $role, $password);
+            break;
+
+        case 'update_avatar':
+            if (isset($_POST['id']) && isset($_FILES['profile_photo_file'])) {
+                $id = strip_tags($_POST['id']);
+                $profile_photo_file = $_FILES['profile_photo_file'];
+                
+                $UsersController->updateAvatar($id, $profile_photo_file);
+            } else {
+                echo json_encode(['error' => 'Faltan datos para actualizar el avatar.']);
+                http_response_code(400);
+            }
             break;
 
         case 'delete_user':
-            
+            $userId = strip_tags($_POST['user_id']);
+            $UsersController->remove($userId);
             break;
 
         case 'detail_user':
-            
+            $userId = strip_tags($_POST['user_id']);
+            $UsersController->getUserById($userId);
             break;
 
         default:
@@ -146,9 +168,83 @@ class UsersController{
         }
     }
 
-    public function update(){
-
+    public function update($id, $name, $lastname, $email, $phone_number, $created_by, $role, $password) {
+        $curl = curl_init();
+    
+        $postData = http_build_query([
+            'id' => $id,
+            'name' => $name,
+            'lastname' => $lastname,
+            'email' => $email,
+            'phone_number' => $phone_number,
+            'created_by' => $created_by,
+            'role' => $role,
+            'password' => $password
+        ]);
+    
+        curl_setopt_array($curl, array(
+            CURLOPT_URL => 'https://crud.jonathansoto.mx/api/users',
+            CURLOPT_RETURNTRANSFER => true,
+            CURLOPT_ENCODING => '',
+            CURLOPT_MAXREDIRS => 10,
+            CURLOPT_TIMEOUT => 0,
+            CURLOPT_FOLLOWLOCATION => true,
+            CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
+            CURLOPT_CUSTOMREQUEST => 'PUT',
+            CURLOPT_POSTFIELDS => $postData,
+            CURLOPT_HTTPHEADER => array(
+                'Authorization: Bearer ' . $_SESSION['user_data']->token,
+                'Content-Type: application/x-www-form-urlencoded'
+            ),
+        ));
+    
+        $response = curl_exec($curl);
+        curl_close($curl);
+    
+        $responseData = json_decode($response, true);
+    
+        if (isset($responseData['code']) && $responseData['code'] === 4) {
+            echo json_encode(['success' => true, 'message' => $responseData['message'], 'data' => $responseData['data']]);
+        } else {
+            $errorMsg = $responseData['message'] ?? 'Error desconocido';
+            echo json_encode(['success' => false, 'error' => $errorMsg]);
+            http_response_code(400);
+        }
     }
+    
+    public function updateAvatar($id, $profile_photo_file) {
+        $curl = curl_init();
+    
+        $postData = [
+            'id' => $id,
+            'profile_photo_file' => new CURLFile($profile_photo_file['tmp_name'], $profile_photo_file['type'], $profile_photo_file['name'])
+        ];
+    
+        curl_setopt_array($curl, [
+            CURLOPT_URL => 'https://crud.jonathansoto.mx/api/users/avatar',
+            CURLOPT_RETURNTRANSFER => true,
+            CURLOPT_POST => true,
+            CURLOPT_POSTFIELDS => $postData,
+            CURLOPT_HTTPHEADER => [
+                'Authorization: Bearer ' . $_SESSION['user_data']->token,
+                'Content-Type: multipart/form-data'
+            ],
+        ]);
+    
+        $response = curl_exec($curl);
+        curl_close($curl);
+    
+        $responseData = json_decode($response, true);
+    
+        if (isset($responseData['code']) && $responseData['code'] === 4) {
+            echo json_encode(['success' => true, 'message' => $responseData['message'], 'data' => $responseData['data']]);
+        } else {
+            $errorMsg = $responseData['message'] ?? 'Error desconocido';
+            echo json_encode(['success' => false, 'error' => $errorMsg]);
+            http_response_code(400);
+        }
+    }
+    
 
     public function remove($userId) {
         $curl = curl_init();

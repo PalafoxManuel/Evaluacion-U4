@@ -67,22 +67,46 @@ class UsersController{
     
         $response = curl_exec($curl);
         curl_close($curl);
+        $responseData = json_decode($response, true);
     
-        $response = json_decode($response);
-    
-        if (isset($response->data)) {
-            echo json_encode(['success' => true, 'data' => $response->data]);
+        if (isset($responseData['code']) && $responseData['code'] === 4) {
+            echo json_encode(['success' => true, 'data' => $responseData['data']]);
         } else {
-            $errorMsg = $response->message ?? 'Error desconocido';
-            echo json_encode(['error' => $errorMsg]);
+            $errorMsg = $responseData['message'] ?? 'Error desconocido';
+            echo json_encode(['success' => false, 'error' => $errorMsg]);
             http_response_code(400);
         }
-    }
+    }    
     
-
-    public function getUserById(){
-        
-    }
+    public function getUserById($userId) {
+        $curl = curl_init();
+    
+        curl_setopt_array($curl, array(
+            CURLOPT_URL => 'https://crud.jonathansoto.mx/api/users/' . $userId,
+            CURLOPT_RETURNTRANSFER => true,
+            CURLOPT_ENCODING => '',
+            CURLOPT_MAXREDIRS => 10,
+            CURLOPT_TIMEOUT => 0,
+            CURLOPT_FOLLOWLOCATION => true,
+            CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
+            CURLOPT_CUSTOMREQUEST => 'GET',
+            CURLOPT_HTTPHEADER => array(
+                'Authorization: Bearer ' . $_SESSION['user_data']->token
+            ),
+        ));
+    
+        $response = curl_exec($curl);
+        curl_close($curl);
+        $responseData = json_decode($response, true);
+    
+        if (isset($responseData['code']) && $responseData['code'] === 4) {
+            echo json_encode(['success' => true, 'data' => $responseData['data']]);
+        } else {
+            $errorMsg = $responseData['message'] ?? 'Error desconocido';
+            echo json_encode(['success' => false, 'error' => $errorMsg]);
+            http_response_code(400);
+        }
+    }    
 
     public function create($name, $lastname, $email, $phone_number, $created_by, $role, $password, $profile_photo_file) {
         $curl = curl_init();

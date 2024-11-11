@@ -1,5 +1,5 @@
 <?php 
-include_once 'config.php';
+include_once "../config.php";
 
 if (session_status() !== PHP_SESSION_ACTIVE) {
     echo json_encode(['error' => 'No hay una sesión activa. Por favor, inicie sesión.']);
@@ -37,7 +37,10 @@ if (isset($_POST['action'])) {
                 exit();
             }
 
-            $productsController->create($name, $slug, $description, $features, $cover, $brand_id, [$category], $tags, $price, $original_price, $stock, $sku);
+            $productsController->create(
+                $name, $slug, $description, $features, $cover, $brand_id, 
+                [$category], $tags, $price, $original_price, $stock, $sku
+            );
             break;
 
         case 'delete_product':
@@ -59,17 +62,17 @@ if (isset($_POST['action'])) {
             break;
 
         case 'get_all_products':
-            $productsController->get();
+            return $productsController->get();
             break;
 
         case 'get_product_by_id':
             $productId = strip_tags($_POST['product_id']);
-            $productsController->getProductById($productId);
+            return $productsController->getProductById($productId);
             break;
 
         case 'get_products_by_category':
             $categorySlug = strip_tags($_POST['category_slug']);
-            $productsController->getProductsByCategory($categorySlug);
+            return $productsController->getProductsByCategory($categorySlug);
             break;
 
         default:
@@ -98,57 +101,20 @@ class ProductsController {
         $responseData = json_decode($response, true);
     
         if (isset($responseData['code']) && $responseData['code'] === 4) {
-            echo json_encode(['success' => true, 'data' => $responseData['data']]);
+            return ['success' => true, 'data' => $responseData['data']];
         } else {
             $errorMsg = $responseData['message'] ?? 'Error desconocido al obtener los productos';
-            echo json_encode(['success' => false, 'error' => $errorMsg]);
             http_response_code(400);
-        }
-    }
-
-    public function getProductById($product_id) {
-        $curl = curl_init();
-    
-        curl_setopt_array($curl, [
-            CURLOPT_URL => 'https://crud.jonathansoto.mx/api/products/' . $product_id,
-            CURLOPT_RETURNTRANSFER => true,
-            CURLOPT_ENCODING => '',
-            CURLOPT_MAXREDIRS => 10,
-            CURLOPT_TIMEOUT => 10,
-            CURLOPT_FOLLOWLOCATION => true,
-            CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
-            CURLOPT_CUSTOMREQUEST => 'GET',
-            CURLOPT_HTTPHEADER => [
-                'Authorization: Bearer ' . $_SESSION['user_data']->token
-            ],
-        ]);
-    
-        $response = curl_exec($curl);
-    
-        if (curl_errno($curl)) {
-            curl_close($curl);
-            echo json_encode(['error' => 'Error de conexión: ' . curl_error($curl)]);
-            http_response_code(500);
-            return;
-        }
-    
-        curl_close($curl);
-        $responseData = json_decode($response, true);
-    
-        if (isset($responseData['code']) && $responseData['code'] === 4) {
-            echo json_encode(['success' => true, 'data' => $responseData['data']]);
-        } else {
-            $errorMsg = $responseData['message'] ?? 'Error desconocido al obtener el producto';
-            echo json_encode(['success' => false, 'error' => $errorMsg]);
-            http_response_code(400);
+            return ['success' => false, 'error' => $errorMsg];
         }
     }    
 
-    public function getProductsByCategory($categorySlug) {
+    public function getProductById($product_id) {
         $curl = curl_init();
-    
+        $url = 'https://crud.jonathansoto.mx/api/products/';
+        
         curl_setopt_array($curl, [
-            CURLOPT_URL => 'https://crud.jonathansoto.mx/api/products/categories/' . $categorySlug,
+            CURLOPT_URL => $url . $product_id,
             CURLOPT_RETURNTRANSFER => true,
             CURLOPT_ENCODING => '',
             CURLOPT_MAXREDIRS => 10,
@@ -162,41 +128,74 @@ class ProductsController {
         ]);
     
         $response = curl_exec($curl);
-    
+        
         if (curl_errno($curl)) {
             curl_close($curl);
-            echo json_encode(['error' => 'Error de conexión: ' . curl_error($curl)]);
             http_response_code(500);
-            return;
+            return ['error' => 'Error de conexión: ' . curl_error($curl)];
+        }
+        
+        curl_close($curl);
+        $responseData = json_decode($response, true);
+        
+        if (isset($responseData['code']) && $responseData['code'] === 4) {
+            return ['success' => true, 'data' => $responseData['data']];
+        } else {
+            $errorMsg = $responseData['message'] ?? 'Error desconocido al obtener el producto';
+            http_response_code(400);
+            return ['success' => false, 'error' => $errorMsg];
+        }
+    }       
+
+    public function getProductsByCategory($categorySlug) {
+        $curl = curl_init();
+        $url = 'https://crud.jonathansoto.mx/api/products/categories/';
+        
+        curl_setopt_array($curl, [
+            CURLOPT_URL => $url . $categorySlug,
+            CURLOPT_RETURNTRANSFER => true,
+            CURLOPT_ENCODING => '',
+            CURLOPT_MAXREDIRS => 10,
+            CURLOPT_TIMEOUT => 10,
+            CURLOPT_FOLLOWLOCATION => true,
+            CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
+            CURLOPT_CUSTOMREQUEST => 'GET',
+            CURLOPT_HTTPHEADER => [
+                'Authorization: Bearer ' . $_SESSION['user_data']->token
+            ],
+        ]);
+    
+        $response = curl_exec($curl);
+        
+        if (curl_errno($curl)) {
+            curl_close($curl);
+            http_response_code(500);
+            return ['error' => 'Error de conexión: ' . curl_error($curl)];
         }
     
         curl_close($curl);
         $responseData = json_decode($response, true);
-    
+        
         if (isset($responseData['code']) && $responseData['code'] === 4) {
-            echo json_encode(['success' => true, 'data' => $responseData['data']]);
+            return ['success' => true, 'data' => $responseData['data']];
         } else {
             $errorMsg = $responseData['message'] ?? 'Error desconocido al obtener productos por categoría';
-            echo json_encode(['success' => false, 'error' => $errorMsg]);
             http_response_code(400);
+            return ['success' => false, 'error' => $errorMsg];
         }
-    }
+    }    
 
-    public function create($name, $slug, $description, $features, $cover, $brand_id, $categories, $tags, $price, $original_price, $stock, $sku) {
+    public function create($name, $slug, $description, $features, $cover, $brand_id, $categories, $tags) {
         $curl = curl_init();
-        $coverFile = new CURLFile($cover['tmp_name'], $cover['type'], $cover['name']);
+        $url = 'https://crud.jonathansoto.mx/api/products';
     
         $postData = [
             'name' => $name,
             'slug' => $slug,
             'description' => $description,
             'features' => $features,
-            'cover' => $coverFile,
-            'brand_id' => $brand_id,
-            'price' => $price,
-            'original_price' => $original_price,
-            'stock' => $stock,
-            'sku' => $sku
+            'cover' => new CURLFile($cover['tmp_name'], $cover['type'], $cover['name']),
+            'brand_id' => $brand_id
         ];
     
         foreach ($categories as $index => $category) {
@@ -208,7 +207,7 @@ class ProductsController {
         }
     
         curl_setopt_array($curl, [
-            CURLOPT_URL => 'https://crud.jonathansoto.mx/api/products',
+            CURLOPT_URL => $url,
             CURLOPT_RETURNTRANSFER => true,
             CURLOPT_POST => true,
             CURLOPT_POSTFIELDS => $postData,
@@ -220,15 +219,17 @@ class ProductsController {
     
         $response = curl_exec($curl);
         curl_close($curl);
-        $response = json_decode($response);
+        $responseData = json_decode($response, true);
     
-        if (isset($response->code) && $response->code == 4) {
-            echo json_encode(['success' => true, 'message' => 'Producto creado exitosamente']);
+        if (isset($responseData['code']) && $responseData['code'] == 4) {
+            header("Location: " . BASE_PATH . "views/products/index.php");
+            exit();
         } else {
-            echo json_encode(['error' => $response->message ?? 'Error desconocido']);
+            $errorMsg = $responseData['message'] ?? 'Error desconocido al crear el producto';
             http_response_code(400);
+            return ['success' => false, 'error' => $errorMsg];
         }
-    }         
+    }    
 
     public function update($product_id, $name, $slug, $description, $features, $brand_id, $categories = [], $tags = []) {
         $curl = curl_init();
@@ -269,34 +270,40 @@ class ProductsController {
         $responseData = json_decode($response, true);
     
         if (isset($responseData['code']) && $responseData['code'] === 4) {
-            echo json_encode(['success' => true, 'message' => 'Producto actualizado exitosamente', 'data' => $responseData['data']]);
+            header("Location: " . BASE_PATH . "views/products/index.php");
+            exit();
         } else {
-            $errorMsg = $responseData['message'] ?? 'Error desconocido';
-            echo json_encode(['error' => $errorMsg]);
+            $errorMsg = $responseData['message'] ?? 'Error desconocido al actualizar el producto';
             http_response_code(400);
+            return ['success' => false, 'error' => $errorMsg];
         }
-    }       
+    }        
 
     public function remove($product_id) {
         $curl = curl_init();
-
-        curl_setopt_array($curl, array(
-            CURLOPT_URL => 'https://crud.jonathansoto.mx/api/products/' . $product_id,
+        $url = 'https://crud.jonathansoto.mx/api/products/';
+    
+        curl_setopt_array($curl, [
+            CURLOPT_URL => $url . $product_id,
             CURLOPT_RETURNTRANSFER => true,
             CURLOPT_CUSTOMREQUEST => 'DELETE',
-            CURLOPT_HTTPHEADER => array('Authorization: Bearer ' . $_SESSION['user_data']->token),
-        )); 
-
-        $response = curl_exec($curl); 
+            CURLOPT_HTTPHEADER => [
+                'Authorization: Bearer ' . $_SESSION['user_data']->token
+            ],
+        ]);
+    
+        $response = curl_exec($curl);
         curl_close($curl);
-        $response = json_decode($response);
-
-        if (isset($response->code) && $response->code == 2) {
-            echo json_encode(['success' => true, 'message' => 'Producto eliminado exitosamente']);
+        $responseData = json_decode($response, true);
+    
+        if (isset($responseData['code']) && $responseData['code'] == 2) {
+            header("Location: " . BASE_PATH . "views/products/index.php");
+            exit();
         } else {
-            echo json_encode(['error' => $response->message ?? 'Error desconocido']);
+            $errorMsg = $responseData['message'] ?? 'Error desconocido al eliminar el producto';
             http_response_code(400);
+            return ['success' => false, 'error' => $errorMsg];
         }
-    }
+    }    
 }
 ?>

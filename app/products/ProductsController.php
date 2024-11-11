@@ -37,8 +37,7 @@ if (isset($_POST['action'])) {
                 exit();
             }
 
-            $productsController->create($name, $slug, $description, $features, $cover, 
-            $brand_id, [$category], $tags, $price, $original_price, $stock, $sku);
+            $productsController->create($name, $slug, $description, $features, $cover, $brand_id, [$category], $tags, $price, $original_price, $stock, $sku);
             break;
 
         case 'delete_product':
@@ -57,6 +56,20 @@ if (isset($_POST['action'])) {
             $tags = isset($_POST['tags']) ? $_POST['tags'] : [];
 
             $productsController->update($productId, $name, $slug, $description, $features, $brand_id, $categories, $tags);
+            break;
+
+        case 'get_all_products':
+            $productsController->get();
+            break;
+
+        case 'get_product_by_id':
+            $productId = strip_tags($_POST['product_id']);
+            $productsController->getProductById($productId);
+            break;
+
+        case 'get_products_by_category':
+            $categorySlug = strip_tags($_POST['category_slug']);
+            $productsController->getProductsByCategory($categorySlug);
             break;
 
         default:
@@ -131,8 +144,42 @@ class ProductsController {
         }
     }    
 
-    public function getProductsByCategory(){
-
+    public function getProductsByCategory($categorySlug) {
+        $curl = curl_init();
+    
+        curl_setopt_array($curl, [
+            CURLOPT_URL => 'https://crud.jonathansoto.mx/api/products/categories/' . $categorySlug,
+            CURLOPT_RETURNTRANSFER => true,
+            CURLOPT_ENCODING => '',
+            CURLOPT_MAXREDIRS => 10,
+            CURLOPT_TIMEOUT => 10,
+            CURLOPT_FOLLOWLOCATION => true,
+            CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
+            CURLOPT_CUSTOMREQUEST => 'GET',
+            CURLOPT_HTTPHEADER => [
+                'Authorization: Bearer ' . $_SESSION['user_data']->token
+            ],
+        ]);
+    
+        $response = curl_exec($curl);
+    
+        if (curl_errno($curl)) {
+            curl_close($curl);
+            echo json_encode(['error' => 'Error de conexión: ' . curl_error($curl)]);
+            http_response_code(500);
+            return;
+        }
+    
+        curl_close($curl);
+        $responseData = json_decode($response, true);
+    
+        if (isset($responseData['code']) && $responseData['code'] === 4) {
+            echo json_encode(['success' => true, 'data' => $responseData['data']]);
+        } else {
+            $errorMsg = $responseData['message'] ?? 'Error desconocido al obtener productos por categoría';
+            echo json_encode(['success' => false, 'error' => $errorMsg]);
+            http_response_code(400);
+        }
     }
 
     public function create($name, $slug, $description, $features, $cover, $brand_id, $categories, $tags, $price, $original_price, $stock, $sku) {

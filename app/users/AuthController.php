@@ -2,6 +2,42 @@
 
 include_once "../config.php";
 
+/*
+DOCUMENTACION 
+
+Funciones principales:
+
+1. login($email, $password):
+   - Realiza una solicitud a la API para autenticar al usuario con 
+   el email y la contraseña proporcionados.
+   - Si las credenciales son correctas, guarda los datos del usuario 
+   en la sesión (`$_SESSION['user_data']`).
+   - Retorna un mensaje de éxito o error según la autenticación.
+
+2. logout():
+   - Cierra la sesión del usuario actual eliminando 
+   los datos de `$_SESSION`.
+   - Devuelve un mensaje de confirmación de cierre de sesión.
+
+3. showPerfil():
+   - Retorna los datos del usuario autenticado actualmente, 
+   usando la información guardada en la sesión (`$_SESSION['user_data']`).
+   - Si no hay un usuario autenticado, devuelve un mensaje de error.
+
+4. globalToken():
+   - Genera y retorna un token de sesión único (`global_token`) 
+   si no existe ya en la sesión.
+   - Este token es utilizado para validar solicitudes de seguridad 
+   en el formulario.
+
+Uso:
+- Este controlador se activa a través de un `switch` que maneja diferentes acciones 
+(`login`, `logout`, `viewProfile`, `globalToken`), determinadas por el valor de `$_POST['action']`.
+- Antes de ejecutar una acción, el código verifica si la sesión 
+y el token de seguridad (`global_token`) son válidos para asegurar 
+la autenticidad de la solicitud.
+*/
+
 if (session_status() === PHP_SESSION_NONE) {
     session_start();
 }
@@ -24,18 +60,11 @@ if (isset($_POST['action'])) {
         case 'logout':
             $authController->logout();
             break;
-        case 'register':
-            $name = strip_tags($_POST['name']);
-            $lastname = strip_tags($_POST['lastname']);
-            $email = strip_tags($_POST['email']);
-            $phone_number = strip_tags($_POST['phone_number']);
-            $created_by = strip_tags($_POST['created_by']);
-            $role = strip_tags($_POST['role']);
-            $password = strip_tags($_POST['password']);
-            $profile_photo_file = $_FILES['profile_photo_file'];
-            $authController->register($name, $lastname, $email, 
-            $phone_number, $created_by, $role, $password, 
-            $profile_photo_file);
+        case 'view_profile':
+            $authController->showPerfil();
+            break;
+        case 'generate_token':
+            $authController->globalToken();
             break;
         default:
             echo json_encode(['error' => 'Acción no válida.']);
@@ -93,41 +122,21 @@ class AuthController {
         echo json_encode(['success' => true, 'message' => 'Sesión cerrada correctamente']);
     }
 
-    public function register($name, $lastname, $email, $phone_number, $created_by, $role, $password, $profile_photo_file) {
-
-        $curl = curl_init();
-
-        $postData = [
-            'name' => $name,
-            'lastname' => $lastname,
-            'email' => $email,
-            'phone_number' => $phone_number,
-            'created_by' => $created_by,
-            'role' => $role,
-            'password' => $password,
-            'profile_photo_file' => new CURLFile($profile_photo_file['tmp_name'], $profile_photo_file['type'], $profile_photo_file['name'])
-        ];
-
-        curl_setopt_array($curl, [
-            CURLOPT_URL => 'https://crud.jonathansoto.mx/api/register',
-            CURLOPT_RETURNTRANSFER => true,
-            CURLOPT_POST => true,
-            CURLOPT_POSTFIELDS => $postData,
-            CURLOPT_HTTPHEADER => ['Content-Type: multipart/form-data'],
-        ]);
-
-        $response = curl_exec($curl);
-        curl_close($curl);
-        $response = json_decode($response);
-
-        if (isset($response->code) && $response->code == 4) {
-            echo json_encode(['success' => true, 'message' => 'Usuario registrado exitosamente']);
+    public function showPerfil() {
+        if (isset($_SESSION['user_data'])) {
+            echo json_encode([
+                'success' => true,
+                'message' => 'Perfil obtenido correctamente',
+                'data' => $_SESSION['user_data']
+            ]);
         } else {
-            $errorMsg = $response->message ?? 'Error desconocido';
-            echo json_encode(['error' => $errorMsg]);
-            http_response_code(400);
+            echo json_encode([
+                'success' => false,
+                'message' => 'No hay un usuario autenticado'
+            ]);
+            http_response_code(401);
         }
-    }
+    }    
 
     public function globalToken() {
         if (!isset($_SESSION['global_token'])) {

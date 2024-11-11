@@ -61,8 +61,8 @@ if (isset($_POST['action'])) {
             $authController->logout();
             break;
         case 'view_profile':
-            $authController->showPerfil();
-            break;
+            $profileData = $authController->showPerfil();
+            return $profileData;           
         case 'generate_token':
             $authController->globalToken();
             break;
@@ -121,20 +121,12 @@ class AuthController {
 
     public function showPerfil() {
         if (isset($_SESSION['user_data'])) {
-            echo json_encode([
-                'success' => true,
-                'message' => 'Perfil obtenido correctamente',
-                'data' => $_SESSION['user_data']
-            ]);
+            return $_SESSION['user_data'];
         } else {
-            echo json_encode([
-                'success' => false,
-                'message' => 'No hay un usuario autenticado'
-            ]);
-            http_response_code(401);
+            return null;
         }
-    }    
-
+    }
+      
     public function globalToken() {
         if (!isset($_SESSION['global_token'])) {
             $_SESSION['global_token'] = bin2hex(random_bytes(32));

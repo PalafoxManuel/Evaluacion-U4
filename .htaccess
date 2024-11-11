@@ -1,13 +1,11 @@
 Options +FollowSymLinks -MultiViews -Indexes
 RewriteEngine on
-RewriteBase /EVALUACION-U4/
+
 
 # Rutas para páginas
-RewriteRule ^login/?$ app/views/login.php [L]
-RewriteRule ^home/?$ app/views/home.php [L]
-RewriteRule ^products/?$ app/views/products/index.php [L]
-RewriteRule ^products/create/?$ app/views/products/create.php [L]
-RewriteRule ^products/([^/]+)/?$ app/views/products/details.php [L]
+RewriteRule ^home/?$ views/home.php [L]
+RewriteRule ^products/?$ views/products/index.php [L]
+RewriteRule ^products/([^/]+)/?$ views/products/details.php [L]
 
 # Rutas para controladores
 RewriteRule ^auth/?$ app/users/AuthController.php [L]
@@ -22,23 +20,23 @@ RewriteRule ^coupons/?$ app/sales/CouponsController.php [L]
 RewriteRule ^orders/?$ app/sales/OrdersController.php [L]
 
 # Registrar nuevo producto
-RewriteRule ^products/add_product/?$ views/products/add_product.php [L]
+RewriteRule ^products/add_product$ views/products/add_product.php [L]
 # Modificar producto
-RewriteRule ^products/edit_product/?$ views/products/edit_product.php [L]
+RewriteRule ^products/edit_product$ views/products/edit_product.php [L]
 # Ver lista de presentaciones
-RewriteRule ^products/presentation/?$ views/products/presentation.php [L]
+RewriteRule ^products/presentation$ views/products/presentation.php [L]
 # Crear nueva presentación
-RewriteRule ^products/add_presentation/?$ views/products/add_presentation.php [L]
+RewriteRule ^products/add_presentation$ views/products/add_presentation.php [L]
 # Modificar presentación
-RewriteRule ^products/edit_presentation/?$ views/products/edit_presentation.php [L]
+RewriteRule ^products/edit_presentation$ views/products/edit_presentation.php [L]
 # Ver detalles de la presentación
-RewriteRule ^products/([^/]+)/?$ views/products/details_presentation.php [L]
+RewriteRule ^products/([^/]+)$ views/products/details_presentation.php [L]
 # Ver detalles del producto
-RewriteRule ^products/([^/]+)/?$ views/products/details.php [L]
+RewriteRule ^products/([^/]+)$ views/products/details.php [L]
 # Registrar nuevo usuario
-RewriteRule ^users/add_users/?$ views/users/add_users.php [L]
+RewriteRule ^users/add_users$ views/users/add_users.php [L]
 # Modificar usuario
-RewriteRule ^users/edit_users/?$ views/users/edit_users.php [L]
+RewriteRule ^users/edit_users$ views/users/edit_users.php [L]
 # Ver detalles del usuario
-RewriteRule ^users/([^/]+)/?$ views/users/details.php [L]
+RewriteRule ^users/([^/]+)$ views/users/details.php [L]
 

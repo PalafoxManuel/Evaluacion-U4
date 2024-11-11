@@ -1,6 +1,9 @@
 <?php 
   include_once "app/config.php";
+  include "app/users/AuthController.php";
 
+  $authController = new AuthController();
+  $authController->globalToken();
 ?>
 
 <!doctype html>
@@ -70,16 +73,16 @@
   </div>
 </div>
  </div>
-        <div class="auth-form">
+        <form method="POST" action="auth" class="auth-form">
           <div class="card my-5 mx-3">
             <div class="card-body">
               <h4 class="f-w-500 mb-1">Login with your email</h4>
               <p class="mb-3">Don't have an Account? <a href="register-v2.html" class="link-primary ms-1">Create Account</a></p>
               <div class="mb-3">
-                <input type="email" class="form-control" id="floatingInput" placeholder="Email Address" />
+                <input type="email" name="email" class="form-control" id="floatingInput" placeholder="Email Address" required/>
               </div>
               <div class="mb-3">
-                <input type="password" class="form-control" id="floatingInput1" placeholder="Password" />
+                <input type="password" name="password" class="form-control" id="floatingInput1" placeholder="Password" required/>
               </div>
               <div class="d-flex mt-1 justify-content-between align-items-center">
                 <div class="form-check">
@@ -91,7 +94,9 @@
                 </a>
               </div>
               <div class="d-grid mt-4">
-                <button type="button" class="btn btn-primary">Login</button>
+                <button type="submit" name="action" class="btn btn-primary">Login</button>
+                <input type="hidden" name="action" value="login">
+                <input type="hidden" name="global_token" value="<?= $_SESSION['global_token'] ?>">
               </div>
               <div class="saprator my-3">
                 <span>Or continue with</span>
@@ -117,7 +122,7 @@
               </div>
             </div>
           </div>
-        </div>
+        </form method="POST" action="auth">
       </div>
     </div>
     <!-- [ Main Content ] end -->

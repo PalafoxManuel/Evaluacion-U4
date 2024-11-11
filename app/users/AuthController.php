@@ -99,11 +99,8 @@ class AuthController {
         if (isset($response->data->name)) {
             $_SESSION['user_data'] = $response->data;
             $_SESSION['user_id'] = $response->data->id;
-            echo json_encode([
-                'success' => true,
-                'message' => 'Inicio de sesión exitoso',
-                'user_data' => $response->data
-            ]);
+            
+            header("Location: " . BASE_PATH . "views/home.php");
         } else {
             echo json_encode([
                 'success' => false,
@@ -119,7 +116,7 @@ class AuthController {
         }
         session_unset();
         session_destroy();
-        echo json_encode(['success' => true, 'message' => 'Sesión cerrada correctamente']);
+        header("Location: " . BASE_PATH . "index.php");
     }
 
     public function showPerfil() {

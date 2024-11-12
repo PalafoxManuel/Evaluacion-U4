@@ -5,7 +5,7 @@ RewriteEngine on
 # Rutas para páginas
 RewriteRule ^home/?$ views/home.php [L]
 RewriteRule ^products/?$ views/products/index.php [L]
-RewriteRule ^products/([^/]+)/?$ views/products/details.php [L]
+RewriteRule ^users/?$ views/users/index.php [L]
 RewriteRule ^customer/?$ views/customer/index.php [L]
 
 # Rutas para controladores

@@ -100,12 +100,12 @@
                 </a>
               </li>
               <li class="list-group-item">
-                <a href="#" class="dropdown-item">
+                <button onclick="Logout()" type="button" class="dropdown-item">
                   <span class="d-flex align-items-center">
                     <i class="ph-duotone ph-power"></i>
                     <span>Logout</span>
                   </span>
-                </a>
+                </button>
               </li>
             </ul>
           </div>
@@ -116,4 +116,12 @@
 </div>
  </div>
 </header>
+<form id="logout" method="POST" action="../auth">
+      <input type="hidden" name="action" value="logout">
+    </form>
+<script>
+  function Logout(){
+    document.getElementById("logout").submit();
+  };
+</script>
 <!-- [ Header ] end -->

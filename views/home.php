@@ -1,6 +1,13 @@
-<?php 
+<?php
+  session_start();
+
   include_once "../app/config.php";
 
+  if (isset($_SESSION["user_id"]) && $_SESSION['user_id']!=null) {
+    //Si hay sesion no redirecciona
+  }else{
+    header('Location: ' . BASE_PATH . 'index.php');
+  }
 ?>
 <!doctype html>
 <html lang="en">
@@ -516,7 +523,6 @@
       include "layouts/modals.php";
 
     ?>
-
 
     <!-- [Page Specific JS] start -->
     <script src="<?= BASE_PATH ?>assets/js/plugins/apexcharts.min.js"></script>

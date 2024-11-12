@@ -207,10 +207,10 @@
                         </a>
                       </li>
                       <li>
-                        <a class="pc-user-links">
+                        <button onclick="Logout()" type="button" class="pc-user-links">
                           <i class="ph-duotone ph-power"></i>
                           <span>Logout</span>
-                        </a>
+                        </button>
                       </li>
                     </ul>
                   </div>
@@ -221,4 +221,12 @@
         </div>
       </div>
     </nav>
+    <form id="logout" method="POST" action="../auth">
+      <input type="hidden" name="action" value="logout">
+    </form>
+    <script>
+      function Logout(){
+        document.getElementById("logout").submit();
+      };
+    </script>
     <!-- [ Sidebar Menu ] end -->

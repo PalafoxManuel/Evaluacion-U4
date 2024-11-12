@@ -6,6 +6,7 @@ RewriteEngine on
 RewriteRule ^home/?$ views/home.php [L]
 RewriteRule ^products/?$ views/products/index.php [L]
 RewriteRule ^products/([^/]+)/?$ views/products/details.php [L]
+RewriteRule ^customer/?$ views/customer/index.php [L]
 
 # Rutas para controladores
 RewriteRule ^auth/?$ app/users/AuthController.php [L]
@@ -39,4 +40,8 @@ RewriteRule ^users/add_users$ views/users/add_users.php [L]
 RewriteRule ^users/edit_users$ views/users/edit_users.php [L]
 # Ver detalles del usuario
 RewriteRule ^users/([^/]+)$ views/users/details.php [L]
+# Modificar clientes
+RewriteRule ^customer/edit_customer/?$ views/customer/edit_customer.php [L]
+# Detalles clientes
+RewriteRule ^customer/([^/]+)/?$ views/customer/details.php [L]
 

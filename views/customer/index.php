@@ -1,385 +1,293 @@
-<?php 
-  include_once "../../app/config.php";
+  <?php 
+    include_once "../../app/config.php";
 
-?>
-<!doctype html>
-<html lang="en">
-  <!-- [Head] start -->
+  ?>
+  <!doctype html>
+  <html lang="en">
+    <!-- [Head] start -->
 
-  <head>
+    <head>
     <?php 
 
       include "../layouts/head.php";
+
     ?>
-  </head>
-  <!-- [Head] end -->
-  <!-- [Body] Start -->
 
-  <body data-pc-preset="preset-1" data-pc-sidebar-theme="light" data-pc-sidebar-caption="true" data-pc-direction="ltr" data-pc-theme="light">
-  <?php 
+    </head>
+    <!-- [Head] end -->
+    <!-- [Body] Start -->
 
-    include "../layouts/sidebar.php";
+    <body data-pc-preset="preset-1" data-pc-sidebar-theme="light" data-pc-sidebar-caption="true" data-pc-direction="ltr" data-pc-theme="light">
 
-  ?>
-  <?php 
-    include "../layouts/nav.php";
-  ?>
-    <!-- [ Main Content ] start -->
-    <div class="pc-container">
-      <div class="pc-content">
-        <!-- [ breadcrumb ] start -->
-        <div class="page-header">
-          <div class="page-block">
-            <div class="row align-items-center">
-              <div class="col-md-12">
-                <ul class="breadcrumb">
-                  <li class="breadcrumb-item"><a href="../dashboard/index.html">Home</a></li>
-                  <li class="breadcrumb-item"><a href="javascript: void(0)">Pagina</a></li>
-                  <li class="breadcrumb-item" aria-current="page">Listado de productos</li>
-                </ul>
-              </div>
-              <div class="col-md-12">
-                <div class="page-header-title">
-                  <h2 class="mb-0">Listado de productos</h2>
+      <?php 
+
+      include "../layouts/sidebar.php";
+
+      ?>
+
+      <?php 
+
+      include "../layouts/nav.php";
+
+      ?>
+      <!-- [ Main Content ] start -->
+      <div class="pc-container">
+        <div class="pc-content">
+          <!-- [ breadcrumb ] start -->
+          <div class="page-header">
+            <div class="page-block">
+              <div class="row align-items-center">
+                <div class="col-md-12">
+                  <ul class="breadcrumb">
+                    <li class="breadcrumb-item"><a href="<?= BASE_PATH ?>home">Inicio</a></li>
+                    <li class="breadcrumb-item"><a href="<?= BASE_PATH ?>customer">Clientes</a></li>
+                    <li class="breadcrumb-item" aria-current="page">Todos los clientes</li>
+                  </ul>
+                </div>
+                <div class="col-md-12">
+                  <div class="page-header-title">
+                    <h2 class="mb-0">Clientes</h2>
+                  </div>
                 </div>
               </div>
             </div>
           </div>
-        </div>
-        <!-- [ breadcrumb ] end -->
-        <!-- [ Main Content ] start -->
-        <div class="row">
-          <!-- [ sample-page ] start -->
-          <div class="col-sm-12">
-            <div class="card table-card">
-              <div class="card-body">
-                <div class="text-end p-sm-4 pb-sm-2">
-                  <a href="<?= BASE_PATH ?>products/add_product" class="btn btn-primary"> <i class="ti ti-plus f-18"></i> Añadir producto </a>
+          <!-- [ breadcrumb ] end -->
+          <!-- [ Main Content ] start -->
+          <div class="row">
+            <div class="col-lg-12">
+              <div class="card shadow-none">
+                <div class="card-header">
+                  <h5>Clientes</h5>
+                  <div class="card-header-right">
+                    <button type="button" class="btn btn-light-warning m-0" data-bs-toggle="modal" data-bs-target="#exampleModal">
+                      Agregar cliente
+                    </button>
+                    <div
+                      class="modal fade"
+                      id="exampleModal"
+                      tabindex="-1"
+                      role="dialog"
+                      aria-labelledby="exampleModalLabel"
+                      aria-hidden="true"
+                    >
+                      <div class="modal-dialog" role="document">
+                        <div class="modal-content">
+                          <div class="modal-header">
+                            <h5 class="modal-title" id="exampleModalLabel"
+                              ><i data-feather="user" class="icon-svg-primary wid-20 me-2"></i>Agregar cliente</h5
+                            >
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"> </button>
+                          </div>
+                          <form>
+                            <div class="modal-body">
+                              <small id="emailHelp" class="form-text text-muted mb-2 mt-0"
+                                >Proporcione la información requerida en el formulario.</small
+                              >
+                              <div class="mb-3">
+                                <label class="form-label">Nombre</label>
+                                <input
+                                  type="text"
+                                  class="form-control"
+                                  id="fname"
+                                  aria-describedby="emailHelp"
+                                  placeholder="Ingresa el nombre"
+                                />
+                              </div>
+                              <div class="mb-3">
+                                <label class="form-label">Apellido</label>
+                                <input
+                                  type="email"
+                                  class="form-control"
+                                  id="lname"
+                                  aria-describedby="emailHelp"
+                                  placeholder="Ingresa el apellido"
+                                />
+                              </div>
+                              <div class="mb-3">
+                                <label class="form-label">Email</label>
+                                <input type="email" class="form-control" id="emial" aria-describedby="emailHelp" placeholder="Ingresa el correo" />
+                              </div>
+                            </div>
+                            <div class="modal-footer">
+                              <button type="button" class="btn btn-light-danger" data-bs-dismiss="modal">Cerrar</button>
+                              <button type="button" class="btn btn-light-primary">Agregar cliente</button>
+                            </div>
+                          </form>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
                 </div>
-                <div class="table-responsive">
-                  <table class="table table-hover tbl-product" id="pc-dt-simple">
-                    <thead>
-                      <tr>
-                        <th class="text-end">#</th>
-                        <th>Detalles producto</th>
-                        <th>Categorias</th>
-                        <th class="text-end">Precio</th>
-                        <th class="text-end">Cantidad</th>
-                        <th class="text-center">Presentaciones</th>
-                        <th class="text-center">Marca</th>
-                      </tr>
-                    </thead>
-                    <tbody>
-                      <tr>
-                        <td class="text-end">7</td>
-                        <td>
-                          <div class="row">
-                            <div class="col-auto pe-0">
-                              <img src="../assets/images/application/img-prod-1.jpg" alt="user-image" class="wid-40 rounded" />
-                            </div>
-                            <div class="col">
-                              <h6 class="mb-1">Samsung Galaxy Watch 4 Classic 46mm</h6>
-                              <p class="text-muted f-12 mb-0">Smartwatch with Fitness Tracking, GPS and Heart Rate Monitor</p>
-                            </div>
-                          </div>
-                        </td>
-                        <td>Electronics,Smartwatch</td>
-                        <td class="text-end">$299.99</td>
-                        <td class="text-end">120</td>
-                        <td class="text-center">
-                          <i class="ph-duotone ph-check-circle text-success f-24" data-bs-toggle="tooltip" data-bs-title="success"></i>
-                        </td>
-                        <td class="text-center">
-                          <img src="../assets/images/application/img-prod-brand-1.png" alt="user-image" class="wid-40" />
-                          <div class="prod-action-links">
-                            <ul class="list-inline me-auto mb-0">
-                              <li class="list-inline-item align-bottom" data-bs-toggle="tooltip" title="View">
-                                <a href="<?= BASE_PATH ?>products/details" class="avtar avtar-xs btn-link-success btn-pc-default">
-                                  <i class="ti ti-eye f-18"></i>
-                                </a>
-                              </li>
-                              <li class="list-inline-item align-bottom" data-bs-toggle="tooltip" title="Edit">
-                                <a href="<?= BASE_PATH ?>products/edit_product" class="avtar avtar-xs btn-link-success btn-pc-default">
-                                  <i class="ti ti-edit-circle f-18"></i>
-                                </a>
-                              </li>
-                              <li class="list-inline-item align-bottom" data-bs-toggle="tooltip" title="Delete">
-                                <a href="#" class="avtar avtar-xs btn-link-danger btn-pc-default">
-                                  <i class="ti ti-trash f-18"></i>
-                                </a>
-                              </li>
-                            </ul>
-                          </div>
-                        </td>
-                      </tr>
-                      <tr>
-                        <td class="text-end">2</td>
-                        <td>
-                          <div class="row">
-                            <div class="col-auto pe-0">
-                              <img src="../assets/images/application/img-prod-2.jpg" alt="user-image" class="wid-40 rounded" />
-                            </div>
-                            <div class="col">
-                              <h6 class="mb-1">Sony WH-1000XM5</h6>
-                              <p class="text-muted f-12 mb-0">Noise Cancelling Headphones (Bluetooth 5.0, Over-ear)</p>
-                            </div>
-                          </div>
-                        </td>
-                        <td>Electronics, Smartwatch</td>
-                        <td class="text-end">$249.99</td>
-                        <td class="text-end">120</td>
-                        <td class="text-center">
-                          <i class="ph-duotone ph-clock-countdown text-warning f-24" data-bs-toggle="tooltip" data-bs-title="warning"></i>
-                        </td>
-                        <td class="text-center">
-                          <img src="../assets/images/application/img-prod-brand-2.png" alt="user-image" class="wid-40" />
-                          <div class="prod-action-links">
-                            <ul class="list-inline me-auto mb-0">
-                              <li class="list-inline-item align-bottom" data-bs-toggle="tooltip" title="View">
-                                <a
-                                  href="#"
-                                  class="avtar avtar-xs btn-link-secondary btn-pc-default"
-                                  data-bs-toggle="offcanvas"
-                                  data-bs-target="#productOffcanvas"
-                                >
-                                  <i class="ti ti-eye f-18"></i>
-                                </a>
-                              </li>
-                              <li class="list-inline-item align-bottom" data-bs-toggle="tooltip" title="Edit">
-                                <a href="ecom_product-add.html" class="avtar avtar-xs btn-link-success btn-pc-default">
-                                  <i class="ti ti-edit-circle f-18"></i>
-                                </a>
-                              </li>
-                              <li class="list-inline-item align-bottom" data-bs-toggle="tooltip" title="Delete">
-                                <a href="#" class="avtar avtar-xs btn-link-danger btn-pc-default">
-                                  <i class="ti ti-trash f-18"></i>
-                                </a>
-                              </li>
-                            </ul>
-                          </div>
-                        </td>
-                      </tr>
-                      <tr>
-                        <td class="text-end">5</td>
-                        <td>
-                          <div class="row">
-                            <div class="col-auto pe-0">
-                              <img src="../assets/images/application/img-prod-3.jpg" alt="user-image" class="wid-40 rounded" />
-                            </div>
-                            <div class="col">
-                              <h6 class="mb-1">Garmin Forerunner 45 GPS Watch</h6>
-                              <p class="text-muted f-12 mb-0">(Forerunner 45 - Waterproof, Fitness Tracking)</p>
-                            </div>
-                          </div>
-                        </td>
-                        <td>Sports, Smartwatch</td>
-                        <td class="text-end">$199.99</td>
-                        <td class="text-end">35</td>
-                        <td class="text-center">
-                          <i class="ph-duotone ph-x-circle text-danger f-24" data-bs-toggle="tooltip" data-bs-title="danger"></i>
-                        </td>
-                        <td class="text-center">
-                          <img src="../assets/images/application/img-prod-brand-3.png" alt="user-image" class="wid-40" />
-                          <div class="prod-action-links">
-                            <ul class="list-inline me-auto mb-0">
-                              <li class="list-inline-item align-bottom" data-bs-toggle="tooltip" title="View">
-                                <a
-                                  href="#"
-                                  class="avtar avtar-xs btn-link-secondary btn-pc-default"
-                                  data-bs-toggle="offcanvas"
-                                  data-bs-target="#productOffcanvas"
-                                >
-                                  <i class="ti ti-eye f-18"></i>
-                                </a>
-                              </li>
-                              <li class="list-inline-item align-bottom" data-bs-toggle="tooltip" title="Edit">
-                                <a href="ecom_product-add.html" class="avtar avtar-xs btn-link-success btn-pc-default">
-                                  <i class="ti ti-edit-circle f-18"></i>
-                                </a>
-                              </li>
-                              <li class="list-inline-item align-bottom" data-bs-toggle="tooltip" title="Delete">
-                                <a href="#" class="avtar avtar-xs btn-link-danger btn-pc-default">
-                                  <i class="ti ti-trash f-18"></i>
-                                </a>
-                              </li>
-                            </ul>
-                          </div>
-                        </td>
-                      </tr>
-                      <tr>
-                        <td class="text-end">7</td>
-                        <td>
-                          <div class="row">
-                            <div class="col-auto pe-0">
-                              <img src="../assets/images/application/img-prod-4.jpg" alt="user-image" class="wid-40 rounded" />
-                            </div>
-                            <div class="col">
-                              <h6 class="mb-1">Samsung Galaxy Watch 5 44mm</h6>
-                              <p class="text-muted f-12 mb-0">ASmartwatch with GPS and Heart Rate Monitor</p>
-                            </div>
-                          </div>
-                        </td>
-                        <td>Electronics, Smartwatch</td>
-                        <td class="text-end">$249.99</td>
-                        <td class="text-end">150</td>
-                        <td class="text-center">
-                          <i class="ph-duotone ph-check-circle text-success f-24" data-bs-toggle="tooltip" data-bs-title="success"></i>
-                        </td>
-                        <td class="text-center">
-                          <img src="../assets/images/application/img-prod-brand-4.png" alt="user-image" class="wid-40" />
-                          <div class="prod-action-links">
-                            <ul class="list-inline me-auto mb-0">
-                              <li class="list-inline-item align-bottom" data-bs-toggle="tooltip" title="View">
-                                <a
-                                  href="#"
-                                  class="avtar avtar-xs btn-link-secondary btn-pc-default"
-                                  data-bs-toggle="offcanvas"
-                                  data-bs-target="#productOffcanvas"
-                                >
-                                  <i class="ti ti-eye f-18"></i>
-                                </a>
-                              </li>
-                              <li class="list-inline-item align-bottom" data-bs-toggle="tooltip" title="Edit">
-                                <a href="ecom_product-add.html" class="avtar avtar-xs btn-link-success btn-pc-default">
-                                  <i class="ti ti-edit-circle f-18"></i>
-                                </a>
-                              </li>
-                              <li class="list-inline-item align-bottom" data-bs-toggle="tooltip" title="Delete">
-                                <a href="#" class="avtar avtar-xs btn-link-danger btn-pc-default">
-                                  <i class="ti ti-trash f-18"></i>
-                                </a>
-                              </li>
-                            </ul>
-                          </div>
-                        </td>
-                      </tr>
-                      <tr>
-                        <td class="text-end">2</td>
-                        <td>
-                          <div class="row">
-                            <div class="col-auto pe-0">
-                              <img src="../assets/images/application/img-prod-5.jpg" alt="user-image" class="wid-40 rounded" />
-                            </div>
-                            <div class="col">
-                              <h6 class="mb-1">Sony WH-1000XM5</h6>
-                              <p class="text-muted f-12 mb-0">Noise Cancelling Headphones (Bluetooth 5.0, Over-ear)</p>
-                            </div>
-                          </div>
-                        </td>
-                        <td>Electronics, Smartwatch</td>
-                        <td class="text-end">$249.99</td>
-                        <td class="text-end">120</td>
-                        <td class="text-center">
-                          <i class="ph-duotone ph-clock-countdown text-warning f-24" data-bs-toggle="tooltip" data-bs-title="warning"></i>
-                        </td>
-                        <td class="text-center">
-                          <img src="../assets/images/application/img-prod-brand-5.png" alt="user-image" class="wid-40" />
-                          <div class="prod-action-links">
-                            <ul class="list-inline me-auto mb-0">
-                              <li class="list-inline-item align-bottom" data-bs-toggle="tooltip" title="View">
-                                <a
-                                  href="#"
-                                  class="avtar avtar-xs btn-link-secondary btn-pc-default"
-                                  data-bs-toggle="offcanvas"
-                                  data-bs-target="#productOffcanvas"
-                                >
-                                  <i class="ti ti-eye f-18"></i>
-                                </a>
-                              </li>
-                              <li class="list-inline-item align-bottom" data-bs-toggle="tooltip" title="Edit">
-                                <a href="ecom_product-add.html" class="avtar avtar-xs btn-link-success btn-pc-default">
-                                  <i class="ti ti-edit-circle f-18"></i>
-                                </a>
-                              </li>
-                              <li class="list-inline-item align-bottom" data-bs-toggle="tooltip" title="Delete">
-                                <a href="#" class="avtar avtar-xs btn-link-danger btn-pc-default">
-                                  <i class="ti ti-trash f-18"></i>
-                                </a>
-                              </li>
-                            </ul>
-                          </div>
-                        </td>
-                      </tr>
-                      <tr>
-                        <td class="text-end">7</td>
-                        <td>
-                          <div class="row">
-                            <div class="col-auto pe-0">
-                              <img src="../assets/images/application/img-prod-4.jpg" alt="user-image" class="wid-40 rounded" />
-                            </div>
-                            <div class="col">
-                              <h6 class="mb-1">Samsung Galaxy Watch 5 44mm</h6>
-                              <p class="text-muted f-12 mb-0">Smartwatch with GPS and Heart Rate Monitor</p>
-                            </div>
-                          </div>
-                        </td>
-                        <td>Electronics, Smartwatch</td>
-                        <td class="text-end">$249.99</td>
-                        <td class="text-end">150</td>
-                        <td class="text-center">
-                          <i class="ph-duotone ph-check-circle text-success f-24" data-bs-toggle="tooltip" data-bs-title="success"></i>
-                        </td>
-                        <td class="text-center">
-                          <img src="../assets/images/application/img-prod-brand-4.png" alt="user-image" class="wid-40" />
-                          <div class="prod-action-links">
-                            <ul class="list-inline me-auto mb-0">
-                              <li class="list-inline-item align-bottom" data-bs-toggle="tooltip" title="View">
-                                <a
-                                  href="#"
-                                  class="avtar avtar-xs btn-link-secondary btn-pc-default"
-                                  data-bs-toggle="offcanvas"
-                                  data-bs-target="#productOffcanvas"
-                                >
-                                  <i class="ti ti-eye f-18"></i>
-                                </a>
-                              </li>
-                              <li class="list-inline-item align-bottom" data-bs-toggle="tooltip" title="Edit">
-                                <a href="ecom_product-add.html" class="avtar avtar-xs btn-link-success btn-pc-default">
-                                  <i class="ti ti-edit-circle f-18"></i>
-                                </a>
-                              </li>
-                              <li class="list-inline-item align-bottom" data-bs-toggle="tooltip" title="Delete">
-                                <a href="#" class="avtar avtar-xs btn-link-danger btn-pc-default">
-                                  <i class="ti ti-trash f-18"></i>
-                                </a>
-                              </li>
-                            </ul>
-                          </div>
-                        </td>
-                      </tr>
-                    </tbody>
-                  </table>
+                <div class="card-body shadow border-0">
+                  <div class="table-responsive">
+                    <table id="report-table" class="table table-bordered table-striped mb-0">
+                      <thead>
+                        <tr>
+                          <th class="border-top-0">Nombre completo</th>
+                          <th class="border-top-0">Email</th>
+                          <th class="border-top-0">Cuenta</th>
+                          <th class="border-top-0">Fecha nacimiento</th>
+                          <th class="border-top-0">Acción</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        <tr>
+                        <td>Daniel Castro</td>
+                        <td><a href="#" class="link-secondary">daniel.castro@example.com</a></td>
+                        <td>N/A</td>
+                        <td>May 9, 2023 at 10:50 AM</td>
+                          <td>
+                            <a href="<?= BASE_PATH ?>customer/details" class="btn btn-sm btn-light-primary"><i class="feather icon-eye"></i></a>
+                            <a href="<?= BASE_PATH ?>customer/edit_customer" class="btn btn-sm btn-light-success me-1"><i class="feather icon-edit"></i></a>
+                            <a href="#" class="btn btn-sm btn-light-danger"><i class="feather icon-trash-2"></i></a>
+                          </td>
+                        </tr>
+                        <tr>
+                        <td>Mateo Ruiz</td>
+                        <td><a href="#" class="link-secondary">mateo.ruiz@example.com</a></td>
+                        <td>N/A</td>
+                        <td>September 5, 2021 at 08:55 AM</td>
+                          <td>
+                            <a href="#" class="btn btn-sm btn-light-primary"><i class="feather icon-eye"></i></a>
+                            <a href="#" class="btn btn-sm btn-light-success me-1"><i class="feather icon-edit"></i></a>
+                            <a href="#" class="btn btn-sm btn-light-danger"><i class="feather icon-trash-2"></i></a>
+                          </td>
+                        </tr>
+                        <tr>
+                        <td>Lucas Pérez</td>
+                        <td><a href="#" class="link-secondary">lucas.perez@example.com</a></td>
+                        <td>N/A</td>
+                        <td>March 14, 2020 at 02:10 PM</td>
+                          <td>
+                            <a href="#" class="btn btn-sm btn-light-primary"><i class="feather icon-eye"></i></a>
+                            <a href="#" class="btn btn-sm btn-light-success me-1"><i class="feather icon-edit"></i></a>
+                            <a href="#" class="btn btn-sm btn-light-danger"><i class="feather icon-trash-2"></i></a>
+                          </td>
+                        </tr>
+                        <tr>
+                        <td>Sofía Ramírez</td>
+                        <td><a href="#" class="link-secondary">sofia.ramirez@example.com</a></td>
+                        <td>N/A</td>
+                        <td>June 08, 2021 at 11:30 AM</td>
+                          <td>
+                            <a href="#" class="btn btn-sm btn-light-success me-1"><i class="feather icon-edit"></i></a>
+                            <a href="#" class="btn btn-sm btn-light-danger"><i class="feather icon-trash-2"></i></a>
+                          </td>
+                        </tr>
+                        <tr>
+                        <td>Diego Fernández</td>
+                        <td><a href="#" class="link-secondary">diego.fernandez@example.com</a></td>
+                        <td>N/A</td>
+                        <td>August 15, 2021 at 05:20 PM</td>
+                          <td>
+                            <a href="#" class="btn btn-sm btn-light-success me-1"><i class="feather icon-edit"></i></a>
+                            <a href="#" class="btn btn-sm btn-light-danger"><i class="feather icon-trash-2"></i></a>
+                          </td>
+                        </tr>
+                        <tr>
+                        <td>Camila Torres</td>
+                        <td><a href="#" class="link-secondary">camila.torres@example.com</a></td>
+                        <td>N/A</td>
+                        <td>November 03, 2022 at 10:45 AM</td>
+                          <td>
+                            <a href="#" class="btn btn-sm btn-light-success me-1"><i class="feather icon-edit"></i></a>
+                            <a href="#" class="btn btn-sm btn-light-danger"><i class="feather icon-trash-2"></i></a>
+                          </td>
+                        </tr>
+                        <tr>
+                        <td>Emilio Cruz</td>
+                        <td><a href="#" class="link-secondary">emilio.cruz@example.com</a></td>
+                        <td>N/A</td>
+                        <td>September 10, 2022 at 07:00 PM</td>
+                          <td>
+                            <a href="#" class="btn btn-sm btn-light-success me-1"><i class="feather icon-edit"></i></a>
+                            <a href="#" class="btn btn-sm btn-light-danger"><i class="feather icon-trash-2"></i></a>
+                          </td>
+                        </tr>
+                        <tr>
+                        <td>Daniela Ortiz</td>
+                        <td><a href="#" class="link-secondary">daniela.ortiz@example.com</a></td>
+                        <td>N/A</td>
+                        <td>May 28, 2023 at 03:10 PM</td>
+                          <td>
+                            <a href="#" class="btn btn-sm btn-light-success me-1"><i class="feather icon-edit"></i></a>
+                            <a href="#" class="btn btn-sm btn-light-danger"><i class="feather icon-trash-2"></i></a>
+                          </td>
+                        </tr>
+                        <tr>
+                        <td>Ángel Gutiérrez</td>
+                        <td><a href="#" class="link-secondary">angel.gutierrez@example.com</a></td>
+                        <td>N/A</td>
+                        <td>October 12, 2022 at 09:25 AM</td>
+                          <td>
+                            <a href="#" class="btn btn-sm btn-light-success me-1"><i class="feather icon-edit"></i></a>
+                            <a href="#" class="btn btn-sm btn-light-danger"><i class="feather icon-trash-2"></i></a>
+                          </td>
+                        </tr>
+                        <tr>
+                        <td>Isabella Rodríguez</td>
+                        <td><a href="#" class="link-secondary">isabella.rodriguez@example.com</a></td>
+                        <td>N/A</td>
+                        <td>December 25, 2018 at 03:25 PM</td>
+                          <td>
+                            <a href="#" class="btn btn-sm btn-light-success me-1"><i class="feather icon-edit"></i></a>
+                            <a href="#" class="btn btn-sm btn-light-danger"><i class="feather icon-trash-2"></i></a>
+                          </td>
+                        </tr>
+                      </tbody>
+                    </table>
+                  </div>
                 </div>
               </div>
             </div>
           </div>
-          <!-- [ sample-page ] end -->
+          <!-- [ Main Content ] end -->
         </div>
-        <!-- [ Main Content ] end -->
       </div>
-    </div>
-    <?php 
 
-      include "../layouts/footer.php";
+      <?php 
 
-      ?>
-    <?php 
+        include "../layouts/footer.php";
 
-      include "../layouts/scripts.php";
+        ?>
 
-      ?>
-    <script>
-      // scroll-block
-      var tc = document.querySelectorAll('.scroll-block');
-      for (var t = 0; t < tc.length; t++) {
-        new SimpleBar(tc[t]);
-      }
-    </script>
-    <?php 
+      <?php 
 
-      include "../layouts/modals.php";
+        include "../layouts/scripts.php";
 
-      ?>
-  </body>
-  <!-- [Body] end -->
-</html>
+        ?>
+      <!-- [Page Specific JS] start -->
+      <script>
+        // scroll-block
+        var tc = document.querySelectorAll('.scroll-block');
+        for (var t = 0; t < tc.length; t++) {
+          new SimpleBar(tc[t]);
+        }
+        // quantity start
+        function increaseValue(temp) {
+          var value = parseInt(document.getElementById(temp).value, 10);
+          value = isNaN(value) ? 0 : value;
+          value++;
+          document.getElementById(temp).value = value;
+        }
+
+        function decreaseValue(temp) {
+          var value = parseInt(document.getElementById(temp).value, 10);
+          value = isNaN(value) ? 0 : value;
+          value < 1 ? (value = 1) : '';
+          value--;
+          document.getElementById(temp).value = value;
+        }
+        // quantity end
+      </script>
+      
+      <?php 
+
+        include "../layouts/modals.php";
+
+        ?>
+
+    </body>
+    <!-- [Body] end -->
+  </html>

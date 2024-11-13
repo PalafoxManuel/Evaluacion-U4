@@ -1,6 +1,6 @@
 Options +FollowSymLinks -MultiViews -Indexes
 RewriteEngine on
-
+RewriteBase /Evaluacion-U4/
 
 # Rutas para páginas
 RewriteRule ^home/?$ views/home.php [L]

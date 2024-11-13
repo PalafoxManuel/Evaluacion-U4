@@ -1,5 +1,17 @@
 <?php 
   include_once "../../app/config.php";
+  include_once "../../app/users/AuthController.php";
+
+  if ($_GET['id']=='profile'){
+    $auth = new AuthController();
+    $perfil = $auth->showPerfil();
+  }
+
+  function procesarFecha($fecha){
+    $nuevaFecha = new DateTime($fecha);
+    $nuevaFecha = $nuevaFecha->format('d/m/y');
+    return $nuevaFecha;
+  }
 
 ?>
 <!doctype html>
@@ -62,12 +74,12 @@
                       <div class="chat-avtar d-inline-flex mx-auto">
                         <img
                           class="rounded-circle img-fluid wid-90 img-thumbnail"
-                          src="../assets/images/user/avatar-1.jpg"
+                          src="<?= $perfil->avatar ?>"
                           alt="User image"
                         />
                         <i class="chat-badge bg-success me-2 mb-2"></i>
                       </div>
-                      <h5 class="mb-0">Rick</h5>
+                      <h5 class="mb-0"><?= $perfil->name ?></h5>
                     </div>
                   </div>
                   <div
@@ -96,11 +108,11 @@
                   <div class="card-body position-relative">
                     <div class="d-inline-flex align-items-center justify-content-between w-100 mb-3">
                       <p class="mb-0 text-muted me-1">Email</p>
-                      <p class="mb-0">RickWtf@gmail.com</p>
+                      <p class="mb-0"><?= $perfil->email ?></p>
                     </div>
                     <div class="d-inline-flex align-items-center justify-content-between w-100 mb-3">
                       <p class="mb-0 text-muted me-1">Número de telefono</p>
-                      <p class="mb-0">6121106397</p>
+                      <p class="mb-0"><?= $perfil->phone_number ?? '' ?></p>
                     </div>
                   </div>
                 </div>
@@ -118,11 +130,11 @@
                             <div class="row">
                               <div class="col-md-6">
                                 <p class="mb-1 text-muted">Nombre</p>
-                                <p class="mb-0">Rick</p>
+                                <p class="mb-0"><?= $perfil->name ?></p>
                               </div>
                               <div class="col-md-6">
                                 <p class="mb-1 text-muted">Apellidos</p>
-                                <p class="mb-0">Luque Garayzar</p>
+                                <p class="mb-0"><?= $perfil->lastname ?></p>
                               </div>
                             </div>
                           </li>
@@ -130,11 +142,19 @@
                             <div class="row">
                               <div class="col-md-6">
                                 <p class="mb-1 text-muted">Número de telefono</p>
-                                <p class="mb-0">6151106899</p>
+                                <?php if($perfil->phone_number!=null): ?>
+                                  <p class="mb-0"><?= $perfil->phone_number ?></p>
+                                <?php else: ?>
+                                  <p class="mb-0"></p>
+                                <?php endif ?>
                               </div>
                               <div class="col-md-6">
                                 <p class="mb-1 text-muted">Género</p>
-                                <p class="mb-0">Masculino</p>
+                                <?php if(isset($perfil->gender)!=null): ?>
+                                  <p class="mb-0"><?= $perfil->gender ?></p>
+                                <?php else: ?>
+                                  <p class="mb-0"></p>
+                                <?php endif ?>
                               </div>
                             </div>
                           </li>
@@ -142,17 +162,21 @@
                             <div class="row">
                               <div class="col-md-6">
                                 <p class="mb-1 text-muted">Email</p>
-                                <p class="mb-0">Ricky@gmail.com</p>
+                                <p class="mb-0"><?= $perfil->email ?></p>
                               </div>
                               <div class="col-md-6">
                                 <p class="mb-1 text-muted">Fecha de nacimiento</p>
-                                <p class="mb-0">14/04/1999</p>
+                                <?php if(isset($perfil->birthday)!=null): ?>
+                                  <p class="mb-0"><?= $perfil->birthday ?></p>
+                                <?php else: ?>
+                                  <p class="mb-0"></p>
+                                <?php endif ?>
                               </div>
                             </div>
                           </li>
                           <li class="list-group-item px-0 pb-0">
                             <p class="mb-1 text-muted">Fecha de ingreso a la empresa</p>
-                            <p class="mb-0">01/05/2026</p>
+                            <p class="mb-0"><?= procesarFecha($perfil->created_at) ?></p>
                           </li>
                         </ul>
                       </div>

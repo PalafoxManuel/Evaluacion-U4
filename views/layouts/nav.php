@@ -92,7 +92,7 @@
                 </div>
               </li>
               <li class="list-group-item">
-                <a href="#" class="dropdown-item">
+                <a href="users/profile" class="dropdown-item">
                   <span class="d-flex align-items-center">
                     <i class="ph-duotone ph-user-square"></i>
                     <span>My profile</span>

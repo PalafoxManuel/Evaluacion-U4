@@ -187,7 +187,7 @@
                   <div class="dropdown-menu">
                     <ul>
                       <li>
-                        <a class="pc-user-links">
+                        <a href="users/profile" class="pc-user-links">
                           <i class="ph-duotone ph-user"></i>
                           <span>My Account</span>
                         </a>

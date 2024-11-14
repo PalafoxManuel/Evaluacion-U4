@@ -22,34 +22,49 @@ RewriteRule ^orders/?$ app/sales/OrdersController.php [L]
 
 # Registrar nuevo producto
 RewriteRule ^products/add_product$ views/products/add_product.php [L]
+
 # Modificar producto
 RewriteRule ^products/edit_product$ views/products/edit_product.php [L]
+
 # Ver lista de presentaciones
 RewriteRule ^products/presentation$ views/products/presentation.php [L]
+
 # Crear nueva presentación
 RewriteRule ^products/add_presentation$ views/products/add_presentation.php [L]
+
 # Modificar presentación
 RewriteRule ^products/edit_presentation$ views/products/edit_presentation.php [L]
+
 # Ver detalles de la presentación
-RewriteRule ^products/([^/]+)$ views/products/details_presentation.php [L]
+RewriteRule ^products/([^/]+)$ views/products/details_presentation.php?id=$1 [L]
+
 # Ver detalles del producto
-RewriteRule ^products/([^/]+)$ views/products/details.php [L]
+RewriteRule ^products/([^/]+)$ views/products/details.php?id=$1 [L]
+
 # Registrar nuevo usuario
 RewriteRule ^users/add_users$ views/users/add_users.php [L]
+
 # Modificar usuario
 RewriteRule ^users/edit_users$ views/users/edit_users.php [L]
+
 # Ver detalles del usuario
-RewriteRule ^users/([^/]+)$ views/users/details.php [L]
+RewriteRule ^users/([^/]+)$ views/users/details.php?id=$1 [L]
+
 # Modificar clientes
 RewriteRule ^customer/edit_customer/?$ views/customer/edit_customer.php [L]
+
 # Detalles clientes
-RewriteRule ^customer/([^/]+)/?$ views/customer/details.php [L]
+RewriteRule ^customer/([^/]+)/?$ views/customer/details.php?id=$1 [L]
+
 #Marcas
 RewriteRule ^catalogs/brands/?$ views/catalogs/brands/brands.php [L]
-RewriteRule ^catalogs/brands/details/?$ views/catalogs/brands/details.php [L]
+RewriteRule ^catalogs/brands/details/([^/]+)/?$ views/catalogs/brands/details.php?id=$1 [L]
+
 #Categorias
 RewriteRule ^catalogs/categories/?$ views/catalogs/categories/categories.php [L]
-RewriteRule ^catalogs/categories/details/?$ views/catalogs/categories/details.php [L]
+RewriteRule ^catalogs/categories/details/([^/]+)/?$ views/catalogs/categories/details.php?id=$1 [L]
+
 #Etiquetas
 RewriteRule ^catalogs/tags/?$ views/catalogs/tags/tags.php [L]
-RewriteRule ^catalogs/tags/details/?$ views/catalogs/tags/details.php [L]
+RewriteRule ^catalogs/tags/details/([^/]+)/?$ views/catalogs/tags/details.php?id=$1 [L]
+

@@ -44,4 +44,12 @@ RewriteRule ^users/([^/]+)$ views/users/details.php [L]
 RewriteRule ^customer/edit_customer/?$ views/customer/edit_customer.php [L]
 # Detalles clientes
 RewriteRule ^customer/([^/]+)/?$ views/customer/details.php [L]
-
+#Marcas
+RewriteRule ^catalogs/brands/?$ views/catalogs/brands/brands.php [L]
+RewriteRule ^catalogs/brands/details/?$ views/catalogs/brands/details.php [L]
+#Categorias
+RewriteRule ^catalogs/categories/?$ views/catalogs/categories/categories.php [L]
+RewriteRule ^catalogs/categories/details/?$ views/catalogs/categories/details.php [L]
+#Etiquetas
+RewriteRule ^catalogs/tags/?$ views/catalogs/tags/tags.php [L]
+RewriteRule ^catalogs/tags/details/?$ views/catalogs/tags/details.php [L]

@@ -7,6 +7,7 @@ RewriteRule ^home/?$ views/home.php [L]
 RewriteRule ^products/?$ views/products/index.php [L]
 RewriteRule ^users/?$ views/users/index.php [L]
 RewriteRule ^customer/?$ views/customer/index.php [L]
+RewriteRule ^coupons/?$ views/coupons/coupons.php [L]
 
 # Rutas para controladores
 RewriteRule ^auth/?$ app/users/AuthController.php [L]
@@ -67,4 +68,7 @@ RewriteRule ^catalogs/categories/details/([^/]+)/?$ views/catalogs/categories/de
 #Etiquetas
 RewriteRule ^catalogs/tags/?$ views/catalogs/tags/tags.php [L]
 RewriteRule ^catalogs/tags/details/([^/]+)/?$ views/catalogs/tags/details.php?id=$1 [L]
+
+#Cupones
+RewriteRule ^coupons/([^/]+)/?$ views/coupons/details.php [L]
 

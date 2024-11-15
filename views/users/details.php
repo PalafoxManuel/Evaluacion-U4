@@ -1,11 +1,6 @@
 <?php 
+  session_start();
   include_once "../../app/config.php";
-  include_once "../../app/users/AuthController.php";
-
-  if ($_GET['id']=='profile'){
-    $auth = new AuthController();
-    $perfil = $auth->showPerfil();
-  }
 
   function procesarFecha($fecha){
     $nuevaFecha = new DateTime($fecha);
@@ -73,13 +68,14 @@
                     <div class="text-center mt-3">
                       <div class="chat-avtar d-inline-flex mx-auto">
                         <img
+                          id="image"
                           class="rounded-circle img-fluid wid-90 img-thumbnail"
-                          src="<?= $perfil->avatar ?>"
+                          src=""
                           alt="User image"
-                        />
+                        /> <!-- mod con ID -->
                         <i class="chat-badge bg-success me-2 mb-2"></i>
                       </div>
-                      <h5 class="mb-0"><?= $perfil->name ?></h5>
+                      <h5 id="port_name" class="mb-0"></h5> <!-- mod con ID -->
                     </div>
                   </div>
                   <div
@@ -108,11 +104,11 @@
                   <div class="card-body position-relative">
                     <div class="d-inline-flex align-items-center justify-content-between w-100 mb-3">
                       <p class="mb-0 text-muted me-1">Email</p>
-                      <p class="mb-0"><?= $perfil->email ?></p>
+                      <p id="inf_pers_email" class="mb-0"></p> <!-- mod con ID -->
                     </div>
                     <div class="d-inline-flex align-items-center justify-content-between w-100 mb-3">
                       <p class="mb-0 text-muted me-1">Número de telefono</p>
-                      <p class="mb-0"><?= $perfil->phone_number ?? '' ?></p>
+                      <p id="inf_pers_phone" class="mb-0"></p> <!-- mod con ID -->
                     </div>
                   </div>
                 </div>
@@ -130,11 +126,11 @@
                             <div class="row">
                               <div class="col-md-6">
                                 <p class="mb-1 text-muted">Nombre</p>
-                                <p class="mb-0"><?= $perfil->name ?></p>
+                                <p id="name" class="mb-0"></p> <!-- mod con ID -->
                               </div>
                               <div class="col-md-6">
                                 <p class="mb-1 text-muted">Apellidos</p>
-                                <p class="mb-0"><?= $perfil->lastname ?></p>
+                                <p id="lastname" class="mb-0"></p> <!-- mod con ID -->
                               </div>
                             </div>
                           </li>
@@ -142,19 +138,11 @@
                             <div class="row">
                               <div class="col-md-6">
                                 <p class="mb-1 text-muted">Número de telefono</p>
-                                <?php if($perfil->phone_number!=null): ?>
-                                  <p class="mb-0"><?= $perfil->phone_number ?></p>
-                                <?php else: ?>
-                                  <p class="mb-0"></p>
-                                <?php endif ?>
+                                <p id="phone_number" class="mb-0"></p> <!-- mod con ID -->
                               </div>
                               <div class="col-md-6">
-                                <p class="mb-1 text-muted">Género</p>
-                                <?php if(isset($perfil->gender)!=null): ?>
-                                  <p class="mb-0"><?= $perfil->gender ?></p>
-                                <?php else: ?>
-                                  <p class="mb-0"></p>
-                                <?php endif ?>
+                                <p class="mb-1 text-muted">Género</p> 
+                                <p id="gender" class="mb-0"></p> <!-- mod con ID -->
                               </div>
                             </div>
                           </li>
@@ -162,21 +150,17 @@
                             <div class="row">
                               <div class="col-md-6">
                                 <p class="mb-1 text-muted">Email</p>
-                                <p class="mb-0"><?= $perfil->email ?></p>
+                                <p id="email" class="mb-0"></p> <!-- mod con ID -->
                               </div>
                               <div class="col-md-6">
                                 <p class="mb-1 text-muted">Fecha de nacimiento</p>
-                                <?php if(isset($perfil->birthday)!=null): ?>
-                                  <p class="mb-0"><?= $perfil->birthday ?></p>
-                                <?php else: ?>
-                                  <p class="mb-0"></p>
-                                <?php endif ?>
+                                <p id="birthday" class="mb-0"></p> <!-- mod con ID -->
                               </div>
                             </div>
                           </li>
                           <li class="list-group-item px-0 pb-0">
                             <p class="mb-1 text-muted">Fecha de ingreso a la empresa</p>
-                            <p class="mb-0"><?= procesarFecha($perfil->created_at) ?></p>
+                            <p id="date" class="mb-0"></p> <!-- mod con ID -->
                           </li>
                         </ul>
                       </div>
@@ -208,6 +192,55 @@
     for (var t = 0; t < tc.length; t++) {
       new SimpleBar(tc[t]);
     }
+
+    // get usuario
+    let token = "<?= $_SESSION['global_token'] ?>";
+    let idU = "<?= $_GET['id'] ?>";
+    if (idU != 'profile'){
+      idU = parseInt(idU);
+      getUser(idU);
+    }
+
+    function getUser(){
+      let formulario = new URLSearchParams();
+      formulario.append("action", "detail_user");
+      formulario.append("user_id", idU);
+      formulario.append("global_token", token);
+
+      fetch('../app/users/UsersController.php', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/x-www-form-urlencoded'
+          },
+          body: formulario.toString()
+      })
+      .then(response => response.json())
+      .then(data => {
+        if (data.success){
+          let datos = data.data;
+          document.getElementById("name").innerText = (datos.name!=null&&datos.name!=undefined)? datos.name : "";
+          document.getElementById("port_name").innerText = (datos.name!=null&&datos.name!=undefined)? datos.name : "";
+          document.getElementById("lastname").innerText = (datos.lastname!=null&&datos.lastname!=undefined)? datos.lastname : "";
+          document.getElementById("phone_number").innerText = (datos.phone_number!=null&&datos.phone_number!=undefined)? datos.phone_number : "";
+          document.getElementById("inf_pers_phone").innerText = (datos.phone_number!=null&&datos.phone_number!=undefined)? datos.phone_number : "";
+          document.getElementById("gender").innerText = (datos.gender!=null&&datos.gender!=undefined)? datos.gender : "";
+          document.getElementById("email").innerText = (datos.email!=null&&datos.email!=undefined)? datos.email : "";
+          document.getElementById("inf_pers_email").innerText = (datos.email!=null&&datos.email!=undefined)? datos.email : "";
+          document.getElementById("date").innerText = (datos.created_at!=null&&datos.created_at!=undefined)? fecha(datos.created_at) : "";
+          document.getElementById("image").src = (datos.avatar!=null&&datos.avatar!=undefined)? datos.avatar : "";
+        }
+      })
+      .catch(error => console.error('Error:', error));
+    }
+
+    function fecha(fecha){
+      let fechaMod = new Date(fecha);
+      const day = String(fechaMod.getDate()).padStart(2, '0');
+      const month = String(fechaMod.getMonth() + 1).padStart(2, '0');
+      const year = fechaMod.getFullYear();
+      return `${day}/${month}/${year}`;
+    }
+
     </script>
     <?php 
 

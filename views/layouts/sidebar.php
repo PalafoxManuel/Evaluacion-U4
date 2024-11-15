@@ -165,15 +165,15 @@
           <div class="card-body">
             <div class="d-flex align-items-center">
               <div class="flex-shrink-0">
-                <img src="<?= BASE_PATH ?>assets/images/user/avatar-1.jpg" alt="user-image" class="user-avtar wid-45 rounded-circle" />
+                <img src="<?= $_SESSION['user_data']->avatar ?? "" ?>" alt="user-image" class="user-avtar wid-45 rounded-circle" />
               </div>
               <div class="flex-grow-1 ms-3">
                 <div class="dropdown">
                   <a href="#" class="arrow-none dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false" data-bs-offset="0,20">
                     <div class="d-flex align-items-center">
                       <div class="flex-grow-1 me-2">
-                        <h6 class="mb-0">Jamie Adams</h6>
-                        <small>Administrator</small>
+                        <h6 class="mb-0"><?= $_SESSION['user_data']->name ?? "" ?></h6>
+                        <small></small>
                       </div>
                       <div class="flex-shrink-0">
                         <div class="btn btn-icon btn-link-secondary avtar">
@@ -185,7 +185,7 @@
                   <div class="dropdown-menu">
                     <ul>
                       <li>
-                        <a href="users/profile" class="pc-user-links">
+                        <a href="users/<?= $_SESSION['user_id'] ?>" class="pc-user-links">
                           <i class="ph-duotone ph-user"></i>
                           <span>My Account</span>
                         </a>

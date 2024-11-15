@@ -71,7 +71,7 @@
         data-bs-auto-close="outside"
         aria-expanded="false"
       >
-        <img src="<?= BASE_PATH ?>assets/images/user/avatar-2.jpg" alt="user-image" class="user-avtar" />
+        <img src="<?= $_SESSION['user_data']->avatar ?? "" ?>" alt="user-image" class="user-avtar" />
       </a>
       <div class="dropdown-menu dropdown-user-profile dropdown-menu-end pc-h-dropdown">
         <div class="dropdown-header d-flex align-items-center justify-content-between">
@@ -83,16 +83,16 @@
               <li class="list-group-item">
                 <div class="d-flex align-items-center">
                   <div class="flex-shrink-0">
-                    <img src="<?= BASE_PATH ?>assets/images/user/avatar-2.jpg" alt="user-image" class="wid-50 rounded-circle" />
+                    <img src="<?= $_SESSION['user_data']->avatar ?? "" ?>" alt="user-image" class="wid-50 rounded-circle" />
                   </div>
                   <div class="flex-grow-1 mx-3">
-                    <h5 class="mb-0">Carson Darrin</h5>
-                    <a class="link-primary" href="mailto:carson.darrin@company.io">carson.darrin@company.io</a>
+                    <h5 class="mb-0"><?= $_SESSION['user_data']->name ?? "" ?></h5>
+                    <a class="link-primary" href=""><?= $_SESSION['user_data']->email ?? "" ?></a>
                   </div>
                 </div>
               </li>
               <li class="list-group-item">
-                <a href="users/profile" class="dropdown-item">
+                <a href="users/<?= $_SESSION['user_id'] ?>" class="dropdown-item">
                   <span class="d-flex align-items-center">
                     <i class="ph-duotone ph-user-square"></i>
                     <span>My profile</span>

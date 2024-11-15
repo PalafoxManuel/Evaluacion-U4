@@ -1,6 +1,8 @@
 <?php 
 include_once "../config.php";
 
+session_start();
+
 if (session_status() !== PHP_SESSION_ACTIVE) {
     echo json_encode(['error' => 'No hay una sesión activa. Por favor, inicie sesión.']);
     http_response_code(401);

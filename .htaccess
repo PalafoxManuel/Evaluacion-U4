@@ -70,5 +70,5 @@ RewriteRule ^catalogs/tags/?$ views/catalogs/tags/tags.php [L]
 RewriteRule ^catalogs/tags/details/([^/]+)/?$ views/catalogs/tags/details.php?id=$1 [L]
 
 #Cupones
-RewriteRule ^coupons/([^/]+)/?$ views/coupons/details.php [L]
+RewriteRule ^coupons/([^/]+)/?$ views/coupons/details.php?id=$1 [L]
 

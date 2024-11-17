@@ -160,7 +160,7 @@ class UsersController{
         $response = json_decode($response);
     
         if (isset($response->code) && $response->code == 4) {
-            header("Location: " . BASE_PATH . "users/index.php");
+            header("Location: " . BASE_PATH . "views/users/index.php");
             exit();
         } else {
             $errorMsg = $response->message ?? 'Error desconocido';
@@ -200,7 +200,7 @@ class UsersController{
         $responseData = json_decode($response, true);
     
         if (isset($responseData['code']) && $responseData['code'] === 4) {
-            header("Location: " . BASE_PATH . "users/index.php");
+            header("Location: " . BASE_PATH . "views/users/index.php");
             exit();
         } else {
             $errorMsg = $responseData['message'] ?? 'Error desconocido';
@@ -233,7 +233,7 @@ class UsersController{
         $responseData = json_decode($response, true);
     
         if (isset($responseData['code']) && $responseData['code'] === 4) {
-            header("Location: " . BASE_PATH . "users/index.php");
+            header("Location: " . BASE_PATH . "views/users/index.php");
             exit();
         } else {
             $errorMsg = $responseData['message'] ?? 'Error desconocido';
@@ -259,7 +259,7 @@ class UsersController{
         $responseData = json_decode($response, true);
     
         if (isset($responseData['code']) && $responseData['code'] === 2) {
-            header("Location: " . BASE_PATH . "users/index.php");
+            header("Location: " . BASE_PATH . "views/users/index.php");
             exit();
         } else {
             $errorMsg = $responseData['message'] ?? 'Error desconocido';

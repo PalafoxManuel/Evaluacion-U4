@@ -165,7 +165,12 @@
           <div class="card-body">
             <div class="d-flex align-items-center">
               <div class="flex-shrink-0">
-                <img src="<?= $_SESSION['user_data']->avatar ?? BASE_PATH."assets/images/user/avatar-2.jpg" ?>" alt="user-image" class="user-avtar wid-45 rounded-circle" />
+                <img
+                  src="<?= $_SESSION['user_data']->avatar ?>"
+                  alt="user-image"
+                  class="user-avtar wid-45 rounded-circle"
+                  onerror="this.onerror=null; this.src='<?= BASE_PATH . "assets/images/user/avatar-2.jpg" ?>';"
+                />
               </div>
               <div class="flex-grow-1 ms-3">
                 <div class="dropdown">
@@ -185,7 +190,7 @@
                   <div class="dropdown-menu">
                     <ul>
                       <li>
-                        <a href="users/<?= $_SESSION['user_id'] ?>" class="pc-user-links">
+                        <a href="<?= BASE_PATH ?>users/<?= $_SESSION['user_id'] ?>" class="pc-user-links">
                           <i class="ph-duotone ph-user"></i>
                           <span>My Account</span>
                         </a>

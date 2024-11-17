@@ -83,7 +83,12 @@
               <li class="list-group-item">
                 <div class="d-flex align-items-center">
                   <div class="flex-shrink-0">
-                    <img src="<?= $_SESSION['user_data']->avatar ?? BASE_PATH."assets/images/user/avatar-2.jpg" ?>" alt="user-image" class="wid-50 rounded-circle" />
+                    <img 
+                      src="<?= $_SESSION['user_data']->avatar ?>"
+                      alt="user-image"
+                      class="wid-50 rounded-circle"
+                      onerror="this.onerror=null; this.src='<?= BASE_PATH . "assets/images/user/avatar-2.jpg" ?>';"
+                    />
                   </div>
                   <div class="flex-grow-1 mx-3">
                     <h5 class="mb-0"><?= $_SESSION['user_data']->name ?? "" ?></h5>
@@ -92,7 +97,7 @@
                 </div>
               </li>
               <li class="list-group-item">
-                <a href="users/<?= $_SESSION['user_id'] ?>" class="dropdown-item">
+                <a href="<?= BASE_PATH ?>users/<?= $_SESSION['user_id'] ?>" class="dropdown-item">
                   <span class="d-flex align-items-center">
                     <i class="ph-duotone ph-user-square"></i>
                     <span>My profile</span>

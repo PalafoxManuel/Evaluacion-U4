@@ -1,6 +1,19 @@
 <?php 
   include_once "../../app/config.php";
+  include_once "../../app/users/UsersController.php";
 
+  if (isset($_SESSION["user_id"]) && $_SESSION['user_id']!=null) {
+    $controlador = new UsersController();
+    $response = json_decode(json_encode($controlador->get()));
+    $users = $response->data;
+  }else{
+    header('Location: home/');
+  }
+
+  function fecha($date){
+    $bruto = new DateTime($date);
+    return $bruto->format('Y/m/d');
+  }
 ?>
 <!doctype html>
 <html lang="en">
@@ -66,199 +79,41 @@
                       </tr>
                     </thead>
                     <tbody>
-                      <tr>
-                        <td>
-                          <a href="<?= BASE_PATH ?>users/details" style="text-decoration: none; color: inherit;">
-                          <div class="d-inline-block align-middle">
-                            <img
-                              src="../assets/images/user/avatar-1.jpg"
-                              alt="user image"
-                              class="img-radius align-top m-r-15"
-                              style="width: 40px"
-                            />
-                            <div class="d-inline-block">
-                              <h6 class="m-b-0">Taylor Morgan</h6>
-                              <p class="m-b-0 text-primary">Full Stack developer</p>
+                      <?php foreach($users as $user): ?>
+                        <tr>
+                          <td>
+                            <div class="d-inline-block align-middle">
+                              <img
+                                src="<?= $user->avatar ?>"
+                                alt="user image"
+                                class="img-radius align-top m-r-15"
+                                style="width: 40px"
+                                onerror="this.onerror=null; this.src='<?= BASE_PATH . "assets/images/user/avatar-2.jpg" ?>';"
+                              />
+                              <div class="d-inline-block">
+                                <h6 class="m-b-0"><?= $user->name ?></h6>
+                                <p class="m-b-0 text-primary"><?= $user->role ?? "User" ?></p>
+                              </div>
                             </div>
-                          </div>
-                        </td>
-                        <td>Project manager</td>
-                        <td>34</td>
-                        <td>2015/08/19</td>
-                        <td>
-                          <span class="badge bg-light-success">Active</span>
-                          <div class="overlay-edit">
-                            <ul class="list-inline mb-0">
-                              <li class="list-inline-item m-0"
-                                ><a href="<?= BASE_PATH ?>users/edit_users" class="avtar avtar-s btn btn-primary"><i class="ti ti-pencil f-18"></i></a
-                              ></li>
-                              <li class="list-inline-item m-0"
-                                ><a href="#" class="avtar avtar-s btn bg-white btn-link-danger"><i class="ti ti-trash f-18"></i></a
-                              ></li>
-                            </ul>
-                          </div>
-                        </td>
-                      </tr>
-                      <tr>
-                        <td>
-                          <div class="d-inline-block align-middle">
-                            <img
-                              src="../assets/images/user/avatar-2.jpg"
-                              alt="user image"
-                              class="img-radius align-top m-r-15"
-                              style="width: 40px"
-                            />
-                            <div class="d-inline-block">
-                              <h6 class="m-b-0">Alex Rivera</h6>
-                              <p class="m-b-0 text-primary">Data analyst</p>
+                          </td>
+                          <td><?= $user->role ?? "User" ?></td>
+                          <td>21</td>
+                          <td><?= fecha($user->created_at) ?></td>
+                          <td>
+                            <span class="badge bg-light-success">Active</span>
+                            <div class="overlay-edit">
+                              <ul class="list-inline mb-0">
+                                <li class="list-inline-item m-0"
+                                  ><a href="<?= BASE_PATH ?>users/edit_users" class="avtar avtar-s btn btn-primary"><i class="ti ti-pencil f-18"></i></a
+                                ></li>
+                                <li class="list-inline-item m-0"
+                                  ><a href="#" class="avtar avtar-s btn bg-white btn-link-danger"><i class="ti ti-trash f-18"></i></a
+                                ></li>
+                              </ul>
                             </div>
-                          </div>
-                        </td>
-                        <td>Team leader</td>
-                        <td>29</td>
-                        <td>2018/03/14</td>
-                        <td>
-                          <span class="badge bg-light-danger">Disabled</span>
-                          <div class="overlay-edit">
-                            <ul class="list-inline mb-0">
-                              <li class="list-inline-item m-0"
-                                ><a href="<?= BASE_PATH ?>users/edit_users" class="avtar avtar-s btn btn-primary"><i class="ti ti-pencil f-18"></i></a
-                              ></li>
-                              <li class="list-inline-item m-0"
-                                ><a href="#" class="avtar avtar-s btn bg-white btn-link-danger"><i class="ti ti-trash f-18"></i></a
-                              ></li>
-                            </ul>
-                          </div>
-                        </td>
-                      </tr>
-                      <tr>
-                        <td>
-                          <div class="d-inline-block align-middle">
-                            <img
-                              src="../assets/images/user/avatar-3.jpg"
-                              alt="user image"
-                              class="img-radius align-top m-r-15"
-                              style="width: 40px"
-                            />
-                            <div class="d-inline-block">
-                              <h6 class="m-b-0">Jordan Lee</h6>
-                              <p class="m-b-0 text-primary">UI/UX Designer</p>
-                            </div>
-                          </div>
-                        </td>
-                        <td>Product designer</td>
-                        <td>45</td>
-                        <td>2010/12/05</td>
-                        <td>
-                          <span class="badge bg-light-danger">Disabled</span>
-                          <div class="overlay-edit">
-                            <ul class="list-inline mb-0">
-                              <li class="list-inline-item m-0"
-                                ><a href="#" class="avtar avtar-s btn btn-primary"><i class="ti ti-pencil f-18"></i></a
-                              ></li>
-                              <li class="list-inline-item m-0"
-                                ><a href="#" class="avtar avtar-s btn bg-white btn-link-danger"><i class="ti ti-trash f-18"></i></a
-                              ></li>
-                            </ul>
-                          </div>
-                        </td>
-                      </tr>
-                      <tr>
-                        <td>
-                          <div class="d-inline-block align-middle">
-                            <img
-                              src="../assets/images/user/avatar-4.jpg"
-                              alt="user image"
-                              class="img-radius align-top m-r-15"
-                              style="width: 40px"
-                            />
-                            <div class="d-inline-block">
-                              <h6 class="m-b-0">Sydney Wong</h6>
-                              <p class="m-b-0 text-primary">Frontend Engineer</p>
-                            </div>
-                          </div>
-                        </td>
-                        <td>Senior Developer</td>
-                        <td>30</td>
-                        <td>2017/09/21</td>
-                        <td>
-                          <span class="badge bg-light-success">Active</span>
-                          <div class="overlay-edit">
-                            <ul class="list-inline mb-0">
-                              <li class="list-inline-item m-0"
-                                ><a href="#" class="avtar avtar-s btn btn-primary"><i class="ti ti-pencil f-18"></i></a
-                              ></li>
-                              <li class="list-inline-item m-0"
-                                ><a href="#" class="avtar avtar-s btn bg-white btn-link-danger"><i class="ti ti-trash f-18"></i></a
-                              ></li>
-                            </ul>
-                          </div>
-                        </td>
-                      </tr>
-                      <tr>
-                        <td>
-                          <div class="d-inline-block align-middle">
-                            <img
-                              src="../assets/images/user/avatar-4.jpg"
-                              alt="user image"
-                              class="img-radius align-top m-r-15"
-                              style="width: 40px"
-                            />
-                            <div class="d-inline-block">
-                              <h6 class="m-b-0">Chris Parker</h6>
-                              <p class="m-b-0 text-primary">DevOps Specialist</p>
-                            </div>
-                          </div>
-                        </td>
-                        <td>Infrastructure Lead</td>
-                        <td>33</td>
-                        <td>2012/06/11</td>
-                        <td>
-                          <span class="badge bg-light-success">Active</span>
-                          <div class="overlay-edit">
-                            <ul class="list-inline mb-0">
-                              <li class="list-inline-item m-0"
-                                ><a href="#" class="avtar avtar-s btn btn-primary"><i class="ti ti-pencil f-18"></i></a
-                              ></li>
-                              <li class="list-inline-item m-0"
-                                ><a href="#" class="avtar avtar-s btn bg-white btn-link-danger"><i class="ti ti-trash f-18"></i></a
-                              ></li>
-                            </ul>
-                          </div>
-                        </td>
-                      </tr>
-                      <tr>
-                        <td>
-                          <div class="d-inline-block align-middle">
-                            <img
-                              src="../assets/images/user/avatar-5.jpg"
-                              alt="user image"
-                              class="img-radius align-top m-r-15"
-                              style="width: 40px"
-                            />
-                            <div class="d-inline-block">
-                              <h6 class="m-b-0">Riley Smith</h6>
-                              <p class="m-b-0 text-primary">Machine Learning Engineer</p>
-                            </div>
-                          </div>
-                        </td>
-                        <td>Data Science Lead</td>
-                        <td>35</td>
-                        <td>2013/10/14</td>
-                        <td>
-                          <span class="badge bg-light-danger">Disabled</span>
-                          <div class="overlay-edit">
-                            <ul class="list-inline mb-0">
-                              <li class="list-inline-item m-0"
-                                ><a href="#" class="avtar avtar-s btn btn-primary"><i class="ti ti-pencil f-18"></i></a
-                              ></li>
-                              <li class="list-inline-item m-0"
-                                ><a href="#" class="avtar avtar-s btn bg-white btn-link-danger"><i class="ti ti-trash f-18"></i></a
-                              ></li>
-                            </ul>
-                          </div>
-                        </td>
-                      </tr>
+                          </td>
+                        </tr>
+                      <?php endforeach; ?>
                     </tbody>
                   </table>
                 </div>

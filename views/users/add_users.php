@@ -1,5 +1,12 @@
-    <?php 
+<?php
+    session_start(); 
     include_once "../../app/config.php";
+
+    if (isset($_SESSION["user_id"]) && $_SESSION['user_id']!=null) {
+        //no hace nada
+      }else{
+        header('Location: home/');
+      }
 
     ?>
     <!doctype html>

@@ -94,11 +94,10 @@ class UsersController{
         $responseData = json_decode($response, true);
     
         if (isset($responseData['code']) && $responseData['code'] === 4) {
-            echo json_encode(['success' => true, 'data' => $responseData['data']]);
+            return ['success' => true, 'data' => $responseData['data']];
         } else {
             $errorMsg = $responseData['message'] ?? 'Error desconocido';
-            echo json_encode(['success' => false, 'error' => $errorMsg]);
-            http_response_code(400);
+            return ['success' => false, 'error' => $errorMsg];
         }
     }    
     
@@ -124,17 +123,16 @@ class UsersController{
         $responseData = json_decode($response, true);
     
         if (isset($responseData['code']) && $responseData['code'] === 4) {
-            echo json_encode(['success' => true, 'data' => $responseData['data']]);
+            return ['success' => true, 'data' => $responseData['data']];
         } else {
             $errorMsg = $responseData['message'] ?? 'Error desconocido';
-            echo json_encode(['success' => false, 'error' => $errorMsg]);
-            http_response_code(400);
+            return ['success' => false, 'error' => $errorMsg];
         }
-    }    
+    }
 
     public function create($name, $lastname, $email, $phone_number, $created_by, $role, $password, $profile_photo_file) {
         $curl = curl_init();
-
+    
         $postData = [
             'name' => $name,
             'lastname' => $lastname,
@@ -145,7 +143,7 @@ class UsersController{
             'password' => $password,
             'profile_photo_file' => new CURLFile($profile_photo_file['tmp_name'], $profile_photo_file['type'], $profile_photo_file['name'])
         ];
-
+    
         curl_setopt_array($curl, [
             CURLOPT_URL => 'https://crud.jonathansoto.mx/api/users',
             CURLOPT_RETURNTRANSFER => true,
@@ -156,20 +154,21 @@ class UsersController{
                 'Content-Type: multipart/form-data'
             ],
         ]);
-
+    
         $response = curl_exec($curl);
         curl_close($curl);
         $response = json_decode($response);
-
+    
         if (isset($response->code) && $response->code == 4) {
-            echo json_encode(['success' => true, 'message' => 'Usuario creado exitosamente']);
+            header("Location: " . BASE_PATH . "users/index.php");
+            exit();
         } else {
             $errorMsg = $response->message ?? 'Error desconocido';
-            echo json_encode(['error' => $errorMsg]);
             http_response_code(400);
+            return ['error' => $errorMsg];
         }
     }
-
+    
     public function update($id, $name, $lastname, $email, $phone_number, $created_by, $role, $password) {
         $curl = curl_init();
     
@@ -184,21 +183,16 @@ class UsersController{
             'password' => $password
         ]);
     
-        curl_setopt_array($curl, array(
+        curl_setopt_array($curl, [
             CURLOPT_URL => 'https://crud.jonathansoto.mx/api/users',
             CURLOPT_RETURNTRANSFER => true,
-            CURLOPT_ENCODING => '',
-            CURLOPT_MAXREDIRS => 10,
-            CURLOPT_TIMEOUT => 0,
-            CURLOPT_FOLLOWLOCATION => true,
-            CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
             CURLOPT_CUSTOMREQUEST => 'PUT',
             CURLOPT_POSTFIELDS => $postData,
-            CURLOPT_HTTPHEADER => array(
+            CURLOPT_HTTPHEADER => [
                 'Authorization: Bearer ' . $_SESSION['user_data']->token,
                 'Content-Type: application/x-www-form-urlencoded'
-            ),
-        ));
+            ],
+        ]);
     
         $response = curl_exec($curl);
         curl_close($curl);
@@ -206,11 +200,12 @@ class UsersController{
         $responseData = json_decode($response, true);
     
         if (isset($responseData['code']) && $responseData['code'] === 4) {
-            echo json_encode(['success' => true, 'message' => $responseData['message'], 'data' => $responseData['data']]);
+            header("Location: " . BASE_PATH . "users/index.php");
+            exit();
         } else {
             $errorMsg = $responseData['message'] ?? 'Error desconocido';
-            echo json_encode(['success' => false, 'error' => $errorMsg]);
             http_response_code(400);
+            return ['error' => $errorMsg];
         }
     }
     
@@ -235,49 +230,43 @@ class UsersController{
     
         $response = curl_exec($curl);
         curl_close($curl);
-    
         $responseData = json_decode($response, true);
     
         if (isset($responseData['code']) && $responseData['code'] === 4) {
-            echo json_encode(['success' => true, 'message' => $responseData['message'], 'data' => $responseData['data']]);
+            header("Location: " . BASE_PATH . "users/index.php");
+            exit();
         } else {
             $errorMsg = $responseData['message'] ?? 'Error desconocido';
-            echo json_encode(['success' => false, 'error' => $errorMsg]);
             http_response_code(400);
+            return ['error' => $errorMsg];
         }
     }
     
-
     public function remove($userId) {
         $curl = curl_init();
     
-        curl_setopt_array($curl, array(
+        curl_setopt_array($curl, [
             CURLOPT_URL => 'https://crud.jonathansoto.mx/api/users/' . $userId,
             CURLOPT_RETURNTRANSFER => true,
-            CURLOPT_ENCODING => '',
-            CURLOPT_MAXREDIRS => 10,
-            CURLOPT_TIMEOUT => 0,
-            CURLOPT_FOLLOWLOCATION => true,
-            CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
             CURLOPT_CUSTOMREQUEST => 'DELETE',
-            CURLOPT_HTTPHEADER => array(
+            CURLOPT_HTTPHEADER => [
                 'Authorization: Bearer ' . $_SESSION['user_data']->token
-            ),
-        ));
+            ],
+        ]);
     
         $response = curl_exec($curl);
         curl_close($curl);
-    
         $responseData = json_decode($response, true);
     
         if (isset($responseData['code']) && $responseData['code'] === 2) {
-            echo json_encode(['success' => true, 'message' => $responseData['message']]);
+            header("Location: " . BASE_PATH . "users/index.php");
+            exit();
         } else {
             $errorMsg = $responseData['message'] ?? 'Error desconocido';
-            echo json_encode(['success' => false, 'error' => $errorMsg]);
             http_response_code(400);
+            return ['error' => $errorMsg];
         }
-    }    
+    }
 }
 
 ?>

@@ -83,7 +83,7 @@
               <li class="list-group-item">
                 <div class="d-flex align-items-center">
                   <div class="flex-shrink-0">
-                    <img src="<?= $_SESSION['user_data']->avatar ?? "" ?>" alt="user-image" class="wid-50 rounded-circle" />
+                    <img src="<?= $_SESSION['user_data']->avatar ?? BASE_PATH."assets/images/user/avatar-2.jpg" ?>" alt="user-image" class="wid-50 rounded-circle" />
                   </div>
                   <div class="flex-grow-1 mx-3">
                     <h5 class="mb-0"><?= $_SESSION['user_data']->name ?? "" ?></h5>

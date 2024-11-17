@@ -1,13 +1,6 @@
 <?php 
   session_start();
   include_once "../../app/config.php";
-
-  function procesarFecha($fecha){
-    $nuevaFecha = new DateTime($fecha);
-    $nuevaFecha = $nuevaFecha->format('d/m/y');
-    return $nuevaFecha;
-  }
-
 ?>
 <!doctype html>
 <html lang="en">

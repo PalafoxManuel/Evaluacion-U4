@@ -89,7 +89,7 @@
                   <input class="form-check-input input-primary" type="checkbox" id="customCheckc1" checked="" />
                   <label class="form-check-label text-muted" for="customCheckc1">Remember me?</label>
                 </div>
-                <a href="forgot-password-v2.html">
+                <a href="">
                   <h6 class="text-secondary f-w-400 mb-0">Forgot Password?</h6>
                 </a>
               </div>

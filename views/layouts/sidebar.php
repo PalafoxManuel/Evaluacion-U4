@@ -165,7 +165,7 @@
           <div class="card-body">
             <div class="d-flex align-items-center">
               <div class="flex-shrink-0">
-                <img src="<?= $_SESSION['user_data']->avatar ?? "" ?>" alt="user-image" class="user-avtar wid-45 rounded-circle" />
+                <img src="<?= $_SESSION['user_data']->avatar ?? BASE_PATH."assets/images/user/avatar-2.jpg" ?>" alt="user-image" class="user-avtar wid-45 rounded-circle" />
               </div>
               <div class="flex-grow-1 ms-3">
                 <div class="dropdown">

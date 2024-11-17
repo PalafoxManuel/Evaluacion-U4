@@ -106,6 +106,27 @@
                       <div class="d-inline-flex align-items-center justify-content-between w-100 mb-3">
                         <p class="mb-0 text-muted me-1">Número de telefono</p>
                         <p class="mb-0">6121106397</p>
+                         </div>
+                       </div>
+                      </div>
+                      <div class="card statistics-card-1 overflow-hidden">
+                      <div class="card-body">
+                      <img src="<?= BASE_PATH ?>assets/images/widget/img-status-4.svg" alt="img" class="img-fluid img-bg" />
+                      <h5 class="mb-4">Widget total de compras</h5>
+                      <div class="d-flex align-items-center mt-3">
+                      <h3 class="f-w-300 d-flex align-items-center m-b-0">$199.99</h3>
+                      <span class="badge bg-light-primary ms-2">25%</span>
+                    </div>
+                    <p class="text-muted mb-2 text-sm mt-3">Has gastado 320,45 este mes</p>
+                        <div class="progress" style="height: 7px">
+                          <div
+                            class="progress-bar bg-brand-color-3"
+                            role="progressbar"
+                            style="width: 75%"
+                            aria-valuenow="75"
+                            aria-valuemin="0"
+                            aria-valuemax="100"
+                          ></div>
                       </div>
                     </div>
                   </div>

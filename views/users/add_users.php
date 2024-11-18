@@ -4,9 +4,9 @@
 
     if (isset($_SESSION["user_id"]) && $_SESSION['user_id']!=null) {
         //no hace nada
-      }else{
+    }else{
         header('Location: home/');
-      }
+    }
 
     ?>
     <!doctype html>
@@ -70,30 +70,30 @@
                     <div class="col-md-6">
                         <div class="mb-3">
                         <label class="form-label">Primer nombre</label>
-                        <input name="name" type="text" class="form-control" placeholder="Enter first name" />
+                        <input name="name" type="text" class="form-control" placeholder="Enter first name" required />
                         </div>
                     </div>
                     <div class="col-md-6">
                         <div class="mb-3">
                         <label class="form-label">Apellido</label>
-                        <input name="lastname" type="text" class="form-control" placeholder="Enter last name" />
+                        <input name="lastname" type="text" class="form-control" placeholder="Enter last name" required />
                         </div>
                     </div>
                     <div class="col-md-6">
                         <div class="mb-3">
                         <label class="form-label">Email</label>
-                        <input name="email" type="email" class="form-control" placeholder="Enter email" />
+                        <input name="email" type="email" class="form-control" placeholder="Enter email" required />
                         </div>
                     </div>
                     <div class="col-md-6">
                         <div class="mb-3">
                         <label class="form-label">Número de telefono</label>
-                        <input name="phone_number" type="number" class="form-control" placeholder="Enter Mobile number" />
+                        <input name="phone_number" type="number" class="form-control" placeholder="Enter Mobile number" required />
                         </div>
                     </div>
                     <div class="col-md-12">
                         <div class="mb-3">
-                        <input type="file" id="formFile" name="profile_photo_file" class="form-control" />
+                        <input type="file" name="profile_photo_file" accept="image/png, image/jpeg" class="form-control" required />
                         </div>
                     </div>
                     <div class="col-md-12 text-end">

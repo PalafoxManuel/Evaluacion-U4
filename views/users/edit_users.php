@@ -1,5 +1,19 @@
 <?php 
   include_once "../../app/config.php";
+  include_once "../../app/users/UsersController.php";
+
+  if (isset($_SESSION["user_id"]) && $_SESSION['user_id']!=null) {
+    if (isset($_GET['id'])){
+      $id = $_GET['id'];
+      $controlador = new UsersController();
+      $response = json_decode(json_encode($controlador->getUserById($id)));
+      $user = $response->data;
+    }else{
+      header('Location: home/');
+    }
+  }else{
+    header('Location: home/');
+  }
 
 ?>
 <!doctype html>
@@ -54,7 +68,7 @@
         <!-- [ Main Content ] start -->
         <div class="row">
           <div class="col-12">
-            <div class="card">
+            <form id="formGeneral" method="POST" enctype="multipart/form-data" action="<?= BASE_PATH ?>users" class="card">
               <div class="card-header">
                 <h5 class="mb-0">Información del usuario</h5>
               </div>
@@ -63,65 +77,50 @@
                   <div class="col-md-6">
                     <div class="mb-3">
                       <label class="form-label">Primer nombre</label>
-                      <input type="text" class="form-control" placeholder="Enter first name" />
+                      <input name="name" type="text" class="form-control" placeholder="Enter first name" value="<?= $user->name ?>" required />
                     </div>
                   </div>
                   <div class="col-md-6">
                     <div class="mb-3">
                       <label class="form-label">Apellido</label>
-                      <input type="text" class="form-control" placeholder="Enter last name" />
+                      <input name="lastname" type="text" class="form-control" placeholder="Enter last name" value="<?= $user->lastname ?>" required />
                     </div>
                   </div>
                   <div class="col-md-6">
                     <div class="mb-3">
                       <label class="form-label">Email</label>
-                      <input type="email" class="form-control" placeholder="Enter email" />
-                    </div>
-                  </div>
-                  <div class="col-md-6">
-                    <div class="mb-3">
-                      <label class="form-label">Día de inicio</label>
-                      <input type="date" class="form-control" />
+                      <input name="email" type="email" class="form-control" placeholder="Enter email" value="<?= $user->email ?>" required />
                     </div>
                   </div>
                   <div class="col-md-6">
                     <div class="mb-3">
                       <label class="form-label">Número de telefono</label>
-                      <input type="number" class="form-control" placeholder="Enter Mobile number" />
-                    </div>
-                  </div>
-                  <div class="col-md-6">
-                    <div class="mb-3">
-                      <label class="form-label">Género</label>
-                      <select class="form-select">
-                        <option>Masculino</option>
-                        <option>Femenino</option>
-                        <option>Prefiero no decirlo</option>
-                      </select>
-                    </div>
-                  </div>
-                  <div class="col-md-6">
-                    <div class="mb-3">
-                      <label class="form-label">Fecha de nacimiento</label>
-                      <input type="date" class="form-control" />
+                      <input name="phone_number" type="number" class="form-control" placeholder="Enter Mobile number" value="<?= $user->phone_number ?>" required/>
                     </div>
                   </div>
                   <div class="col-md-12">
-                    <div class="mb-3">
-                      <input class="form-control" type="file" />
+                    <div method="post" enctype="multipart/form-data" action="<?= BASE_PATH ?>users" class="mb-3">
+                      <input class="form-control" type="file" id="imagen" accept="image/png, image/jpeg" />
                     </div>
                   </div>
                   <div class="col-md-12 text-end">
-                    <button class="btn btn-primary">Editar usuario</button>
+                    <button id="sub" name="action" type="button" class="btn btn-primary">Editar usuario</button>
+                    <input type="hidden" name="id" value="<?= $user->id ?>">
+                    <input type="hidden" name="action" value="update_user">
+                    <input type="hidden" name="role" value="Administrador">
+                    <input type="hidden" name="password" value="123456789">
+                    <input type="hidden" name="created_by" value="<?= $_SESSION['user_data']->name ?>">
+                    <input type="hidden" name="global_token" value="<?= $_SESSION['global_token'] ?>">
                   </div>
                 </div>
               </div>
-            </div>
+            </form>
           </div>
         </div>
         <!-- [ Main Content ] end -->
       </div>
     </div>
+
     <?php 
 
     include "../layouts/footer.php";
@@ -138,6 +137,33 @@
     for (var t = 0; t < tc.length; t++) {
       new SimpleBar(tc[t]);
     }
+
+    document.getElementById("sub").addEventListener("click", function (e) {
+      e.preventDefault();
+
+      let imagenAvatar = document.getElementById("imagen");
+      let imagen = imagenAvatar.files[0];
+      if (imagen){
+        let formAvatar = new FormData();
+        formAvatar.append('profile_photo_file', imagen);
+        formAvatar.append('id', <?= $user->id ?>);
+        formAvatar.append('action', 'update_avatar');
+        formAvatar.append('global_token', "<?= $_SESSION['global_token'] ?>");
+        console.log("hay imagen")
+
+        fetch("<?= BASE_PATH ?>users/", {
+        method: 'post',
+        body: formAvatar,
+        })
+        .then(response => response.json())
+        .then(data => {
+        })
+        .catch(error => console.error("Error: ",error))
+        
+      }
+      document.getElementById("formGeneral").submit();
+    })
+
     </script>
     <?php 
 

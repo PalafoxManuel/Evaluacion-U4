@@ -4,15 +4,13 @@ include_once dirname(__DIR__) . '/config.php';
 session_start();
 
 if (session_status() !== PHP_SESSION_ACTIVE) {
-    echo json_encode(['error' => 'No hay una sesión activa. Por favor, inicie sesión.']);
     http_response_code(401);
-    exit();
+    exit(json_encode(['error' => 'No hay una sesión activa. Por favor, inicie sesión.']));
 }
 
 if (!isset($_POST['global_token'], $_SESSION['global_token']) || $_POST['global_token'] !== $_SESSION['global_token']) {
-    echo json_encode(['error' => 'Token de seguridad no coincide.']);
     http_response_code(400);
-    exit();
+    exit(json_encode(['error' => 'Token de seguridad no coincide.']));
 }
 
 if (isset($_POST['action'])) {
@@ -34,20 +32,14 @@ if (isset($_POST['action'])) {
 
             if (isset($_FILES['cover']) && $_FILES['cover']['error'] == 0) {
                 $cover = $_FILES['cover'];
+                $productsController->create(
+                    $name, $slug, $description, $features, $cover, $brand_id, 
+                    [$category], $tags, $price, $original_price, $stock, $sku
+                );
             } else {
-                echo json_encode(['error' => 'El archivo de imagen no se subió correctamente.']);
-                exit();
+                http_response_code(400);
+                exit(json_encode(['error' => 'El archivo de imagen no se subió correctamente.']));
             }
-
-            $productsController->create(
-                $name, $slug, $description, $features, $cover, $brand_id, 
-                [$category], $tags, $price, $original_price, $stock, $sku
-            );
-            break;
-
-        case 'delete_product':
-            $productId = strip_tags($_POST['product_id']);
-            $productsController->remove($productId);
             break;
 
         case 'update_product':
@@ -59,28 +51,37 @@ if (isset($_POST['action'])) {
             $brand_id = strip_tags($_POST['brand_id']);
             $categories = isset($_POST['categories']) ? $_POST['categories'] : [];
             $tags = isset($_POST['tags']) ? $_POST['tags'] : [];
-
             $productsController->update($productId, $name, $slug, $description, $features, $brand_id, $categories, $tags);
             break;
 
+        case 'delete_product':
+            $productId = strip_tags($_POST['product_id']);
+            $productsController->remove($productId);
+            break;
+
         case 'get_all_products':
-            return $productsController->get();
+            $products = $productsController->get();
+            http_response_code(200);
+            exit(json_encode(['success' => true, 'data' => $products]));
             break;
 
         case 'get_product_by_id':
             $productId = strip_tags($_POST['product_id']);
-            return $productsController->getProductById($productId);
+            $product = $productsController->getProductById($productId);
+            http_response_code(200);
+            exit(json_encode(['success' => true, 'data' => $product]));
             break;
 
         case 'get_products_by_category':
             $categorySlug = strip_tags($_POST['category_slug']);
-            return $productsController->getProductsByCategory($categorySlug);
+            $productsByCategory = $productsController->getProductsByCategory($categorySlug);
+            http_response_code(200);
+            exit(json_encode(['success' => true, 'data' => $productsByCategory]));
             break;
 
         default:
-            echo json_encode(['error' => 'Acción no válida.']);
             http_response_code(400);
-            break;
+            exit(json_encode(['error' => 'Acción no válida.']));
     }
 }
 
@@ -103,11 +104,11 @@ class ProductsController {
         $responseData = json_decode($response, true);
     
         if (isset($responseData['code']) && $responseData['code'] === 4) {
-            return ['success' => true, 'data' => $responseData['data']];
+            return $responseData['data'];
         } else {
             $errorMsg = $responseData['message'] ?? 'Error desconocido al obtener los productos';
             http_response_code(400);
-            return ['success' => false, 'error' => $errorMsg];
+            return ['error' => $errorMsg];
         }
     }    
 
@@ -118,36 +119,22 @@ class ProductsController {
         curl_setopt_array($curl, [
             CURLOPT_URL => $url . $product_id,
             CURLOPT_RETURNTRANSFER => true,
-            CURLOPT_ENCODING => '',
-            CURLOPT_MAXREDIRS => 10,
-            CURLOPT_TIMEOUT => 10,
-            CURLOPT_FOLLOWLOCATION => true,
-            CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
-            CURLOPT_CUSTOMREQUEST => 'GET',
             CURLOPT_HTTPHEADER => [
                 'Authorization: Bearer ' . $_SESSION['user_data']->token
             ],
         ]);
     
         $response = curl_exec($curl);
-        
-        if (curl_errno($curl)) {
-            curl_close($curl);
-            http_response_code(500);
-            return ['error' => 'Error de conexión: ' . curl_error($curl)];
-        }
-        
         curl_close($curl);
         $responseData = json_decode($response, true);
-        
+    
         if (isset($responseData['code']) && $responseData['code'] === 4) {
-            return ['success' => true, 'data' => $responseData['data']];
+            return $responseData['data'];
         } else {
-            $errorMsg = $responseData['message'] ?? 'Error desconocido al obtener el producto';
             http_response_code(400);
-            return ['success' => false, 'error' => $errorMsg];
+            return ['error' => 'Error desconocido al obtener el producto'];
         }
-    }       
+    }
 
     public function getProductsByCategory($categorySlug) {
         $curl = curl_init();
@@ -156,34 +143,20 @@ class ProductsController {
         curl_setopt_array($curl, [
             CURLOPT_URL => $url . $categorySlug,
             CURLOPT_RETURNTRANSFER => true,
-            CURLOPT_ENCODING => '',
-            CURLOPT_MAXREDIRS => 10,
-            CURLOPT_TIMEOUT => 10,
-            CURLOPT_FOLLOWLOCATION => true,
-            CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
-            CURLOPT_CUSTOMREQUEST => 'GET',
             CURLOPT_HTTPHEADER => [
                 'Authorization: Bearer ' . $_SESSION['user_data']->token
             ],
         ]);
     
         $response = curl_exec($curl);
-        
-        if (curl_errno($curl)) {
-            curl_close($curl);
-            http_response_code(500);
-            return ['error' => 'Error de conexión: ' . curl_error($curl)];
-        }
-    
         curl_close($curl);
         $responseData = json_decode($response, true);
-        
+    
         if (isset($responseData['code']) && $responseData['code'] === 4) {
-            return ['success' => true, 'data' => $responseData['data']];
+            return $responseData['data'];
         } else {
-            $errorMsg = $responseData['message'] ?? 'Error desconocido al obtener productos por categoría';
             http_response_code(400);
-            return ['success' => false, 'error' => $errorMsg];
+            return ['error' => 'Error desconocido al obtener productos por categoría'];
         }
     }    
 
@@ -203,7 +176,6 @@ class ProductsController {
         foreach ($categories as $index => $category) {
             $postData["categories[$index]"] = $category;
         }
-    
         foreach ($tags as $index => $tag) {
             $postData["tags[$index]"] = $tag;
         }
@@ -227,44 +199,33 @@ class ProductsController {
             header("Location: " . BASE_PATH . "views/products/index.php");
             exit();
         } else {
-            $errorMsg = $responseData['message'] ?? 'Error desconocido al crear el producto';
             http_response_code(400);
-            return ['success' => false, 'error' => $errorMsg];
+            exit(json_encode(['error' => 'Error desconocido al crear el producto']));
         }
-    }    
+    }
 
     public function update($product_id, $name, $slug, $description, $features, $brand_id, $categories = [], $tags = []) {
         $curl = curl_init();
         $url = 'https://crud.jonathansoto.mx/api/products';
     
-        $postData = [
+        $postData = http_build_query([
             'id' => $product_id,
             'name' => $name,
             'slug' => $slug,
             'description' => $description,
             'features' => $features,
             'brand_id' => $brand_id
-        ];
-    
-        foreach ($categories as $index => $category) {
-            $postData["categories[$index]"] = $category;
-        }
-        foreach ($tags as $index => $tag) {
-            $postData["tags[$index]"] = $tag;
-        }
-    
-        $postData = http_build_query($postData);
-        $headers = [
-            'Authorization: Bearer ' . $_SESSION['user_data']->token,
-            'Content-Type: application/x-www-form-urlencoded'
-        ];
+        ]);
     
         curl_setopt_array($curl, [
             CURLOPT_URL => $url,
             CURLOPT_RETURNTRANSFER => true,
             CURLOPT_CUSTOMREQUEST => 'PUT',
             CURLOPT_POSTFIELDS => $postData,
-            CURLOPT_HTTPHEADER => $headers,
+            CURLOPT_HTTPHEADER => [
+                'Authorization: Bearer ' . $_SESSION['user_data']->token,
+                'Content-Type: application/x-www-form-urlencoded'
+            ],
         ]);
     
         $response = curl_exec($curl);
@@ -275,18 +236,17 @@ class ProductsController {
             header("Location: " . BASE_PATH . "views/products/index.php");
             exit();
         } else {
-            $errorMsg = $responseData['message'] ?? 'Error desconocido al actualizar el producto';
             http_response_code(400);
-            return ['success' => false, 'error' => $errorMsg];
+            exit(json_encode(['error' => 'Error desconocido al actualizar el producto']));
         }
-    }        
+    }
 
     public function remove($product_id) {
         $curl = curl_init();
-        $url = 'https://crud.jonathansoto.mx/api/products/';
+        $url = 'https://crud.jonathansoto.mx/api/products/' . $product_id;
     
         curl_setopt_array($curl, [
-            CURLOPT_URL => $url . $product_id,
+            CURLOPT_URL => $url,
             CURLOPT_RETURNTRANSFER => true,
             CURLOPT_CUSTOMREQUEST => 'DELETE',
             CURLOPT_HTTPHEADER => [
@@ -298,14 +258,12 @@ class ProductsController {
         curl_close($curl);
         $responseData = json_decode($response, true);
     
-        if (isset($responseData['code']) && $responseData['code'] == 2) {
+        if (isset($responseData['code']) && $responseData['code'] === 2) {
             header("Location: " . BASE_PATH . "views/products/index.php");
             exit();
         } else {
-            $errorMsg = $responseData['message'] ?? 'Error desconocido al eliminar el producto';
             http_response_code(400);
-            return ['success' => false, 'error' => $errorMsg];
+            exit(json_encode(['error' => 'Error desconocido al eliminar el producto']));
         }
-    }    
+    }
 }
-?>

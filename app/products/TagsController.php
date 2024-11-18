@@ -4,15 +4,13 @@ include_once dirname(__DIR__) . '/config.php';
 session_start();
 
 if (session_status() !== PHP_SESSION_ACTIVE) {
-    echo json_encode(['error' => 'No hay una sesión activa. Por favor, inicie sesión.']);
     http_response_code(401);
-    exit();
+    exit(json_encode(['error' => 'No hay una sesión activa. Por favor, inicie sesión.']));
 }
 
 if (!isset($_POST['global_token'], $_SESSION['global_token']) || $_POST['global_token'] !== $_SESSION['global_token']) {
-    echo json_encode(['error' => 'Token de seguridad no coincide.']);
     http_response_code(400);
-    exit();
+    exit(json_encode(['error' => 'Token de seguridad no coincide.']));
 }
 
 $tagsController = new TagsController();
@@ -23,12 +21,12 @@ if (isset($_POST['action'])) {
             $name = $_POST['name'] ?? null;
             $description = $_POST['description'] ?? null;
             $slug = $_POST['slug'] ?? null;
+
             if ($name && $description && $slug) {
-                $response = $tagsController->createTag($name, $description, $slug);
-                echo json_encode($response);
+                $tagsController->create($name, $description, $slug);
             } else {
-                echo json_encode(['error' => 'Datos insuficientes para crear la etiqueta.']);
                 http_response_code(400);
+                exit(json_encode(['error' => 'Datos insuficientes para crear la etiqueta.']));
             }
             break;
 
@@ -37,56 +35,63 @@ if (isset($_POST['action'])) {
             $name = $_POST['name'] ?? null;
             $description = $_POST['description'] ?? null;
             $slug = $_POST['slug'] ?? null;
+
             if ($id && $name && $description && $slug) {
-                $response = $tagsController->updateTag($id, $name, $description, $slug);
-                echo json_encode($response);
+                $tagsController->update($id, $name, $description, $slug);
             } else {
-                echo json_encode(['error' => 'Datos insuficientes para actualizar la etiqueta.']);
                 http_response_code(400);
+                exit(json_encode(['error' => 'Datos insuficientes para actualizar la etiqueta.']));
             }
             break;
 
         case 'delete_tag':
             $id = $_POST['id'] ?? null;
+
             if ($id) {
-                $response = $tagsController->deleteTag($id);
-                echo json_encode($response);
+                $tagsController->delete($id);
             } else {
-                echo json_encode(['error' => 'ID no proporcionado para eliminar la etiqueta.']);
                 http_response_code(400);
+                exit(json_encode(['error' => 'ID no proporcionado para eliminar la etiqueta.']));
             }
             break;
 
         case 'get_tags':
-            $response = $tagsController->getTags();
-            echo json_encode($response);
+            $tags = $tagsController->getTags();
+            http_response_code(200);
+            exit(json_encode(['success' => true, 'data' => $tags]));
             break;
 
         case 'get_tag_by_id':
             $id = $_POST['id'] ?? null;
+
             if ($id) {
-                $response = $tagsController->getTagById($id);
-                echo json_encode($response);
+                $tag = $tagsController->getTagById($id);
+                if ($tag) {
+                    http_response_code(200);
+                    exit(json_encode(['success' => true, 'data' => $tag]));
+                } else {
+                    http_response_code(404);
+                    exit(json_encode(['error' => 'Etiqueta no encontrada.']));
+                }
             } else {
-                echo json_encode(['error' => 'ID no proporcionado para obtener la etiqueta.']);
                 http_response_code(400);
+                exit(json_encode(['error' => 'ID no proporcionado para obtener la etiqueta.']));
             }
             break;
 
         default:
-            echo json_encode(['error' => 'Acción no válida.']);
             http_response_code(400);
-            break;
+            exit(json_encode(['error' => 'Acción no válida.']));
     }
 }
 
-class TagsController{
+class TagsController {
     public function getTags() {
         $curl = curl_init();
         curl_setopt_array($curl, [
             CURLOPT_URL => 'https://crud.jonathansoto.mx/api/tags',
             CURLOPT_RETURNTRANSFER => true,
-            CURLOPT_HTTPHEADER => ['Authorization: Bearer ' . $_SESSION['user_data']->token]
+            CURLOPT_HTTPHEADER => ['Authorization: Bearer ' . $_SESSION['user_data']->token],
         ]);
         $response = curl_exec($curl);
         curl_close($curl);
@@ -102,7 +107,7 @@ class TagsController{
             CURLOPT_URL => $url . $tag_id,
             CURLOPT_RETURNTRANSFER => true,
             CURLOPT_HTTPHEADER => [
-                'Authorization: Bearer ' . $_SESSION['user_data']->token
+                'Authorization: Bearer ' . $_SESSION['user_data']->token,
             ],
         ]);
 
@@ -120,7 +125,7 @@ class TagsController{
         }
     }
 
-    public function createTag($name, $description, $slug) {
+    public function create($name, $description, $slug) {
         $curl = curl_init();
         $url = 'https://crud.jonathansoto.mx/api/tags';
         
@@ -131,10 +136,10 @@ class TagsController{
             CURLOPT_POSTFIELDS => [
                 'name' => $name,
                 'description' => $description,
-                'slug' => $slug
+                'slug' => $slug,
             ],
             CURLOPT_HTTPHEADER => [
-                'Authorization: Bearer ' . $_SESSION['user_data']->token
+                'Authorization: Bearer ' . $_SESSION['user_data']->token,
             ],
         ]);
 
@@ -144,15 +149,15 @@ class TagsController{
         $responseData = json_decode($response, true);
 
         if (isset($responseData['code']) && $responseData['code'] === 4) {
-            return ['success' => true, 'data' => $responseData['data']];
+            header("Location: " . BASE_PATH . "views/catalogs/tags/tags.php");
+            exit();
         } else {
-            $errorMsg = $responseData['message'] ?? 'Error desconocido al crear la etiqueta';
             http_response_code(400);
-            return ['success' => false, 'error' => $errorMsg];
+            exit(json_encode(['error' => 'Error desconocido al crear la etiqueta.']));
         }
     }
 
-    public function updateTag($id, $name, $description, $slug) {
+    public function update($id, $name, $description, $slug) {
         $curl = curl_init();
         $url = 'https://crud.jonathansoto.mx/api/tags';
 
@@ -160,7 +165,7 @@ class TagsController{
             'id' => $id,
             'name' => $name,
             'description' => $description,
-            'slug' => $slug
+            'slug' => $slug,
         ]);
 
         curl_setopt_array($curl, [
@@ -170,7 +175,7 @@ class TagsController{
             CURLOPT_POSTFIELDS => $postData,
             CURLOPT_HTTPHEADER => [
                 'Authorization: Bearer ' . $_SESSION['user_data']->token,
-                'Content-Type: application/x-www-form-urlencoded'
+                'Content-Type: application/x-www-form-urlencoded',
             ],
         ]);
 
@@ -180,15 +185,15 @@ class TagsController{
         $responseData = json_decode($response, true);
 
         if (isset($responseData['code']) && $responseData['code'] === 4) {
-            return ['success' => true, 'data' => $responseData['data']];
+            header("Location: " . BASE_PATH . "views/catalogs/tags/tags.php");
+            exit();
         } else {
-            $errorMsg = $responseData['message'] ?? 'Error desconocido al actualizar la etiqueta';
             http_response_code(400);
-            return ['success' => false, 'error' => $errorMsg];
+            exit(json_encode(['error' => 'Error desconocido al actualizar la etiqueta.']));
         }
     }
 
-    public function deleteTag($id) {
+    public function delete($id) {
         $curl = curl_init();
         $url = 'https://crud.jonathansoto.mx/api/tags/' . $id;
 
@@ -197,7 +202,7 @@ class TagsController{
             CURLOPT_RETURNTRANSFER => true,
             CURLOPT_CUSTOMREQUEST => 'DELETE',
             CURLOPT_HTTPHEADER => [
-                'Authorization: Bearer ' . $_SESSION['user_data']->token
+                'Authorization: Bearer ' . $_SESSION['user_data']->token,
             ],
         ]);
 
@@ -207,13 +212,11 @@ class TagsController{
         $responseData = json_decode($response, true);
 
         if (isset($responseData['code']) && $responseData['code'] === 2) {
-            return ['success' => true, 'message' => $responseData['message']];
+            header("Location: " . BASE_PATH . "views/catalogs/tags/tags.php");
+            exit();
         } else {
-            $errorMsg = $responseData['message'] ?? 'Error desconocido al eliminar la etiqueta';
             http_response_code(400);
-            return ['success' => false, 'error' => $errorMsg];
+            exit(json_encode(['error' => 'Error desconocido al eliminar la etiqueta.']));
         }
     }
 }
-
-?>

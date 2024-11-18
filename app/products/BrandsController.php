@@ -4,15 +4,13 @@ include_once dirname(__DIR__) . '/config.php';
 session_start();
 
 if (session_status() !== PHP_SESSION_ACTIVE) {
-    echo json_encode(['error' => 'No hay una sesión activa. Por favor, inicie sesión.']);
     http_response_code(401);
-    exit();
+    exit(json_encode(['error' => 'No hay una sesión activa. Por favor, inicie sesión.']));
 }
 
 if (!isset($_POST['global_token'], $_SESSION['global_token']) || $_POST['global_token'] !== $_SESSION['global_token']) {
-    echo json_encode(['error' => 'Token de seguridad no coincide.']);
     http_response_code(400);
-    exit();
+    exit(json_encode(['error' => 'Token de seguridad no coincide.']));
 }
 
 if (isset($_POST['action'])) {
@@ -23,12 +21,12 @@ if (isset($_POST['action'])) {
             $name = $_POST['name'] ?? null;
             $description = $_POST['description'] ?? null;
             $slug = $_POST['slug'] ?? null;
+
             if ($name && $description && $slug) {
-                $response = $brandsController->create($name, $description, $slug);
-                echo json_encode($response);
+                $brandsController->create($name, $description, $slug);
             } else {
-                echo json_encode(['error' => 'Datos insuficientes para crear la marca.']);
                 http_response_code(400);
+                exit(json_encode(['error' => 'Datos insuficientes para crear la marca.']));
             }
             break;
 
@@ -37,40 +35,63 @@ if (isset($_POST['action'])) {
             $name = $_POST['name'] ?? null;
             $description = $_POST['description'] ?? null;
             $slug = $_POST['slug'] ?? null;
+
             if ($id && $name && $description && $slug) {
-                $response = $brandsController->update($id, $name, $description, $slug);
-                echo json_encode($response);
+                $brandsController->update($id, $name, $description, $slug);
             } else {
-                echo json_encode(['error' => 'Datos insuficientes para actualizar la marca.']);
                 http_response_code(400);
+                exit(json_encode(['error' => 'Datos insuficientes para actualizar la marca.']));
             }
             break;
 
         case 'delete_brand':
             $id = $_POST['id'] ?? null;
+
             if ($id) {
-                $response = $brandsController->deleteBrand($id);
-                echo json_encode($response);
+                $brandsController->deleteBrand($id);
             } else {
-                echo json_encode(['error' => 'ID no proporcionado para eliminar la marca.']);
                 http_response_code(400);
+                exit(json_encode(['error' => 'ID no proporcionado para eliminar la marca.']));
+            }
+            break;
+
+        case 'get_brands':
+            $brands = $brandsController->getBrands();
+            http_response_code(200);
+            exit(json_encode(['success' => true, 'data' => $brands]));
+            break;
+
+        case 'get_brand_by_id':
+            $id = $_POST['id'] ?? null;
+    
+            if ($id) {
+                $brand = $brandsController->getBrandById($id);
+                if ($brand) {
+                    http_response_code(200);
+                    exit(json_encode(['success' => true, 'data' => $brand]));
+                } else {
+                    http_response_code(404);
+                    exit(json_encode(['error' => 'Marca no encontrada.']));
+                }
+            } else {
+                http_response_code(400);
+                exit(json_encode(['error' => 'ID no proporcionado para buscar la marca.']));
             }
             break;
 
         default:
-            echo json_encode(['error' => 'Acción no válida.']);
             http_response_code(400);
-            break;
+            exit(json_encode(['error' => 'Acción no válida.']));
     }
 }
 
-class BrandsController{
+class BrandsController {
     public function getBrands() {
         $curl = curl_init();
         curl_setopt_array($curl, [
             CURLOPT_URL => 'https://crud.jonathansoto.mx/api/brands',
             CURLOPT_RETURNTRANSFER => true,
-            CURLOPT_HTTPHEADER => ['Authorization: Bearer ' . $_SESSION['user_data']->token]
+            CURLOPT_HTTPHEADER => ['Authorization: Bearer ' . $_SESSION['user_data']->token],
         ]);
         $response = curl_exec($curl);
         curl_close($curl);
@@ -86,7 +107,7 @@ class BrandsController{
             CURLOPT_URL => $url . $brand_id,
             CURLOPT_RETURNTRANSFER => true,
             CURLOPT_HTTPHEADER => [
-                'Authorization: Bearer ' . $_SESSION['user_data']->token
+                'Authorization: Bearer ' . $_SESSION['user_data']->token,
             ],
         ]);
     
@@ -128,11 +149,11 @@ class BrandsController{
         $responseData = json_decode($response, true);
     
         if (isset($responseData['code']) && $responseData['code'] === 4) {
-            return ['success' => true, 'message' => $responseData['message'], 'data' => $responseData['data']];
+            header("Location: " . BASE_PATH . "views/catalogs/brands/brands.php");
+            exit();
         } else {
-            $errorMsg = $responseData['message'] ?? 'Error desconocido al crear la marca';
             http_response_code(400);
-            return ['success' => false, 'error' => $errorMsg];
+            exit(json_encode(['error' => 'Error desconocido al crear la marca.']));
         }
     }
 
@@ -164,11 +185,11 @@ class BrandsController{
         $responseData = json_decode($response, true);
     
         if (isset($responseData['code']) && $responseData['code'] === 4) {
-            return ['success' => true, 'message' => $responseData['message'], 'data' => $responseData['data']];
+            header("Location: " . BASE_PATH . "views/catalogs/brands/brands.php");
+            exit();
         } else {
-            $errorMsg = $responseData['message'] ?? 'Error desconocido al actualizar la marca';
             http_response_code(400);
-            return ['success' => false, 'error' => $errorMsg];
+            exit(json_encode(['error' => 'Error desconocido al actualizar la marca.']));
         }
     }
 
@@ -191,13 +212,11 @@ class BrandsController{
         $responseData = json_decode($response, true);
     
         if (isset($responseData['code']) && $responseData['code'] === 2) {
-            return ['success' => true, 'message' => $responseData['message']];
+            header("Location: " . BASE_PATH . "views/catalogs/brands/brands.php");
+            exit();
         } else {
-            $errorMsg = $responseData['message'] ?? 'Error desconocido al eliminar la marca';
             http_response_code(400);
-            return ['success' => false, 'error' => $errorMsg];
+            exit(json_encode(['error' => 'Error desconocido al eliminar la marca.']));
         }
     }
 }
-
-?>

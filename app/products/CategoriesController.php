@@ -26,11 +26,10 @@ if (isset($_POST['action'])) {
             $categoryId = $_POST['category_id'] ?? null;
 
             if ($name && $description && $slug && $categoryId) {
-                $response = $categoriesController->create($name, $description, $slug, $categoryId);
-                echo json_encode($response);
+                $categoriesController->create($name, $description, $slug, $categoryId);
             } else {
-                echo json_encode(['error' => 'Datos insuficientes para crear la categoría.']);
                 http_response_code(400);
+                exit(json_encode(['error' => 'Datos insuficientes para crear la categoría.']));
             }
             break;
 
@@ -42,11 +41,10 @@ if (isset($_POST['action'])) {
             $categoryId = $_POST['category_id'] ?? null;
 
             if ($id && $name && $description && $slug && $categoryId) {
-                $response = $categoriesController->update($id, $name, $description, $slug, $categoryId);
-                echo json_encode($response);
+                $categoriesController->update($id, $name, $description, $slug, $categoryId);
             } else {
-                echo json_encode(['error' => 'Datos insuficientes para actualizar la categoría.']);
                 http_response_code(400);
+                exit(json_encode(['error' => 'Datos insuficientes para actualizar la categoría.']));
             }
             break;
 
@@ -54,18 +52,39 @@ if (isset($_POST['action'])) {
             $id = $_POST['id'] ?? null;
 
             if ($id) {
-                $response = $categoriesController->delete($id);
-                echo json_encode($response);
+                $categoriesController->delete($id);
             } else {
-                echo json_encode(['error' => 'ID no proporcionado para eliminar la categoría.']);
                 http_response_code(400);
+                exit(json_encode(['error' => 'ID no proporcionado para eliminar la categoría.']));
+            }
+            break;
+        case 'get_categories':
+            $categories = $categoriesController->getCategories();
+            http_response_code(200);
+            exit(json_encode(['success' => true, 'data' => $categories]));
+            break;
+    
+        case 'get_category_by_id':
+            $id = $_POST['id'] ?? null;
+    
+            if ($id) {
+                $category = $categoriesController->getCategoriesById($id);
+                if ($category) {
+                    http_response_code(200);
+                    exit(json_encode(['success' => true, 'data' => $category]));
+                } else {
+                    http_response_code(404);
+                    exit(json_encode(['error' => 'Categoría no encontrada.']));
+                }
+            } else {
+                http_response_code(400);
+                exit(json_encode(['error' => 'ID no proporcionado para buscar la categoría.']));
             }
             break;
 
         default:
-            echo json_encode(['error' => 'Acción no válida.']);
             http_response_code(400);
-            break;
+            exit(json_encode(['error' => 'Acción no válida.']));
     }
 }
 
@@ -77,7 +96,7 @@ class CategoriesController{
         curl_setopt_array($curl, [
             CURLOPT_URL => $url,
             CURLOPT_RETURNTRANSFER => true,
-            CURLOPT_HTTPHEADER => ['Authorization: Bearer ' . $_SESSION['user_data']->token]
+            CURLOPT_HTTPHEADER => ['Authorization: Bearer ' . $_SESSION['user_data']->token],
         ]);
         $response = curl_exec($curl);
         curl_close($curl);
@@ -89,7 +108,7 @@ class CategoriesController{
         $curl = curl_init();
         $url = 'https://crud.jonathansoto.mx/api/categories/';
     
-        curl_setopt_array($curl, array(
+        curl_setopt_array($curl, [
             CURLOPT_URL => $url . $id,
             CURLOPT_RETURNTRANSFER => true,
             CURLOPT_ENCODING => '',
@@ -98,17 +117,14 @@ class CategoriesController{
             CURLOPT_FOLLOWLOCATION => true,
             CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
             CURLOPT_CUSTOMREQUEST => 'GET',
-        ));
+        ]);
     
         $response = curl_exec($curl);
         curl_close($curl);
         $responseData = json_decode($response, true);
 
         if (isset($responseData['data'])) {
-            return [
-                'success' => true,
-                'data' => $responseData['data']
-            ];
+            return ['success' => true, 'data' => $responseData['data']];
         } else {
             return false;
         }
@@ -118,7 +134,7 @@ class CategoriesController{
         $curl = curl_init();
         $url = 'https://crud.jonathansoto.mx/api/categories';
 
-        curl_setopt_array($curl, array(
+        curl_setopt_array($curl, [
             CURLOPT_URL => $url,
             CURLOPT_RETURNTRANSFER => true,
             CURLOPT_ENCODING => '',
@@ -127,25 +143,24 @@ class CategoriesController{
             CURLOPT_FOLLOWLOCATION => true,
             CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
             CURLOPT_CUSTOMREQUEST => 'POST',
-            CURLOPT_POSTFIELDS => array(
+            CURLOPT_POSTFIELDS => [
                 'name' => $name,
                 'description' => $description,
                 'slug' => $slug,
-                'category_id' => $categoryId
-            ),
-        ));
+                'category_id' => $categoryId,
+            ],
+        ]);
 
         $response = curl_exec($curl);
         curl_close($curl);
         $responseData = json_decode($response, true);
 
         if (isset($responseData['data'])) {
-            return [
-                'success' => true,
-                'data' => $responseData['data']
-            ];
+            header("Location: " . BASE_PATH . "views/catalogs/categories/categories.php");
+            exit();
         } else {
-            return false;
+            http_response_code(400);
+            exit(json_encode(['error' => 'Error al crear la categoría.']));
         }
     }
 
@@ -153,7 +168,7 @@ class CategoriesController{
         $curl = curl_init();
         $url = 'https://crud.jonathansoto.mx/api/categories';
 
-        curl_setopt_array($curl, array(
+        curl_setopt_array($curl, [
             CURLOPT_URL => $url,
             CURLOPT_RETURNTRANSFER => true,
             CURLOPT_ENCODING => '',
@@ -162,32 +177,26 @@ class CategoriesController{
             CURLOPT_FOLLOWLOCATION => true,
             CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
             CURLOPT_CUSTOMREQUEST => 'PUT',
-            CURLOPT_POSTFIELDS => http_build_query(array(
+            CURLOPT_POSTFIELDS => http_build_query([
                 'id' => $id,
                 'name' => $name,
                 'description' => $description,
                 'slug' => $slug,
-                'category_id' => $categoryId
-            )),
-            CURLOPT_HTTPHEADER => array(
-                'Content-Type: application/x-www-form-urlencoded'
-            ),
-        ));
+                'category_id' => $categoryId,
+            ]),
+            CURLOPT_HTTPHEADER => ['Content-Type: application/x-www-form-urlencoded'],
+        ]);
 
         $response = curl_exec($curl);
         curl_close($curl);
         $responseData = json_decode($response, true);
 
         if (isset($responseData['data'])) {
-            return [
-                'success' => true,
-                'data' => $responseData['data']
-            ];
+            header("Location: " . BASE_PATH . "views/catalogs/categories/categories.php");
+            exit();
         } else {
-            return [
-                'success' => false,
-                'message' => $responseData['message'] ?? 'Error al actualizar la categoría.'
-            ];
+            http_response_code(400);
+            exit(json_encode(['error' => 'Error al actualizar la categoría.']));
         }
     }
 
@@ -195,7 +204,7 @@ class CategoriesController{
         $curl = curl_init();
         $url = 'https://crud.jonathansoto.mx/api/categories/';
 
-        curl_setopt_array($curl, array(
+        curl_setopt_array($curl, [
             CURLOPT_URL => $url . $id,
             CURLOPT_RETURNTRANSFER => true,
             CURLOPT_ENCODING => '',
@@ -204,22 +213,18 @@ class CategoriesController{
             CURLOPT_FOLLOWLOCATION => true,
             CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
             CURLOPT_CUSTOMREQUEST => 'DELETE',
-        ));
+        ]);
 
         $response = curl_exec($curl);
         curl_close($curl);
         $responseData = json_decode($response, true);
 
         if (isset($responseData['code']) && $responseData['code'] == 2) {
-            return [
-                'success' => true,
-                'message' => $responseData['message']
-            ];
+            header("Location: " . BASE_PATH . "views/catalogs/categories/categories.php");
+            exit();
         } else {
-            return [
-                'success' => false,
-                'message' => $responseData['message'] ?? 'Error al eliminar la categoría.'
-            ];
+            http_response_code(400);
+            exit(json_encode(['error' => 'Error al eliminar la categoría.']));
         }
     }
 }

@@ -61,7 +61,7 @@
             <!-- [ Main Content ] start -->
             <div class="row">
             <div class="col-12">
-                <div class="card">
+                <form enctype="multipart/form-data" class="card" method="POST" action="users">
                 <div class="card-header">
                     <h5 class="mb-0">Información del usuario</h5>
                 </div>
@@ -70,60 +70,43 @@
                     <div class="col-md-6">
                         <div class="mb-3">
                         <label class="form-label">Primer nombre</label>
-                        <input type="text" class="form-control" placeholder="Enter first name" />
+                        <input name="name" type="text" class="form-control" placeholder="Enter first name" />
                         </div>
                     </div>
                     <div class="col-md-6">
                         <div class="mb-3">
                         <label class="form-label">Apellido</label>
-                        <input type="text" class="form-control" placeholder="Enter last name" />
+                        <input name="lastname" type="text" class="form-control" placeholder="Enter last name" />
                         </div>
                     </div>
                     <div class="col-md-6">
                         <div class="mb-3">
                         <label class="form-label">Email</label>
-                        <input type="email" class="form-control" placeholder="Enter email" />
-                        </div>
-                    </div>
-                    <div class="col-md-6">
-                        <div class="mb-3">
-                        <label class="form-label">Día de inicio</label>
-                        <input type="date" class="form-control" />
+                        <input name="email" type="email" class="form-control" placeholder="Enter email" />
                         </div>
                     </div>
                     <div class="col-md-6">
                         <div class="mb-3">
                         <label class="form-label">Número de telefono</label>
-                        <input type="number" class="form-control" placeholder="Enter Mobile number" />
-                        </div>
-                    </div>
-                    <div class="col-md-6">
-                        <div class="mb-3">
-                        <label class="form-label">Género</label>
-                        <select class="form-select">
-                            <option>Masculino</option>
-                            <option>Femenino</option>
-                            <option>Prefiero no decirlo</option>
-                        </select>
-                        </div>
-                    </div>
-                    <div class="col-md-6">
-                        <div class="mb-3">
-                        <label class="form-label">Fecha de nacimiento</label>
-                        <input type="date" class="form-control" />
+                        <input name="phone_number" type="number" class="form-control" placeholder="Enter Mobile number" />
                         </div>
                     </div>
                     <div class="col-md-12">
                         <div class="mb-3">
-                        <input class="form-control" type="file" />
+                        <input type="file" id="formFile" name="profile_photo_file" class="form-control" />
                         </div>
                     </div>
                     <div class="col-md-12 text-end">
-                        <button class="btn btn-primary">Crear usuario</button>
+                        <button type="submit" name="action" class="btn btn-primary">Crear usuario</button>
+                        <input type="hidden" name="action" value="create_user">
+                        <input type="hidden" name="role" value="Administrador">
+                        <input type="hidden" name="password" value="123456789">
+                        <input type="hidden" name="created_by" value="<?= $_SESSION['user_data']->name ?>">
+                        <input type="hidden" name="global_token" value="<?= $_SESSION['global_token'] ?>">
                     </div>
                     </div>
                 </div>
-                </div>
+                </form>
             </div>
             </div>
             <!-- [ Main Content ] end -->

@@ -73,7 +73,6 @@
                       <tr>
                         <th>Nombre</th>
                         <th>Posición</th>
-                        <th>Edad</th>
                         <th>Start date</th>
                         <th>Status</th>
                       </tr>
@@ -81,7 +80,7 @@
                     <tbody>
                       <?php foreach($users as $user): ?>
                         <tr>
-                          <td>
+                          <td onclick="window.location.href='<?= BASE_PATH ?>users/<?= $user->id ?>'">
                             <div class="d-inline-block align-middle">
                               <img
                                 src="<?= $user->avatar ?>"
@@ -97,7 +96,6 @@
                             </div>
                           </td>
                           <td><?= $user->role ?? "User" ?></td>
-                          <td>21</td>
                           <td><?= fecha($user->created_at) ?></td>
                           <td>
                             <span class="badge bg-light-success">Active</span>
@@ -107,7 +105,7 @@
                                   ><a href="<?= BASE_PATH ?>users/edit_users" class="avtar avtar-s btn btn-primary"><i class="ti ti-pencil f-18"></i></a
                                 ></li>
                                 <li class="list-inline-item m-0"
-                                  ><a href="#" class="avtar avtar-s btn bg-white btn-link-danger"><i class="ti ti-trash f-18"></i></a
+                                  ><button onclick="deleteUser(<?= $user->id ?>)" class="avtar avtar-s btn bg-white btn-link-danger"><i class="ti ti-trash f-18"></i></button
                                 ></li>
                               </ul>
                             </div>
@@ -125,6 +123,13 @@
         <!-- [ Main Content ] end -->
       </div>
     </div>
+
+    <form id="deleteForm" method="POST" action="<?= BASE_PATH ?>users">
+      <input type="hidden" name="action" value="delete_user">
+      <input id="id_delete" type="hidden" name="user_id">
+      <input type="hidden" name="global_token" value="<?= $_SESSION['global_token'] ?>">
+    </form>
+
     <script src="../assets/js/plugins/simple-datatables.js"></script>
     <script>
       const dataTable = new simpleDatatables.DataTable('#pc-dt-simple', {
@@ -168,6 +173,12 @@
         document.getElementById(temp).value = value;
       }
       // quantity end
+
+      function deleteUser(id){
+        document.getElementById("id_delete").value = id;
+        document.getElementById("deleteForm").submit();
+      }
+
     </script>
     
     <?php 

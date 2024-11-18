@@ -46,11 +46,13 @@ if (isset($_POST['action'])) {
             if (isset($_POST['id']) && isset($_FILES['profile_photo_file'])) {
                 $id = strip_tags($_POST['id']);
                 $profile_photo_file = $_FILES['profile_photo_file'];
-                
-                $UsersController->updateAvatar($id, $profile_photo_file);
+
+                $response = $UsersController->updateAvatar($id, $profile_photo_file);
+                http_response_code(200);
+                exit(json_encode(['success' => true, 'message' => 'Avatar actualizado correctamente.']));
             } else {
-                echo json_encode(['error' => 'Faltan datos para actualizar el avatar.']);
                 http_response_code(400);
+                exit(json_encode(['error' => 'Faltan datos para actualizar el avatar.']));
             }
             break;
 
@@ -233,12 +235,11 @@ class UsersController{
         $responseData = json_decode($response, true);
     
         if (isset($responseData['code']) && $responseData['code'] === 4) {
-            header("Location: " . BASE_PATH . "views/users/index.php");
-            exit();
+            return true;
         } else {
             $errorMsg = $responseData['message'] ?? 'Error desconocido';
             http_response_code(400);
-            return ['error' => $errorMsg];
+            exit(json_encode(['error' => $errorMsg]));
         }
     }
     

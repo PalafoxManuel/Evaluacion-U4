@@ -53,8 +53,8 @@ if (isset($_POST['action'])) {
                 $password = strip_tags($_POST['password']);
                 $authController->login($email, $password);
             } else {
-                echo json_encode(['error' => 'Token de seguridad no coincide.']);
                 http_response_code(400);
+                return ['success' => false, 'error' => 'Token de seguridad no coincide.'];
             }
             break;
         case 'logout':
@@ -99,14 +99,14 @@ class AuthController {
         if (isset($response->data->name)) {
             $_SESSION['user_data'] = $response->data;
             $_SESSION['user_id'] = $response->data->id;
-            
+             
             header("Location: " . BASE_PATH . "views/home.php");
         } else {
-            echo json_encode([
-                'success' => false,
-                'message' => 'Credenciales incorrectas. Inténtalo de nuevo.'
-            ]);
             http_response_code(401);
+            return [
+                'success' => false,
+                'error' => 'Credenciales incorrectas. Inténtalo de nuevo.'
+            ];
         }
     }
 
@@ -131,7 +131,10 @@ class AuthController {
         if (!isset($_SESSION['global_token'])) {
             $_SESSION['global_token'] = bin2hex(random_bytes(32));
         }
-        return $_SESSION['global_token'];
+        return [
+            'success' => true,
+            'data' => $_SESSION['global_token']
+        ];
     }
 }
 ?>

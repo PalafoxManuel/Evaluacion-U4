@@ -16,41 +16,44 @@ if (!isset($_POST['global_token'], $_SESSION['global_token']) || $_POST['global_
 }
 
 if (isset($_POST['action'])) {
-
-    $clientsController = new ClientsController();
+    $addressController = new AddressController();
 
     switch ($_POST['action']) {
-        case 'create_client':
-            $name = strip_tags($_POST['name']);
-            $email = strip_tags($_POST['email']);
+        case 'create_address':
+            $first_name = strip_tags($_POST['first_name']);
+            $last_name = strip_tags($_POST['last_name']);
+            $street_and_use_number = strip_tags($_POST['street_and_use_number']);
+            $postal_code = strip_tags($_POST['postal_code']);
+            $city = strip_tags($_POST['city']);
+            $province = strip_tags($_POST['province']);
             $phone_number = strip_tags($_POST['phone_number']);
-            $is_suscribed = isset($_POST['is_suscribed']) ? (int)$_POST['is_suscribed'] : 0;
-            $level_id = strip_tags($_POST['level_id']);
-            $clientController->create($name, $email, $phone_number, $is_suscribed, $level_id);
+            $is_billing_address = (int)$_POST['is_billing_address'];
+            $client_id = strip_tags($_POST['client_id']);
+            $addressController->create($first_name, $last_name, $street_and_use_number, $postal_code, $city, $province, $phone_number, $is_billing_address, $client_id);
             break;
 
-        case 'update_client':
+        case 'update_address':
             $id = strip_tags($_POST['id']);
-            $name = strip_tags($_POST['name']);
-            $email = strip_tags($_POST['email']);
+            $first_name = strip_tags($_POST['first_name']);
+            $last_name = strip_tags($_POST['last_name']);
+            $street_and_use_number = strip_tags($_POST['street_and_use_number']);
+            $postal_code = strip_tags($_POST['postal_code']);
+            $city = strip_tags($_POST['city']);
+            $province = strip_tags($_POST['province']);
             $phone_number = strip_tags($_POST['phone_number']);
-            $is_suscribed = isset($_POST['is_suscribed']) ? (int)$_POST['is_suscribed'] : 0;
-            $level_id = strip_tags($_POST['level_id']);
-            $clientController->update($id, $name, $email, $phone_number, $is_suscribed, $level_id);
-            break;
-
-        case 'delete_client':
+            $is_billing_address = (int)$_POST['is_billing_address'];
             $client_id = strip_tags($_POST['client_id']);
-            $clientController->delete($client_id);
+            $addressController->update($id, $first_name, $last_name, $street_and_use_number, $postal_code, $city, $province, $phone_number, $is_billing_address, $client_id);
             break;
 
-        case 'get_all_client':
-            $clientController->get();
+        case 'delete_address':
+            $id = strip_tags($_POST['address_id']);
+            $addressController->delete($id);
             break;
 
-        case 'get_client_by_id':
-            $client_id = strip_tags($_POST['client_id']);
-            $clientController->getClientById($client_id);
+        case 'get_address_by_id':
+            $address_id = strip_tags($_POST['address_id']);
+            return $addressController->getAddressById($address_id);
             break;
 
         default:
@@ -60,13 +63,13 @@ if (isset($_POST['action'])) {
     }
 }
 
-class ClientsController {
-    public function get() {
+class AddressController{
+    public function getAddressById($address_id) {
         $curl = curl_init();
-        $url = 'https://crud.jonathansoto.mx/api/clients';
+        $url = 'https://crud.jonathansoto.mx/api/addresses/';
 
         curl_setopt_array($curl, [
-            CURLOPT_URL => $url,
+            CURLOPT_URL => $url  . $address_id,
             CURLOPT_RETURNTRANSFER => true,
             CURLOPT_HTTPHEADER => [
                 'Authorization: Bearer ' . $_SESSION['user_data']->token,
@@ -80,51 +83,28 @@ class ClientsController {
         $responseData = json_decode($response, true);
 
         if ($httpCode === 200 && isset($responseData['code']) && $responseData['code'] === 4) {
-            return ['success' => true, 'message' => 'Clientes obtenidos correctamente.', 'data' => $responseData['data']];
+            return ['success' => true, 'message' => 'Dirección obtenida correctamente.', 'data' => $responseData['data']];
         } else {
-            $errorMsg = $responseData['message'] ?? 'Error desconocido al obtener los clientes';
+            $errorMsg = $responseData['message'] ?? 'Error desconocido al obtener la dirección';
             http_response_code($httpCode);
             return ['error' => $errorMsg];
         }
     }
 
-    public function getClientById($client_id) {
+    public function create($first_name, $last_name, $street_and_use_number, $postal_code, $city, $province, $phone_number, $is_billing_address, $client_id) {
         $curl = curl_init();
-        $url = 'https://crud.jonathansoto.mx/api/clients/';
-
-        curl_setopt_array($curl, [
-            CURLOPT_URL => $url . $client_id,
-            CURLOPT_RETURNTRANSFER => true,
-            CURLOPT_HTTPHEADER => [
-                'Authorization: Bearer ' . $_SESSION['user_data']->token,
-            ],
-        ]);
-
-        $response = curl_exec($curl);
-        $httpCode = curl_getinfo($curl, CURLINFO_HTTP_CODE);
-        curl_close($curl);
-
-        $responseData = json_decode($response, true);
-
-        if ($httpCode === 200 && isset($responseData['code']) && $responseData['code'] === 4) {
-            return ['success' => true, 'message' => 'Cliente obtenido correctamente.', 'data' => $responseData['data']];
-        } else {
-            $errorMsg = $responseData['message'] ?? 'Error desconocido al obtener el cliente';
-            http_response_code($httpCode);
-            return ['error' => $errorMsg];
-        }
-    }
-
-    public function create($name, $email, $phone_number, $is_suscribed, $level_id) {
-        $curl = curl_init();
-        $url = 'https://crud.jonathansoto.mx/api/clients';
+        $url = 'https://crud.jonathansoto.mx/api/addresses';
 
         $postData = [
-            'name' => $name,
-            'email' => $email,
+            'first_name' => $first_name,
+            'last_name' => $last_name,
+            'street_and_use_number' => $street_and_use_number,
+            'postal_code' => $postal_code,
+            'city' => $city,
+            'province' => $province,
             'phone_number' => $phone_number,
-            'is_suscribed' => $is_suscribed,
-            'level_id' => $level_id
+            'is_billing_address' => $is_billing_address,
+            'client_id' => $client_id
         ];
 
         curl_setopt_array($curl, [
@@ -144,27 +124,31 @@ class ClientsController {
 
         $responseData = json_decode($response, true);
 
-        if ($httpCode === 201 && isset($responseData['code']) && $responseData['code'] === 4) {
+        if ($httpCode === 200 && isset($responseData['code']) && $responseData['code'] === 4) {
             header("Location: " . BASE_PATH . "views/customer/index.php");
             exit();
         } else {
-            $errorMsg = $responseData['message'] ?? 'Error desconocido al crear el cliente';
+            $errorMsg = $responseData['message'] ?? 'Error desconocido al crear la dirección';
             http_response_code($httpCode);
             echo json_encode(['error' => $errorMsg]);
         }
     }
 
-    public function update($id, $name, $email, $phone_number, $is_suscribed, $level_id) {
+    public function update($id, $first_name, $last_name, $street_and_use_number, $postal_code, $city, $province, $phone_number, $is_billing_address, $client_id) {
         $curl = curl_init();
-        $url = 'https://crud.jonathansoto.mx/api/clients';
+        $url = 'https://crud.jonathansoto.mx/api/addresses';
 
         $postData = [
             'id' => $id,
-            'name' => $name,
-            'email' => $email,
+            'first_name' => $first_name,
+            'last_name' => $last_name,
+            'street_and_use_number' => $street_and_use_number,
+            'postal_code' => $postal_code,
+            'city' => $city,
+            'province' => $province,
             'phone_number' => $phone_number,
-            'is_suscribed' => $is_suscribed,
-            'level_id' => $level_id
+            'is_billing_address' => $is_billing_address,
+            'client_id' => $client_id
         ];
 
         curl_setopt_array($curl, [
@@ -188,15 +172,15 @@ class ClientsController {
             header("Location: " . BASE_PATH . "views/customer/index.php");
             exit();
         } else {
-            $errorMsg = $responseData['message'] ?? 'Error desconocido al actualizar el cliente';
+            $errorMsg = $responseData['message'] ?? 'Error desconocido al actualizar la dirección';
             http_response_code($httpCode);
             echo json_encode(['error' => $errorMsg]);
         }
     }
 
-    public function delete($client_id) {
+    public function delete($id) {
         $curl = curl_init();
-        $url = 'https://crud.jonathansoto.mx/api/clients/' . $client_id;
+        $url = 'https://crud.jonathansoto.mx/api/addresses/' . $id;
 
         curl_setopt_array($curl, [
             CURLOPT_URL => $url,
@@ -217,9 +201,10 @@ class ClientsController {
             header("Location: " . BASE_PATH . "views/customer/index.php");
             exit();
         } else {
-            $errorMsg = $responseData['message'] ?? 'Error desconocido al eliminar el cliente';
+            $errorMsg = $responseData['message'] ?? 'Error desconocido al eliminar la dirección';
             http_response_code($httpCode);
             echo json_encode(['error' => $errorMsg]);
         }
     }
 }
+?>

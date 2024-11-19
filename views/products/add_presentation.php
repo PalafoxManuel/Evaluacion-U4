@@ -52,7 +52,6 @@
             </div>
             </div>
             <!-- [ breadcrumb ] end -->
-
             <!-- [ Main Content ] start -->
             <div class="row">
             <!-- [ sample-page ] start -->
@@ -64,24 +63,98 @@
                 <div class="card-body">
                     <div class="mb-3">
                     <label class="form-label">Titulo de la presentación</label>
-                    <input type="text" class="form-control" placeholder="Enter Product Name" />
+                    <input type="text" class="form-control" placeholder="Ingresa el nombre" />
                     </div>
                     <div class="mb-3">
-                    <label class="form-label">Producto principal</label>
-                    <select class="form-select">
-                        <option>Cleats</option>
-                        <option>Category 1</option>
-                        <option>Category 2</option>
-                        <option>Category 3</option>
-                        <option>Category 4</option>
+                    <label class="form-label">Código</label>
+                  <input 
+                    type="text" 
+                    class="form-control" 
+                    placeholder="Ingrese el código" 
+                    oninput="this.value = this.value.replace(/[^0-9]/g, '')" 
+                    required 
+                  />
+                  <small class="text-muted">El código solo debe incluir números.</small>
+                </div>
+                <div class="mb-3">
+                  <label class="form-label">Peso(en gramos)</label>
+                  <input 
+                    type="text" 
+                    class="form-control" 
+                    placeholder="gr" 
+                    oninput="this.value = this.value.replace(/[^0-9]/g, '')" 
+                  />
+                </div>
+                <div class="mb-3">
+                  <label class="form-label">Estado</label>
+                  <select class="form-control" required>
+                    <option value="">Seleccione un estado</option>
+                    <option value="activo">Activo</option>
+                    <option value="inactivo">Inactivo</option>
                     </select>
                     </div>
-                    <div class="mb-0">
-                    <label class="form-label">Detalle de la presentación</label>
-                    <textarea class="form-control" placeholder="Enter Product Description"></textarea>
+                        <div class="mb-3">
+                    <label class="form-label">Stock</label>
+                    <input 
+                        type="number" 
+                        class="form-control" 
+                        placeholder="Ingrese stock actual" 
+                        min="0" 
+                        required 
+                    />
                     </div>
+                    <div class="mb-3">
+                    <label class="form-label">Stock MIN</label>
+                    <input 
+                        type="number" 
+                        class="form-control" 
+                        placeholder="Ingrese stock mínimo" 
+                        min="0" 
+                        required 
+                    />
+                    </div>
+                    <div class="mb-3">
+                    <label class="form-label">Stock MAX</label>
+                    <input 
+                        type="number" 
+                        class="form-control" 
+                        placeholder="Ingrese stock máximo" 
+                        min="0" 
+                        required 
+                    />
+                    </div>
+                    <div class="mb-3">
+                    <label class="form-label">ID Producto</label>
+                    <input 
+                        type="text" 
+                        class="form-control" 
+                        placeholder="Ingrese el ID del producto" 
+                        oninput="this.value = this.value.replace(/[^0-9]/g, '')" 
+                        required 
+                    />
+                    </div>
+                    <div class="mb-3">
+                    <label class="form-label">ID</label>
+                    <input 
+                        type="text" 
+                        class="form-control" 
+                        placeholder="Ingrese el ID" 
+                        oninput="this.value = this.value.replace(/[^0-9]/g, '')" 
+                        required 
+                    />
+                    </div>
+                    <div class="mb-3">
+                    <label class="form-label">Cantidad</label>
+                    <input 
+                        type="number" 
+                        class="form-control" 
+                        placeholder="Ingrese la cantidad" 
+                        min="0" 
+                        required 
+                     />
+                 </div>
                 </div>
-                </div>
+              </div>
             </div>
             <div class="col-xl-6">
             </div>

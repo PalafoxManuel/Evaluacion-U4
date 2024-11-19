@@ -66,27 +66,15 @@
                     <input type="text" class="form-control" placeholder="Enter Product Name" />
                     </div>
                     <div class="mb-3">
-                    <label class="form-label">Presentaciones</label>
-                    <select class="form-select">
-                        <option>Cleats</option>
-                        <option>Category 1</option>
-                        <option>Category 2</option>
-                        <option>Category 3</option>
-                        <option>Category 4</option>
-                    </select>
+                    <label class="form-label">Slug</label>
+                    <input type="text" class="form-control" placeholder="Ingresa el slug del producto" name="slug" />
+                 </div>
+                <div class="mb-3" style="display: none;">
+                    <label class="form-label">ID del Producto</label>
+                    <input type="hidden" class="form-control" placeholder="Ingresa el ID" name="slug" value="12345" />
                     </div>
                     <div class="mb-3">
                     <label class="form-label">Categorías</label>
-                    <select class="form-select">
-                        <option>Cleats</option>
-                        <option>Category 1</option>
-                        <option>Category 2</option>
-                        <option>Category 3</option>
-                        <option>Category 4</option>
-                    </select>
-                    </div>
-                    <div class="mb-3">
-                    <label class="form-label">Marcas</label>
                     <select class="form-select">
                         <option>Cleats</option>
                         <option>Category 1</option>
@@ -105,9 +93,23 @@
                         <option>Category 4</option>
                     </select>
                     </div>
+                    <div class="mb-3">
+                    <label class="form-label">Marcas</label>
+                    <select class="form-select">
+                        <option>Cleats</option>
+                        <option>Category 1</option>
+                        <option>Category 2</option>
+                        <option>Category 3</option>
+                        <option>Category 4</option>
+                    </select>
+                    </div>
                     <div class="mb-0">
                     <label class="form-label">Detalle del producto</label>
-                    <textarea class="form-control" placeholder="Enter Product Description"></textarea>
+                    <textarea class="form-control" placeholder="Ingresa la descripción del producto"></textarea>
+                </div>
+                <div class="mb-3">
+                  <label class="form-label">Características del producto</label>
+                  <textarea class="form-control" placeholder="Ingresa las características del producto"></textarea>
                     </div>
                 </div>
                 </div>
@@ -126,25 +128,11 @@
                             <span class="input-group-text">$</span>
                             <input type="text" class="form-control" placeholder="Cost per items" />
                         </div>
-                        </div>
+                      </div>
                     </div>
-                    </div>
+                  </div>
                 </div>
-                </div>
-            </div>
-            <div class="col-xl-6">
-                <div class="card">
-                <div class="card-header">
-                    <h5>Imagen del producto</h5>
-                </div>
-                <div class="card-body">
-                    <div class="mb-0">
-                    <p><span class="text-danger">*</span>Resolución sugerida: 645 x 645 para la imagen del producto</p>
-                    <label class="btn btn-outline-secondary" for="flupld"><i class="ti ti-upload me-2"></i>Haz click aqui para subir</label>
-                    <input type="file" id="flupld" class="d-none" />
-                    </div>
-                </div>
-                </div>
+              </div>
             </div>
             <div class="col-sm-12">
                 <div class="card">

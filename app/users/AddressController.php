@@ -9,13 +9,12 @@ if (session_status() !== PHP_SESSION_ACTIVE) {
     exit();
 }
 
-if (!isset($_POST['global_token'], $_SESSION['global_token']) || $_POST['global_token'] !== $_SESSION['global_token']) {
-    echo json_encode(['error' => 'Token de seguridad no coincide.']);
-    http_response_code(400);
-    exit();
-}
-
 if (isset($_POST['action'])) {
+    if (!isset($_POST['global_token'], $_SESSION['global_token']) || $_POST['global_token'] !== $_SESSION['global_token']) {
+        echo json_encode(['error' => 'Token de seguridad no coincide.']);
+        http_response_code(400);
+        exit();
+    }
     $addressController = new AddressController();
 
     switch ($_POST['action']) {

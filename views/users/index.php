@@ -105,7 +105,7 @@
                                   ><a href="<?= BASE_PATH ?>users/edit_users/<?= $user->id ?>" class="avtar avtar-s btn btn-primary"><i class="ti ti-pencil f-18"></i></a
                                 ></li>
                                 <li class="list-inline-item m-0"
-                                  ><button onclick="deleteUser(<?= $user->id ?>)" class="avtar avtar-s btn bg-white btn-link-danger"><i class="ti ti-trash f-18"></i></button
+                                  ><button onclick="deleteUser(<?= $user->id ?>,'<?= $user->name ?>')" class="avtar avtar-s btn bg-white btn-link-danger"><i class="ti ti-trash f-18"></i></button
                                 ></li>
                               </ul>
                             </div>
@@ -151,6 +151,7 @@
 
 
     <!-- [Page Specific JS] start -->
+    <script src="https://common.olemiss.edu/_js/sweet-alert/sweet-alert.min.js"></script>
     <script>
       // scroll-block
       var tc = document.querySelectorAll('.scroll-block');
@@ -174,9 +175,21 @@
       }
       // quantity end
 
-      function deleteUser(id){
-        document.getElementById("id_delete").value = id;
-        document.getElementById("deleteForm").submit();
+      function deleteUser(id, name){
+        swal({
+          title: "¿Eliminar a "+name+"?",
+          text: "Esta acción sera permanente",
+          type: "warning",
+          showCancelButton: true,
+          confirmButtonColor: "#DD6B55",
+          confirmButtonText: "Sí, eliminar!",
+          closeOnConfirm: false
+        },
+        function(){
+          swal("Eliminada!", "El usuario a sido eliminado con éxito", "success");
+          document.getElementById("id_delete").value = id;
+          document.getElementById("deleteForm").submit();
+        });
       }
 
     </script>
@@ -186,8 +199,6 @@
       include "../layouts/modals.php";
 
       ?>
-
-
   </body>
   <!-- [Body] end -->
 </html>

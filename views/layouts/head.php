@@ -28,3 +28,5 @@
     <!-- [Template CSS Files] -->
     <link rel="stylesheet" href="<?= BASE_PATH ?>assets/css/style.css" id="main-style-link" />
     <link rel="stylesheet" href="<?= BASE_PATH ?>assets/css/style-preset.css" />
+    <!-- [SweetAlert] -->
+    <link rel="stylesheet" type="text/css" href="https://common.olemiss.edu/_js/sweet-alert/sweet-alert.css">

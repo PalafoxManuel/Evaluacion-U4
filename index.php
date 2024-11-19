@@ -39,6 +39,8 @@
 <!-- [Template CSS Files] -->
 <link rel="stylesheet" href="<?= BASE_PATH ?>assets/css/style.css" id="main-style-link" />
 <link rel="stylesheet" href="<?= BASE_PATH ?>assets/css/style-preset.css" />
+<!-- [SweetAlert] -->
+<link rel="stylesheet" type="text/css" href="https://common.olemiss.edu/_js/sweet-alert/sweet-alert.css">
 
   </head>
   <!-- [Head] end -->
@@ -57,36 +59,30 @@
       <div class="bg-overlay bg-dark"></div>
       <div class="auth-wrapper">
         <div class="auth-sidecontent"> <div class="auth-sidefooter">
-  <img src="<?= BASE_PATH ?>assets/images/logo-dark.svg" class="img-brand img-fluid" alt="images" />
   <hr class="mb-3 mt-4" />
   <div class="row">
     <div class="col my-1">
-      <p class="m-0">Made with ♥ by Team <a href="https://themeforest.net/user/phoenixcoded" target="_blank"> Phoenixcoded</a></p>
+      
     </div>
     <div class="col-auto my-1">
-      <ul class="list-inline footer-link mb-0">
-        <li class="list-inline-item"><a href="../index.html">Home</a></li>
-        <li class="list-inline-item"><a href="https://pcoded.gitbook.io/light-able/" target="_blank">Documentation</a></li>
-        <li class="list-inline-item"><a href="https://phoenixcoded.support-hub.io/" target="_blank">Support</a></li>
-      </ul>
     </div>
   </div>
 </div>
  </div>
-        <form method="POST" action="auth" class="auth-form">
+        <form id="formLogin" method="POST" action="auth" class="auth-form">
           <div class="card my-5 mx-3">
             <div class="card-body">
-              <h4 class="f-w-500 mb-1">Login with your email</h4>
+              <h4 class="f-w-500 mb-1">Inicia sesión con tu correo</h4>
               <div class="mb-3">
-                <input type="email" name="email" class="form-control" id="floatingInput" placeholder="Email Address" required/>
+                <input type="email" name="email" class="form-control" id="floatingInput" placeholder="Correo" required/>
               </div>
               <div class="mb-3">
-                <input type="password" name="password" class="form-control" id="floatingInput1" placeholder="Password" required/>
+                <input type="password" name="password" class="form-control" id="floatingInput1" placeholder="Contraseña" required/>
               </div>
               <div class="d-flex mt-1 justify-content-between align-items-center">
               </div>
               <div class="d-grid mt-4">
-                <button type="submit" name="action" class="btn btn-primary">Login</button>
+                <button id="sub" type="button" name="action" class="btn btn-primary">Acceder</button>
                 <input type="hidden" name="action" value="login">
                 <input type="hidden" name="global_token" value="<?= $_SESSION['global_token'] ?>">
               </div>
@@ -327,6 +323,20 @@
   </div>
 </div>
 
+<script src="https://common.olemiss.edu/_js/sweet-alert/sweet-alert.min.js"></script>
+<script>
+    document.getElementById("sub").addEventListener('click', function (e){
+      e.preventDefault();
+      let form = document.getElementById("formLogin");
+      if (form.checkValidity()){
+
+        form.submit();
+
+      }else{
+        sweetAlert("Error al iniciar sesión", "Llene todos los campos y verifique que sean datos validos", "error");
+      }
+    })
+  </script>
   </body>
   <!-- [Body] end -->
 </html>

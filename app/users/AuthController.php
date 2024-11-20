@@ -100,20 +100,22 @@ class AuthController {
             $_SESSION['user_data'] = $response->data;
             $_SESSION['user_id'] = $response->data->id;
 
-            return [
+            header('Content-Type: application/json');
+            echo json_encode([
                 'success' => true,
                 'message' => 'Inicio de sesión exitoso.',
                 'data' => [
                     'user_id' => $_SESSION['user_id'],
                     'user_data' => $_SESSION['user_data']
                 ]
-            ];
+            ]);
         } else {
+            header('Content-Type: application/json');
             http_response_code(401);
-            return [
+            echo json_encode([
                 'success' => false,
                 'error' => 'Credenciales incorrectas. Inténtalo de nuevo.'
-            ];
+            ]);
         }
     }
 

@@ -9,14 +9,12 @@ if (session_status() !== PHP_SESSION_ACTIVE) {
     exit();
 }
 
-if (!isset($_POST['global_token'], $_SESSION['global_token']) || $_POST['global_token'] !== $_SESSION['global_token']) {
-    echo json_encode(['error' => 'Token de seguridad no coincide.']);
-    http_response_code(400);
-    exit();
-}
-
 if (isset($_POST['action'])) {
-
+    if (!isset($_POST['global_token'], $_SESSION['global_token']) || $_POST['global_token'] !== $_SESSION['global_token']) {
+        echo json_encode(['error' => 'Token de seguridad no coincide.']);
+        http_response_code(400);
+        exit();
+    }
     $clientsController = new ClientsController();
 
     switch ($_POST['action']) {
@@ -51,6 +49,11 @@ if (isset($_POST['action'])) {
         case 'get_client_by_id':
             $client_id = strip_tags($_POST['client_id']);
             $clientController->getClientById($client_id);
+            break;
+
+        case 'get_client_widgets':
+            $client_id = strip_tags($_POST['client_id']);
+            return $clientsController->getClientWidgets($client_id);
             break;
 
         default:
@@ -221,5 +224,44 @@ class ClientsController {
             http_response_code($httpCode);
             echo json_encode(['error' => $errorMsg]);
         }
+    }
+
+    public function getClientWidgets($client_id) {
+        $clientDetails = $this->getClientById($client_id);
+
+        if (isset($clientDetails['error'])) {
+            return $clientDetails; // Devuelve el error si algo falló
+        }
+
+        $clientData = $clientDetails['data'];
+        $orders = $clientData['orders']; // Lista de órdenes del cliente
+
+        // Inicializa los totales por estado
+        $statusTotals = [
+            1 => ['status' => 'Pendiente de pago', 'total' => 0],
+            2 => ['status' => 'Pagada', 'total' => 0],
+            3 => ['status' => 'Enviada', 'total' => 0],
+            4 => ['status' => 'Abandonada', 'total' => 0],
+            5 => ['status' => 'Pendiente de enviar', 'total' => 0],
+            6 => ['status' => 'Cancelada', 'total' => 0],
+        ];
+
+        // Paso 2: Recorre las órdenes y acumula los totales por estado
+        foreach ($orders as $order) {
+            $status_id = $order['order_status_id'];
+            if (isset($statusTotals[$status_id])) {
+                $statusTotals[$status_id]['total'] += $order['total'];
+            }
+        }
+
+        // Paso 3: Devuelve los widgets con los totales por estado
+        return [
+            'success' => true,
+            'message' => 'Widgets generados correctamente.',
+            'data' => [
+                'client_info' => $clientData,
+                'widgets' => $statusTotals, // Widgets con los totales por estado
+            ],
+        ];
     }
 }

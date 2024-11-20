@@ -91,22 +91,38 @@
                                     class="form-control"
                                     id="fname"
                                     aria-describedby="emailHelp"
-                                    placeholder="Ingresa el nombre"
+                                    placeholder="Ingrese el nombre de categoria"
                                 />
                                 </div>
                                 <div class="mb-3">
-                                <label class="form-label">Detalles adicionales</label>
+                                <label class="form-label">Descripción de la categoría</label>
                                 <input
                                     type="email"
                                     class="form-control"
                                     id="lname"
                                     aria-describedby="emailHelp"
-                                    placeholder="Ingresa el apellido"
+                                    placeholder="Ingrese la descripción de categoría"
                                 />
                                 </div>
-                                <div class="col-md-12">
-                                    <label class="form-label">Foto del usuario</label>
-                                    <input class="form-control" type="file" />
+                                <div class="mb-3">
+                              <label class="form-label">Slug</label>
+                              <input
+                                type="email"
+                                class="form-control"
+                                id="lname"
+                                aria-describedby="emailHelp"
+                                placeholder="Slug"
+                              />
+                            </div>
+                            <div class="mb-3">
+                              <label class="form-label">ID de categoría</label>
+                              <input
+                                type="email"
+                                class="form-control"
+                                id="lname"
+                                aria-describedby="emailHelp"
+                                placeholder="Ingrese el ID de categoría"
+                              />
                                 </div>
                             </div>
                             <div class="modal-footer">
@@ -147,22 +163,28 @@
                                     class="form-control"
                                     id="fname"
                                     aria-describedby="emailHelp"
-                                    placeholder="Ingresa el nombre"
+                                    placeholder="Ingrese el nombre de categoria"
                                 />
                                 </div>
                                 <div class="mb-3">
-                                <label class="form-label">Detalles adicionales</label>
+                                <label class="form-label">Descripción de la categoría</label>
                                 <input
                                     type="email"
                                     class="form-control"
                                     id="lname"
                                     aria-describedby="emailHelp"
-                                    placeholder="Ingresa el apellido"
+                                    placeholder="Ingrese la descripción de categoría"
                                 />
                                 </div>
-                                <div class="col-md-12">
-                                    <label class="form-label">Foto del usuario</label>
-                                    <input class="form-control" type="file" />
+                                <div class="mb-3">
+                              <label class="form-label">Ingresa el ID de la categoría</label>
+                              <input
+                                type="email"
+                                class="form-control"
+                                id="lname"
+                                aria-describedby="emailHelp"
+                                placeholder="Ingresa el ID de la categoría"
+                              />
                                 </div>
                             </div>
                             <div class="modal-footer">
@@ -180,11 +202,11 @@
                     <table id="report-table" class="table table-bordered table-striped mb-0">
                         <thead>
                         <tr>
-                            <th class="border-top-0">Nombre</th>
-                            <th class="border-top-0">Correo electronico</th>
-                            <th class="border-top-0">Cuenta</th>
-                            <th class="border-top-0">Fecha de nacimiento</th>
-                            <th class="border-top-0">Acción</th>
+                            <th class="border-top-0">Nombre categoria</th>
+                            <th class="border-top-0">Descripcion</th>
+                            <th class="border-top-0">Slug</th>
+                            <th class="border-top-0">ID</th>
+                           
                         </tr>
                         </thead>
                         <tbody>

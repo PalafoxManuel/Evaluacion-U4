@@ -106,8 +106,29 @@
                               </div>
                               <div class="mb-3">
                                 <label class="form-label">Email</label>
-                                <input type="email" class="form-control" id="emial" aria-describedby="emailHelp" placeholder="Ingresa el correo" />
+                                <input type="email" class="form-control" id="emial" aria-describedby="emailHelp" placeholder="Ingresa el correo" 
+                                />
                               </div>
+                              <div class="mb-3">
+                              <label class="form-label">Número de teléfono</label>
+                              <input
+                                type="tel"
+                                class="form-control"
+                                id="phone"
+                                placeholder="Ingresa el número de teléfono"
+                                pattern="[0-9]{10}"
+                                required
+                              />
+                            </div>
+                            <div class="mb-3">
+                              <label class="form-label">Nivel</label>
+                              <select class="form-control" id="level" required>
+                                <option value="">Seleccione el nivel</option>
+                                <option value="principiante">Principiante</option>
+                                <option value="intermedio">Intermedio</option>
+                                <option value="avanzado">Avanzado</option>
+                              </select>
+                            </div>
                             </div>
                             <div class="modal-footer">
                               <button type="button" class="btn btn-light-danger" data-bs-dismiss="modal">Cerrar</button>
@@ -124,11 +145,11 @@
                     <table id="report-table" class="table table-bordered table-striped mb-0">
                       <thead>
                         <tr>
-                          <th class="border-top-0">Nombre completo</th>
+                          <th class="border-top-0">Nombre</th>
+                          <th class="border-top-0">Apellido</th>
                           <th class="border-top-0">Email</th>
-                          <th class="border-top-0">Cuenta</th>
-                          <th class="border-top-0">Fecha nacimiento</th>
-                          <th class="border-top-0">Acción</th>
+                          <th class="border-top-0">Numero telefono</th>
+                          <th class="border-top-0">Nivel</th>
                         </tr>
                       </thead>
                       <tbody>

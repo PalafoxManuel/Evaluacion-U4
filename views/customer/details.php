@@ -94,21 +94,6 @@
                       </a>
                     </div>
                   </div>
-                  <div class="card">
-                    <div class="card-header">
-                      <h5>Información personal</h5>
-                    </div>
-                    <div class="card-body position-relative">
-                      <div class="d-inline-flex align-items-center justify-content-between w-100 mb-3">
-                        <p class="mb-0 text-muted me-1">Email</p>
-                        <p class="mb-0">RickWtf@gmail.com</p>
-                      </div>
-                      <div class="d-inline-flex align-items-center justify-content-between w-100 mb-3">
-                        <p class="mb-0 text-muted me-1">Número de telefono</p>
-                        <p class="mb-0">6121106397</p>
-                         </div>
-                       </div>
-                      </div>
                       <div class="card statistics-card-1 overflow-hidden">
                       <div class="card-body">
                       <img src="<?= BASE_PATH ?>assets/images/widget/img-status-4.svg" alt="img" class="img-fluid img-bg" />
@@ -171,14 +156,11 @@
                                   <p class="mb-0">Ricky@gmail.com</p>
                                 </div>
                                 <div class="col-md-6">
-                                  <p class="mb-1 text-muted">Fecha de nacimiento</p>
-                                  <p class="mb-0">14/04/1999</p>
+                                  <p class="mb-1 text-muted">Nivel</p>
+                                  <p class="mb-0">Principiante</p>
                                 </div>
                               </div>
                             </li>
-                            <li class="list-group-item px-0 pb-0">
-                              <p class="mb-1 text-muted">Fecha de ingreso a la empresa</p>
-                              <p class="mb-0">01/05/2026</p>
                             </li>
                           </ul>
                         </div>

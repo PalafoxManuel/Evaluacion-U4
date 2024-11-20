@@ -8,12 +8,11 @@ if (session_status() !== PHP_SESSION_ACTIVE) {
     exit(json_encode(['error' => 'No hay una sesión activa. Por favor, inicie sesión.']));
 }
 
-if (!isset($_POST['global_token'], $_SESSION['global_token']) || $_POST['global_token'] !== $_SESSION['global_token']) {
-    http_response_code(400);
-    exit(json_encode(['error' => 'Token de seguridad no coincide.']));
-}
-
 if (isset($_POST['action'])) {
+    if (!isset($_POST['global_token'], $_SESSION['global_token']) || $_POST['global_token'] !== $_SESSION['global_token']) {
+        http_response_code(400);
+        exit(json_encode(['error' => 'Token de seguridad no coincide.']));
+    }
     $couponsController = new CouponsController();
 
     switch ($_POST['action']) {
@@ -86,6 +85,11 @@ if (isset($_POST['action'])) {
         case 'get_coupon_by_id':
             $coupon_id = strip_tags($_POST['coupon_id']);
             return $couponsController->getCouponById($coupon_id);
+            break;
+
+        case 'get_coupon_widget':
+            $coupon_id = strip_tags($_POST['coupon_id']);
+            return $couponsController->getCouponWidget($coupon_id);
             break;
 
         default:
@@ -271,7 +275,39 @@ class CouponsController{
             exit(json_encode(['error' => $errorMsg]));
         }
     }
-    
+
+    public function getCouponWidget($coupon_id) {
+        $couponDetails = $this->getCouponById($coupon_id);
+
+        if (isset($couponDetails['error'])) {
+            return $couponDetails;
+        }
+
+        $couponData = $couponDetails['data'];
+        $totalDiscounted = 0;
+
+        foreach ($couponData['orders'] as $order) {
+            if ($couponData['percentage_discount'] > 0) {
+                $discount = ($order['total'] * $couponData['percentage_discount']) / 100;
+            } elseif ($couponData['amount_discount'] > 0) {
+                $discount = $couponData['amount_discount'];
+            } else {
+                $discount = 0;
+            }
+
+            $totalDiscounted += $discount;
+        }
+
+        return [
+            'success' => true,
+            'message' => 'Widget generado correctamente.',
+            'data' => [
+                'coupon_info' => $couponData,
+                'total_discounted' => $totalDiscounted,
+                'orders' => $couponData['orders'],
+            ],
+        ];
+    }
 }
 
 ?>

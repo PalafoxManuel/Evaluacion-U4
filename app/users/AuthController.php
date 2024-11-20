@@ -99,8 +99,15 @@ class AuthController {
         if (isset($response->data->name)) {
             $_SESSION['user_data'] = $response->data;
             $_SESSION['user_id'] = $response->data->id;
-             
-            header("Location: " . BASE_PATH . "views/home.php");
+
+            return [
+                'success' => true,
+                'message' => 'Inicio de sesión exitoso.',
+                'data' => [
+                    'user_id' => $_SESSION['user_id'],
+                    'user_data' => $_SESSION['user_data']
+                ]
+            ];
         } else {
             http_response_code(401);
             return [

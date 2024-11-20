@@ -1,5 +1,11 @@
-  <?php 
+<?php 
     include_once "../../app/config.php";
+    include_once "../../app/products/ProductsController.php";
+
+    session_start();
+
+    $ProductsController = new ProductsController();
+    $products = $ProductsController->get();
   ?>
   <!doctype html>
   <html lang="en">
@@ -63,293 +69,115 @@
                     <table class="table table-hover tbl-product" id="pc-dt-simple">
                       <thead>
                         <tr>
-                          <th class="text-end">#</th>
                           <th>Descripción del producto</th>
                           <th>Categorias</th>
                           <th class="text-end">Precio</th>
                           <th class="text-end">Cantidad</th>
-                          <th class="text-center">Presentaciones</th>
                           <th class="text-center">Marca</th>
                         </tr>
                       </thead>
                       <tbody>
-                        <tr>
-                          <td class="text-end">7</td>
-                          <td>
-                            <div class="row">
-                              <div class="col-auto pe-0">
-                                <img src="../assets/images/application/img-prod-1.jpg" alt="user-image" class="wid-40 rounded" />
-                              </div>
-                              <div class="col">
-                                <h6 class="mb-1">Samsung Galaxy Watch 4 44mm</h6>
-                                <p class="text-muted f-12 mb-0">Smartwatch con seguimiento de actividad física</p>
-                              </div>
-                            </div>
-                          </td>
-                          <td>Electronics,Smartphone</td>
-                          <td class="text-end">$299.99</td>
-                          <td class="text-end">150</td>
-                          <td class="text-center">
-                            <i class="ph-duotone ph-check-circle text-success f-24" data-bs-toggle="tooltip" data-bs-title="success"></i>
-                          </td>
-                          <td class="text-center">
-                            <img src="../assets/images/application/img-prod-brand-1.png" alt="user-image" class="wid-40" />
-                            <div class="prod-action-links">
-                              <ul class="list-inline me-auto mb-0">
-                                <li class="list-inline-item align-bottom" data-bs-toggle="tooltip" title="View">
-                                  <a href="<?= BASE_PATH ?>products/details" class="avtar avtar-xs btn-link-success btn-pc-default">
-                                    <i class="ti ti-eye f-18"></i>
-                                  </a>
-                                </li>
-                                <li class="list-inline-item align-bottom" data-bs-toggle="tooltip" title="Edit">
-                                  <a href="<?= BASE_PATH ?>products/edit_product" class="avtar avtar-xs btn-link-success btn-pc-default">
-                                    <i class="ti ti-edit-circle f-18"></i>
-                                  </a>
-                                </li>
-                                <li class="list-inline-item align-bottom" data-bs-toggle="tooltip" title="Delete">
-                                  <a href="#" class="avtar avtar-xs btn-link-danger btn-pc-default">
-                                    <i class="ti ti-trash f-18"></i>
-                                  </a>
-                                </li>
-                              </ul>
-                            </div>
-                          </td>
-                        </tr>
-                        <tr>
-                          <td class="text-end">2</td>
-                          <td>
-                            <div class="row">
-                              <div class="col-auto pe-0">
-                                <img src="../assets/images/application/img-prod-2.jpg" alt="user-image" class="wid-40 rounded" />
-                              </div>
-                              <div class="col">
-                                <h6 class="mb-1">Sony WH-1000XM5</h6>
-                                <p class="text-muted f-12 mb-0">Noise Cancelling Headphones(Bluetooth 5.0, Over-ear)</p>
-                              </div>
-                            </div>
-                          </td>
-                          <td>Electronics, Smartwatch</td>
-                          <td class="text-end">$249.99</td>
-                          <td class="text-end">120</td>
-                          <td class="text-center">
-                            <i class="ph-duotone ph-clock-countdown text-warning f-24" data-bs-toggle="tooltip" data-bs-title="warning"></i>
-                          </td>
-                          <td class="text-center">
-                            <img src="../assets/images/application/img-prod-brand-2.png" alt="user-image" class="wid-40" />
-                            <div class="prod-action-links">
-                              <ul class="list-inline me-auto mb-0">
-                                <li class="list-inline-item align-bottom" data-bs-toggle="tooltip" title="View">
-                                  <a
-                                    href="#"
-                                    class="avtar avtar-xs btn-link-secondary btn-pc-default"
-                                    data-bs-toggle="offcanvas"
-                                    data-bs-target="#productOffcanvas"
-                                  >
-                                    <i class="ti ti-eye f-18"></i>
-                                  </a>
-                                </li>
-                                <li class="list-inline-item align-bottom" data-bs-toggle="tooltip" title="Edit">
-                                  <a href="ecom_product-add.html" class="avtar avtar-xs btn-link-success btn-pc-default">
-                                    <i class="ti ti-edit-circle f-18"></i>
-                                  </a>
-                                </li>
-                                <li class="list-inline-item align-bottom" data-bs-toggle="tooltip" title="Delete">
-                                  <a href="#" class="avtar avtar-xs btn-link-danger btn-pc-default">
-                                    <i class="ti ti-trash f-18"></i>
-                                  </a>
-                                </li>
-                              </ul>
-                            </div>
-                          </td>
-                        </tr>
-                        <tr>
-                          <td class="text-end">5</td>
-                          <td>
-                            <div class="row">
-                              <div class="col-auto pe-0">
-                                <img src="../assets/images/application/img-prod-3.jpg" alt="user-image" class="wid-40 rounded" />
-                              </div>
-                              <div class="col">
-                                <h6 class="mb-1">Garmin Forerunner 45 GPS Watch</h6>
-                                <p class="text-muted f-12 mb-0">(Forerunner 45 - Waterproof, Fitness Tracking)</p>
-                              </div>
-                            </div>
-                          </td>
-                          <td>Sports,Smartwatch</td>
-                          <td class="text-end">$199.99</td>
-                          <td class="text-end">35</td>
-                          <td class="text-center">
-                            <i class="ph-duotone ph-x-circle text-danger f-24" data-bs-toggle="tooltip" data-bs-title="danger"></i>
-                          </td>
-                          <td class="text-center">
-                            <img src="../assets/images/application/img-prod-brand-3.png" alt="user-image" class="wid-40" />
-                            <div class="prod-action-links">
-                              <ul class="list-inline me-auto mb-0">
-                                <li class="list-inline-item align-bottom" data-bs-toggle="tooltip" title="View">
-                                  <a
-                                    href="#"
-                                    class="avtar avtar-xs btn-link-secondary btn-pc-default"
-                                    data-bs-toggle="offcanvas"
-                                    data-bs-target="#productOffcanvas"
-                                  >
-                                    <i class="ti ti-eye f-18"></i>
-                                  </a>
-                                </li>
-                                <li class="list-inline-item align-bottom" data-bs-toggle="tooltip" title="Edit">
-                                  <a href="ecom_product-add.html" class="avtar avtar-xs btn-link-success btn-pc-default">
-                                    <i class="ti ti-edit-circle f-18"></i>
-                                  </a>
-                                </li>
-                                <li class="list-inline-item align-bottom" data-bs-toggle="tooltip" title="Delete">
-                                  <a href="#" class="avtar avtar-xs btn-link-danger btn-pc-default">
-                                    <i class="ti ti-trash f-18"></i>
-                                  </a>
-                                </li>
-                              </ul>
-                            </div>
-                          </td>
-                        </tr>
-                        <tr>
-                          <td class="text-end">7</td>
-                          <td>
-                            <div class="row">
-                              <div class="col-auto pe-0">
-                                <img src="../assets/images/application/img-prod-4.jpg" alt="user-image" class="wid-40 rounded" />
-                              </div>
-                              <div class="col">
-                                <h6 class="mb-1">Samsung Galaxy Watch 5 44mm</h6>
-                                <p class="text-muted f-12 mb-0">Smartwatch with GPS and Heart Rate Monitor</p>
-                              </div>
-                            </div>
-                          </td>
-                          <td>Electronics, Smartwatch</td>
-                          <td class="text-end">$249.99</td>
-                          <td class="text-end">150</td>
-                          <td class="text-center">
-                            <i class="ph-duotone ph-check-circle text-success f-24" data-bs-toggle="tooltip" data-bs-title="success"></i>
-                          </td>
-                          <td class="text-center">
-                            <img src="../assets/images/application/img-prod-brand-4.png" alt="user-image" class="wid-40" />
-                            <div class="prod-action-links">
-                              <ul class="list-inline me-auto mb-0">
-                                <li class="list-inline-item align-bottom" data-bs-toggle="tooltip" title="View">
-                                  <a
-                                    href="#"
-                                    class="avtar avtar-xs btn-link-secondary btn-pc-default"
-                                    data-bs-toggle="offcanvas"
-                                    data-bs-target="#productOffcanvas"
-                                  >
-                                    <i class="ti ti-eye f-18"></i>
-                                  </a>
-                                </li>
-                                <li class="list-inline-item align-bottom" data-bs-toggle="tooltip" title="Edit">
-                                  <a href="ecom_product-add.html" class="avtar avtar-xs btn-link-success btn-pc-default">
-                                    <i class="ti ti-edit-circle f-18"></i>
-                                  </a>
-                                </li>
-                                <li class="list-inline-item align-bottom" data-bs-toggle="tooltip" title="Delete">
-                                  <a href="#" class="avtar avtar-xs btn-link-danger btn-pc-default">
-                                    <i class="ti ti-trash f-18"></i>
-                                  </a>
-                                </li>
-                              </ul>
-                            </div>
-                          </td>
-                        </tr>
-                        <tr>
-                          <td class="text-end">2</td>
-                          <td>
-                            <div class="row">
-                              <div class="col-auto pe-0">
-                                <img src="../assets/images/application/img-prod-5.jpg" alt="user-image" class="wid-40 rounded" />
-                              </div>
-                              <div class="col">
-                                <h6 class="mb-1">Sony WH-1000XM4 Wireless Headphones</h6>
-                                <p class="text-muted f-12 mb-0">Noise-cancelling, Bluetooth 5.0, Over-ear</p>
-                              </div>
-                            </div>
-                          </td>
-                          <td>Electronics,Headphones</td>
-                          <td class="text-end">$349.99</td>
-                          <td class="text-end">60</td>
-                          <td class="text-center">
-                            <i class="ph-duotone ph-clock-countdown text-warning f-24" data-bs-toggle="tooltip" data-bs-title="warning"></i>
-                          </td>
-                          <td class="text-center">
-                            <img src="../assets/images/application/img-prod-brand-5.png" alt="user-image" class="wid-40" />
-                            <div class="prod-action-links">
-                              <ul class="list-inline me-auto mb-0">
-                                <li class="list-inline-item align-bottom" data-bs-toggle="tooltip" title="View">
-                                  <a
-                                    href="#"
-                                    class="avtar avtar-xs btn-link-secondary btn-pc-default"
-                                    data-bs-toggle="offcanvas"
-                                    data-bs-target="#productOffcanvas"
-                                  >
-                                    <i class="ti ti-eye f-18"></i>
-                                  </a>
-                                </li>
-                                <li class="list-inline-item align-bottom" data-bs-toggle="tooltip" title="Edit">
-                                  <a href="ecom_product-add.html" class="avtar avtar-xs btn-link-success btn-pc-default">
-                                    <i class="ti ti-edit-circle f-18"></i>
-                                  </a>
-                                </li>
-                                <li class="list-inline-item align-bottom" data-bs-toggle="tooltip" title="Delete">
-                                  <a href="#" class="avtar avtar-xs btn-link-danger btn-pc-default">
-                                    <i class="ti ti-trash f-18"></i>
-                                  </a>
-                                </li>
-                              </ul>
-                            </div>
-                          </td>
-                        </tr>
-                        <tr>
-                          <td class="text-end">7</td>
-                          <td>
-                            <div class="row">
-                              <div class="col-auto pe-0">
-                                <img src="../assets/images/application/img-prod-4.jpg" alt="user-image" class="wid-40 rounded" />
-                              </div>
-                              <div class="col">
-                                <h6 class="mb-1">Samsung Galaxy Watch 4 Classic 46mm</h6>
-                                <p class="text-muted f-12 mb-0">Smartwatch with Fitness Tracking, GPS and Heart Rate Monitor</p>
-                              </div>
-                            </div>
-                          </td>
-                          <td>Electronics, Smartwatch</td>
-                          <td class="text-end">$299.99</td>
-                          <td class="text-end">120</td>
-                          <td class="text-center">
-                            <i class="ph-duotone ph-check-circle text-success f-24" data-bs-toggle="tooltip" data-bs-title="success"></i>
-                          </td>
-                          <td class="text-center">
-                            <img src="../assets/images/application/img-prod-brand-4.png" alt="user-image" class="wid-40" />
-                            <div class="prod-action-links">
-                              <ul class="list-inline me-auto mb-0">
-                                <li class="list-inline-item align-bottom" data-bs-toggle="tooltip" title="View">
-                                  <a
-                                    href="#"
-                                    class="avtar avtar-xs btn-link-secondary btn-pc-default"
-                                    data-bs-toggle="offcanvas"
-                                    data-bs-target="#productOffcanvas"
-                                  >
-                                    <i class="ti ti-eye f-18"></i>
-                                  </a>
-                                </li>
-                                <li class="list-inline-item align-bottom" data-bs-toggle="tooltip" title="Edit">
-                                  <a href="ecom_product-add.html" class="avtar avtar-xs btn-link-success btn-pc-default">
-                                    <i class="ti ti-edit-circle f-18"></i>
-                                  </a>
-                                </li>
-                                <li class="list-inline-item align-bottom" data-bs-toggle="tooltip" title="Delete">
-                                  <a href="#" class="avtar avtar-xs btn-link-danger btn-pc-default">
-                                    <i class="ti ti-trash f-18"></i>
-                                  </a>
-                                </li>
-                              </ul>
-                            </div>
-                          </td>
-                        </tr>
+                        <?php 
+                          foreach ($products as $product) {
+                            echo '<tr>';
+                              echo '<td>';
+                                echo '<div class="row">';
+                                  echo '<div class="col-auto pe-0">';
+
+                                  $cover = "https://wilsonartshop.decorlam.com.mx/wp-content/uploads/2020/12/3192-Gris-mate-swatch.jpg";
+
+                                  if (!empty($product['cover'])) {
+                                    $cover = $product['cover'];
+                                  }
+
+                                  echo '<img src="' . $cover . '" class="wid-40 rounded" onerror="this.src=\'https://wilsonartshop.decorlam.com.mx/wp-content/uploads/2020/12/3192-Gris-mate-swatch.jpg\'" />';
+                                  echo '</div>';
+                                  echo '<div class="col">';
+                                    echo '<h6 class="mb-1"> ' . $product['name'] . ' </h6>';
+                                    echo '<p class="text-muted f-12 mb-0"> ' . substr($product['description'], 0, 50) . '...'. ' </p>';
+                                  echo '</div>';
+                                echo '</div>';
+                              echo '</td>';
+
+                              $categoryGlobal = "";
+
+                              foreach ($product['categories'] as $category) {
+                                if ($categoryGlobal == ""){
+                                  $categoryGlobal = $category['name'];
+                                } else {
+                                  $categoryGlobal = $categoryGlobal . ', ' . $category['name'];
+                                }
+                              }                
+                              
+                              echo '<td>' . substr($categoryGlobal, 0, 40) . '...'. '</td>';
+
+                              $price = "No disponible";
+
+                              if (!empty($product['presentations']) && !empty($product['presentations'][0]['price'])) {
+                                  foreach ($product['presentations'][0]['price'] as $priceData) {
+                                      if ($priceData['is_current_price'] == 1) { 
+                                          $price = '$' . number_format($priceData['amount'], 2); 
+                                          break; 
+                                      }
+                                  }
+                              }
+
+                              echo '<td class="text-end">'. $price .'</td>';
+
+                              $stock = "Sin stock";
+
+                              if (!empty($product['presentations']) && isset($product['presentations'][0]['stock'])) {
+                                  $stock = $product['presentations'][0]['stock'];
+                              }
+
+                              echo '<td class="text-center">' . $stock . '</td>';                              
+                              echo '<td class="text-center">';
+
+                                $brand;
+
+                                if (!empty($product['brand'])) {
+                                  $brand = $product['brand']['name'];
+                                }
+                              
+                                echo '<p class= "text-center">' . $brand . '</p>';
+                                echo '<div class="prod-action-links">';
+                                  echo '<ul class="list-inline me-auto mb-0">';
+                                    echo '<li class="list-inline-item align-bottom" data-bs-toggle="tooltip" title="View">';
+                                      echo '<a href="' . BASE_PATH . 'products/details" class="avtar avtar-xs btn-link-success btn-pc-default">';
+                                        echo '<i class="ti ti-eye f-18"></i>';
+                                      echo '</a>';
+                                    echo '</li>';
+                                    echo '<li class="list-inline-item align-bottom" data-bs-toggle="tooltip" title="Edit">';
+
+                                      echo '<form action="' . BASE_PATH . 'products/edit_product" method="POST" enctype="multipart/form-data">';
+                                        echo '<input type="hidden" name="product_id" value="' . $product['id'] . '">';
+                                        echo '<button type="submit" class="avtar avtar-xs btn-link-success btn-pc-default">';
+                                          echo '<i class="ti ti-edit-circle f-18"></i>';
+                                        echo '</a>';
+
+                                      echo '</form>';
+
+                                    echo '</li>';
+                                    echo '<li class="list-inline-item align-bottom" data-bs-toggle="tooltip" title="Delete">';
+
+                                      echo '<form action="' . BASE_PATH . 'products/" method="POST" enctype="multipart/form-data">';
+
+                                        echo '<input type="hidden" name="action" value="delete_product">';
+                                        echo '<input type="hidden" name="global_token" value="' . $_SESSION['global_token'] . '">';
+                                        echo '<input type="hidden" name="product_id" value="' . $product['id'] . '">';
+
+                                        echo '<button type="submit" class="avtar avtar-xs btn-link-danger btn-pc-default">';
+                                          echo '<i class="ti ti-trash f-18"></i>';
+                                        echo '</button>';
+                                      echo '</form>';
+
+                                    echo '</li>';
+                                  echo '</ul>';
+                                echo '</div>';
+                              echo '</td>';
+                            echo '</tr>     ';
+                          }
+                        ?>
                       </tbody>
                     </table>
                   </div>

@@ -318,11 +318,9 @@
                     <table id="report-table" class="table table-bordered table-striped mb-0">
                         <thead>
                         <tr>
-                            <th class="border-top-0">Nombre</th>
-                            <th class="border-top-0">Correo electronico</th>
-                            <th class="border-top-0">Cuenta</th>
-                            <th class="border-top-0">Fecha de nacimiento</th>
-                            <th class="border-top-0">Acción</th>
+                            <th class="border-top-0">Porcentaje</th>
+                            <th class="border-top-0">Inicio</th>
+                            <th class="border-top-0">Vencimiento</th>
                         </tr>
                         </thead>
                         <tbody>

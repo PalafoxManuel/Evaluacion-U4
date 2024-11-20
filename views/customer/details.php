@@ -121,55 +121,130 @@
                     <div class="tab-pane fade show active" id="user-set-profile" role="tabpanel" aria-labelledby="user-set-profile-tab">
                       <div class="card">
                         <div class="card-header">
-                          <h5>Información personal</h5>
-                        </div>
+                      <h5>Información personal</h5>
+                      </div>
+                      <div class="card-body">
+                        <ul class="list-group list-group-flush">
+                          <li class="list-group-item px-0 pt-0">
+                            <div class="row">
+                              <div class="col-md-6">
+                                <p class="mb-1 text-muted">Nombre</p>
+                                <p class="mb-0">Rick</p>
+                              </div>
+                              <div class="col-md-6">
+                                <p class="mb-1 text-muted">Apellidos</p>
+                                <p class="mb-0">Luque Garayzar</p>
+                              </div>
+                            </div>
+                          </li>
+                          <li class="list-group-item px-0">
+                            <div class="row">
+                              <div class="col-md-6">
+                                <p class="mb-1 text-muted">Número de teléfono</p>
+                                <p class="mb-0">6151106899</p>
+                              </div>
+                              <div class="col-md-6">
+                                <p class="mb-1 text-muted">Género</p>
+                                <p class="mb-0">Masculino</p>
+                              </div>
+                            </div>
+                          </li>
+                          <li class="list-group-item px-0">
+                            <div class="row">
+                              <div class="col-md-6">
+                                <p class="mb-1 text-muted">Email</p>
+                                <p class="mb-0">Ricky@gmail.com</p>
+                              </div>
+                              <div class="col-md-6">
+                                <p class="mb-1 text-muted">Nivel</p>
+                                <p class="mb-0">Principiante</p>
+                              </div>
+                            </div>
+                          </li>
+                        </ul>
+                      </div>
+                      </div>
+                      </div>
+                      </div>
+
+                      <h5>Direcciones registradas</h5>
+                      <div class="card">
                         <div class="card-body">
                           <ul class="list-group list-group-flush">
-                            <li class="list-group-item px-0 pt-0">
+                            <li class="list-group-item px-0">
                               <div class="row">
                                 <div class="col-md-6">
-                                  <p class="mb-1 text-muted">Nombre</p>
-                                  <p class="mb-0">Rick</p>
+                                  <p class="mb-1 text-muted">Calle</p>
+                                  <p class="mb-0">Av. Siempre Viva 742</p>
                                 </div>
                                 <div class="col-md-6">
-                                  <p class="mb-1 text-muted">Apellidos</p>
-                                  <p class="mb-0">Luque Garayzar</p>
+                                  <p class="mb-1 text-muted">Ciudad</p>
+                                  <p class="mb-0">Springfield</p>
                                 </div>
                               </div>
                             </li>
                             <li class="list-group-item px-0">
                               <div class="row">
                                 <div class="col-md-6">
-                                  <p class="mb-1 text-muted">Número de telefono</p>
-                                  <p class="mb-0">6151106899</p>
+                                  <p class="mb-1 text-muted">Estado</p>
+                                  <p class="mb-0">Illinois</p>
                                 </div>
                                 <div class="col-md-6">
-                                  <p class="mb-1 text-muted">Género</p>
-                                  <p class="mb-0">Masculino</p>
+                                  <p class="mb-1 text-muted">Código Postal</p>
+                                  <p class="mb-0">12345</p>
+                                </div>
+                              </div>
+                            </li>
+                          </ul>
+                          <div class="mt-3">
+                            <button class="btn btn-primary btn-sm">Añadir Dirección</button>
+                            <button class="btn btn-warning btn-sm">Editar Dirección</button>
+                            <button class="btn btn-danger btn-sm">Eliminar Dirección</button>
+                          </div>
+                        </div>
+                      </div>
+
+                      <h5>Lista de Órdenes</h5>
+                      <div class="card">
+                        <div class="card-body">
+                          <ul class="list-group list-group-flush">
+                            <li class="list-group-item px-0">
+                              <div class="row">
+                                <div class="col-md-4">
+                                  <p class="mb-1 text-muted">Orden #1</p>
+                                  <p class="mb-0">Descripción: Compra de gadgets</p>
+                                </div>
+                                <div class="col-md-4">
+                                  <p class="mb-1 text-muted">Fecha</p>
+                                  <p class="mb-0">2024-11-15</p>
+                                </div>
+                                <div class="col-md-4">
+                                  <p class="mb-1 text-muted">Estado</p>
+                                  <p class="mb-0 text-success">Completada</p>
                                 </div>
                               </div>
                             </li>
                             <li class="list-group-item px-0">
                               <div class="row">
-                                <div class="col-md-6">
-                                  <p class="mb-1 text-muted">Email</p>
-                                  <p class="mb-0">Ricky@gmail.com</p>
+                                <div class="col-md-4">
+                                  <p class="mb-1 text-muted">Orden #2</p>
+                                  <p class="mb-0">Descripción: Compra de accesorios</p>
                                 </div>
-                                <div class="col-md-6">
-                                  <p class="mb-1 text-muted">Nivel</p>
-                                  <p class="mb-0">Principiante</p>
+                                <div class="col-md-4">
+                                  <p class="mb-1 text-muted">Fecha</p>
+                                  <p class="mb-0">2024-11-18</p>
+                                </div>
+                                <div class="col-md-4">
+                                  <p class="mb-1 text-muted">Estado</p>
+                                  <p class="mb-0 text-warning">En proceso</p>
                                 </div>
                               </div>
-                            </li>
                             </li>
                           </ul>
                         </div>
                       </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
+
+
             <!-- [ sample-page ] end -->
           </div>
           <!-- [ Main Content ] end -->

@@ -327,10 +327,33 @@
 <script>
     document.getElementById("sub").addEventListener('click', function (e){
       e.preventDefault();
-      let form = document.getElementById("formLogin");
-      if (form.checkValidity()){
+      let formBruto = document.getElementById("formLogin");
+      if (formBruto.checkValidity()){
+        let form = new FormData(formBruto);
 
-        form.submit();
+        //form.submit();
+
+        fetch('auth', {
+          method: 'POST',
+          body: form,
+        })
+        .then(response => {
+          if (!response.ok) {
+            sweetAlert("Error al iniciar sesión", "El correo y/o la contraseña son incorrectos", "error");
+          }
+          return response.json();
+        })
+        .then(data => {
+          if (data.success) {
+            sweetAlert("Éxito", "Iniciando sesión...", "success");
+            window.location.href = "<?= BASE_PATH ?>home";
+          }else{
+            console.error('Error en success:', data);
+          }
+        })
+        .catch(error => {
+          console.error("Error: ",error);
+        })
 
       }else{
         sweetAlert("Error al iniciar sesión", "Llene todos los campos y verifique que sean datos validos", "error");

@@ -220,7 +220,7 @@
         </div>
       </div>
     </nav>
-    <form id="logout" method="POST" action="../auth">
+    <form id="logout" method="POST" action="<?= BASE_PATH ?>auth">
       <input type="hidden" name="action" value="logout">
     </form>
     <script>

@@ -55,7 +55,8 @@ RewriteRule ^users/edit_users/([^/]+)/?$ views/users/edit_users.php?id=$1 [L]
 RewriteRule ^users/([^/]+)$ views/users/details.php?id=$1 [L]
 
 # Modificar clientes
-RewriteRule ^customer/edit_customer/?$ views/customer/edit_customer.php [L]
+RewriteRule ^customer/edit_customer/([^/]+)$ views/customer/edit_customer.php?id=$1 [L]
+
 
 # Detalles clientes
 RewriteRule ^customer/([^/]+)/?$ views/customer/details.php?id=$1 [L]

@@ -1,5 +1,14 @@
   <?php 
     include_once "../../app/config.php";
+    include_once "../../app/users/ClientsController.php";
+
+    if (isset($_SESSION["user_id"]) && $_SESSION['user_id']!=null) {
+      $controlador = new ClientsController();
+      $response = json_decode(json_encode($controlador->get()));
+      $clients = $response->data;
+    }else{
+      header('Location: home/');
+    }
 
   ?>
   <!doctype html>
@@ -79,7 +88,7 @@
                             >
                             <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"> </button>
                           </div>
-                          <form>
+                          <form id="formCreate" method="POST">
                             <div class="modal-body">
                               <small id="emailHelp" class="form-text text-muted mb-2 mt-0"
                                 >Proporcione la información requerida en el formulario.</small
@@ -88,31 +97,31 @@
                                 <label class="form-label">Nombre</label>
                                 <input
                                   type="text"
+                                  name="name"
                                   class="form-control"
                                   id="fname"
                                   aria-describedby="emailHelp"
                                   placeholder="Ingresa el nombre"
-                                />
-                              </div>
-                              <div class="mb-3">
-                                <label class="form-label">Apellido</label>
-                                <input
-                                  type="email"
-                                  class="form-control"
-                                  id="lname"
-                                  aria-describedby="emailHelp"
-                                  placeholder="Ingresa el apellido"
+                                  required
                                 />
                               </div>
                               <div class="mb-3">
                                 <label class="form-label">Email</label>
-                                <input type="email" class="form-control" id="emial" aria-describedby="emailHelp" placeholder="Ingresa el correo" 
+                                <input
+                                  type="email"
+                                  name="email"
+                                  class="form-control"
+                                  id="emial"
+                                  aria-describedby="emailHelp"
+                                  placeholder="Ingresa el correo" 
+                                  required
                                 />
                               </div>
                               <div class="mb-3">
                               <label class="form-label">Número de teléfono</label>
                               <input
                                 type="tel"
+                                name="phone_number"
                                 class="form-control"
                                 id="phone"
                                 placeholder="Ingresa el número de teléfono"
@@ -121,18 +130,27 @@
                               />
                             </div>
                             <div class="mb-3">
+                              <label class="form-label">Suscrito</label>
+                              <select class="form-control" id="level" name="is_suscribed" required>
+                                <option value="0">No</option>
+                                <option value="1">Sí</option>
+                              </select>
+                            </div>
+                            <div class="mb-3">
                               <label class="form-label">Nivel</label>
-                              <select class="form-control" id="level" required>
-                                <option value="">Seleccione el nivel</option>
-                                <option value="principiante">Principiante</option>
-                                <option value="intermedio">Intermedio</option>
-                                <option value="avanzado">Avanzado</option>
+                              <select class="form-control" id="level" name="level_id" required>
+                                <option value="1">Normal</option>
+                                <option value="2">Premium</option>
+                                <option value="3">VIP</option>
+                                <option value="5">GOOD</option>
                               </select>
                             </div>
                             </div>
                             <div class="modal-footer">
                               <button type="button" class="btn btn-light-danger" data-bs-dismiss="modal">Cerrar</button>
-                              <button type="button" class="btn btn-light-primary">Agregar cliente</button>
+                              <button onclick="createClient()" type="button" class="btn btn-light-primary">Agregar cliente</button>
+                              <input type="hidden" name="global_token" value="<?= $_SESSION['global_token'] ?>">
+                              <input type="hidden" name="action" value="create_client">
                             </div>
                           </form>
                         </div>
@@ -146,116 +164,25 @@
                       <thead>
                         <tr>
                           <th class="border-top-0">Nombre</th>
-                          <th class="border-top-0">Apellido</th>
                           <th class="border-top-0">Email</th>
                           <th class="border-top-0">Numero telefono</th>
                           <th class="border-top-0">Nivel</th>
                         </tr>
                       </thead>
                       <tbody>
-                        <tr>
-                        <td>Daniel Castro</td>
-                        <td><a href="#" class="link-secondary">daniel.castro@example.com</a></td>
-                        <td>N/A</td>
-                        <td>May 9, 2023 at 10:50 AM</td>
-                          <td>
-                            <a href="<?= BASE_PATH ?>customer/details" class="btn btn-sm btn-light-primary"><i class="feather icon-eye"></i></a>
-                            <a href="<?= BASE_PATH ?>customer/edit_customer" class="btn btn-sm btn-light-success me-1"><i class="feather icon-edit"></i></a>
-                            <a href="#" class="btn btn-sm btn-light-danger"><i class="feather icon-trash-2"></i></a>
-                          </td>
-                        </tr>
-                        <tr>
-                        <td>Mateo Ruiz</td>
-                        <td><a href="#" class="link-secondary">mateo.ruiz@example.com</a></td>
-                        <td>N/A</td>
-                        <td>September 5, 2021 at 08:55 AM</td>
-                          <td>
-                            <a href="#" class="btn btn-sm btn-light-primary"><i class="feather icon-eye"></i></a>
-                            <a href="#" class="btn btn-sm btn-light-success me-1"><i class="feather icon-edit"></i></a>
-                            <a href="#" class="btn btn-sm btn-light-danger"><i class="feather icon-trash-2"></i></a>
-                          </td>
-                        </tr>
-                        <tr>
-                        <td>Lucas Pérez</td>
-                        <td><a href="#" class="link-secondary">lucas.perez@example.com</a></td>
-                        <td>N/A</td>
-                        <td>March 14, 2020 at 02:10 PM</td>
-                          <td>
-                            <a href="#" class="btn btn-sm btn-light-primary"><i class="feather icon-eye"></i></a>
-                            <a href="#" class="btn btn-sm btn-light-success me-1"><i class="feather icon-edit"></i></a>
-                            <a href="#" class="btn btn-sm btn-light-danger"><i class="feather icon-trash-2"></i></a>
-                          </td>
-                        </tr>
-                        <tr>
-                        <td>Sofía Ramírez</td>
-                        <td><a href="#" class="link-secondary">sofia.ramirez@example.com</a></td>
-                        <td>N/A</td>
-                        <td>June 08, 2021 at 11:30 AM</td>
-                          <td>
-                            <a href="#" class="btn btn-sm btn-light-success me-1"><i class="feather icon-edit"></i></a>
-                            <a href="#" class="btn btn-sm btn-light-danger"><i class="feather icon-trash-2"></i></a>
-                          </td>
-                        </tr>
-                        <tr>
-                        <td>Diego Fernández</td>
-                        <td><a href="#" class="link-secondary">diego.fernandez@example.com</a></td>
-                        <td>N/A</td>
-                        <td>August 15, 2021 at 05:20 PM</td>
-                          <td>
-                            <a href="#" class="btn btn-sm btn-light-success me-1"><i class="feather icon-edit"></i></a>
-                            <a href="#" class="btn btn-sm btn-light-danger"><i class="feather icon-trash-2"></i></a>
-                          </td>
-                        </tr>
-                        <tr>
-                        <td>Camila Torres</td>
-                        <td><a href="#" class="link-secondary">camila.torres@example.com</a></td>
-                        <td>N/A</td>
-                        <td>November 03, 2022 at 10:45 AM</td>
-                          <td>
-                            <a href="#" class="btn btn-sm btn-light-success me-1"><i class="feather icon-edit"></i></a>
-                            <a href="#" class="btn btn-sm btn-light-danger"><i class="feather icon-trash-2"></i></a>
-                          </td>
-                        </tr>
-                        <tr>
-                        <td>Emilio Cruz</td>
-                        <td><a href="#" class="link-secondary">emilio.cruz@example.com</a></td>
-                        <td>N/A</td>
-                        <td>September 10, 2022 at 07:00 PM</td>
-                          <td>
-                            <a href="#" class="btn btn-sm btn-light-success me-1"><i class="feather icon-edit"></i></a>
-                            <a href="#" class="btn btn-sm btn-light-danger"><i class="feather icon-trash-2"></i></a>
-                          </td>
-                        </tr>
-                        <tr>
-                        <td>Daniela Ortiz</td>
-                        <td><a href="#" class="link-secondary">daniela.ortiz@example.com</a></td>
-                        <td>N/A</td>
-                        <td>May 28, 2023 at 03:10 PM</td>
-                          <td>
-                            <a href="#" class="btn btn-sm btn-light-success me-1"><i class="feather icon-edit"></i></a>
-                            <a href="#" class="btn btn-sm btn-light-danger"><i class="feather icon-trash-2"></i></a>
-                          </td>
-                        </tr>
-                        <tr>
-                        <td>Ángel Gutiérrez</td>
-                        <td><a href="#" class="link-secondary">angel.gutierrez@example.com</a></td>
-                        <td>N/A</td>
-                        <td>October 12, 2022 at 09:25 AM</td>
-                          <td>
-                            <a href="#" class="btn btn-sm btn-light-success me-1"><i class="feather icon-edit"></i></a>
-                            <a href="#" class="btn btn-sm btn-light-danger"><i class="feather icon-trash-2"></i></a>
-                          </td>
-                        </tr>
-                        <tr>
-                        <td>Isabella Rodríguez</td>
-                        <td><a href="#" class="link-secondary">isabella.rodriguez@example.com</a></td>
-                        <td>N/A</td>
-                        <td>December 25, 2018 at 03:25 PM</td>
-                          <td>
-                            <a href="#" class="btn btn-sm btn-light-success me-1"><i class="feather icon-edit"></i></a>
-                            <a href="#" class="btn btn-sm btn-light-danger"><i class="feather icon-trash-2"></i></a>
-                          </td>
-                        </tr>
+                        <?php foreach ($clients as $client): ?>
+                          <tr>
+                            <td><?= $client->name ?? " " ?></td>
+                            <td><?= $client->email ?? " " ?></td>
+                            <td><?= $client->phone_number ?? " " ?></td>
+                            <td><?= $client->level->name ?? " " ?></td>
+                            <td>
+                              <a href="<?= BASE_PATH ?>customer/<?= $client->id ?>" class="btn btn-sm btn-light-primary"><i class="feather icon-eye"></i></a>
+                              <a href="<?= BASE_PATH ?>customer/edit_customer/<?= $client->id ?>" class="btn btn-sm btn-light-success me-1"><i class="feather icon-edit"></i></a>
+                              <button onclick="deleteClient(<?= $client->id ?>,'<?= $client->name ?>')" class="btn btn-sm btn-light-danger"><i class="feather icon-trash-2"></i></button>
+                            </td>
+                          </tr>
+                        <?php endforeach; ?>
                       </tbody>
                     </table>
                   </div>
@@ -266,6 +193,12 @@
           <!-- [ Main Content ] end -->
         </div>
       </div>
+
+      <form id="deleteForm" method="POST" action="<?= BASE_PATH ?>clients">
+        <input type="hidden" name="action" value="delete_client">
+        <input id="id_delete" type="hidden" name="client_id">
+        <input type="hidden" name="global_token" value="<?= $_SESSION['global_token'] ?>">
+      </form>
 
       <?php 
 
@@ -279,6 +212,7 @@
 
         ?>
       <!-- [Page Specific JS] start -->
+      <script src="https://common.olemiss.edu/_js/sweet-alert/sweet-alert.min.js"></script>
       <script>
         // scroll-block
         var tc = document.querySelectorAll('.scroll-block');
@@ -301,6 +235,99 @@
           document.getElementById(temp).value = value;
         }
         // quantity end
+
+        function createClient(){
+          let formData = document.getElementById("formCreate");
+
+          if (formData.checkValidity()){
+              let form = new FormData(formData);
+
+              //form.submit();
+
+              fetch('<?= BASE_PATH ?>clients', {
+                  method: 'POST',
+                  body: form,
+              })
+              .then(response => {
+                  if (response.ok) {
+                      if (response.redirected){
+                          sweetAlert("ÉXITO", "Se creo de forma correcta", "success");
+                          window.location.href = response.url
+                          return;
+                      }else{
+                          return response.text();
+                      }
+                  }else{
+                      swal("Ocurrio un error", "No fue posible crear al nuevo cliente");
+                      throw new Error('Error en el servidor: ' + response.status);
+                  }
+              })
+              .then(data => {
+                  if (data?.error) {
+                      swal("Ocurrio un error", "No fue posible crear al nuevo cliente");
+                      console.error(data.error);
+                  }
+              })
+              .catch(error => {
+                  console.error("Error: ",error);
+              })
+          }else{
+              sweetAlert("Error al ingresador los datos", "Llene todos los campos y verifique que sean datos validos", "error");
+          }
+        }
+
+        function deleteClient(id, name){
+        swal({
+          title: "¿Eliminar a "+name+"?",
+          text: "Esta acción será permanente",
+          type: "warning",
+          showCancelButton: true,
+          confirmButtonColor: "#DD6B55",
+          confirmButtonText: "Sí, eliminar!",
+          closeOnConfirm: false
+        },
+        function(){
+          document.getElementById("id_delete").value = id;
+
+          let formData = document.getElementById("deleteForm");
+
+          if (formData.checkValidity()){
+              let form = new FormData(formData);
+
+              //form.submit();
+
+              fetch('<?= BASE_PATH ?>clients', {
+                  method: 'POST',
+                  body: form,
+              })
+              .then(response => {
+                  if (response.ok) {
+                      if (response.redirected){
+                          sweetAlert("ÉXITO", "Se elimino de forma correcta", "success");
+                          window.location.href = response.url
+                          return;
+                      }else{
+                          return response.json();
+                      }
+                  }else{
+                      throw new Error('Error en el servidor: ' + response.status);
+                  }
+              })
+              .then(data => {
+                  if (data?.success) {
+                      swal("Ocurrio un error", "No fue posible eliminar al cliente");
+                      console.error(data.error);
+                  }
+              })
+              .catch(error => {
+                  console.error("Error: ",error);
+              })
+            }else{
+                sweetAlert("Error al ingresador los datos", "Llene todos los campos y verifique que sean datos validos", "error");
+            }
+        });
+      }
+
       </script>
       
       <?php 

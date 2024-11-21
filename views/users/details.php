@@ -153,6 +153,10 @@
                                 <p class="mb-1 text-muted">Número de telefono</p>
                                 <p id="phone_number" class="mb-0"><?= $user->phone_number ?? "" ?></p> <!-- mod con ID -->
                               </div>
+                              <div class="col-md-6">
+                                <p class="mb-1 text-muted">Creado por</p>
+                                <p id="phone_number" class="mb-0"><?= $user->created_by ?? "" ?></p> <!-- mod con ID -->
+                              </div>
                             </div>
                           </li>
                           <li class="list-group-item px-0">
@@ -160,6 +164,10 @@
                               <div class="col-md-6">
                                 <p class="mb-1 text-muted">Email</p>
                                 <p id="email" class="mb-0"><?= $user->email ?? "" ?></p> <!-- mod con ID -->
+                              </div>
+                              <div class="col-md-6">
+                                <p class="mb-1 text-muted">Rol</p>
+                                <p id="email" class="mb-0"><?= $user->role ?? "" ?></p> <!-- mod con ID -->
                               </div>
                             </div>
                           </li>

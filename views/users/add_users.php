@@ -5,7 +5,7 @@
     if (isset($_SESSION["user_id"]) && $_SESSION['user_id']!=null) {
         //no hace nada
     }else{
-        header('Location: home/');
+        header('Location: '. BASE_PATH);
     }
 
     ?>

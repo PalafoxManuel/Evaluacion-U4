@@ -5,7 +5,6 @@
     if (isset($_SESSION["user_id"]) && $_SESSION['user_id']!=null) {
         $controlador = new BrandsController();
         $marcas = $controlador->getBrands();
-        //var_dump($marcas[0]);
     }else{
         header('Location: '. BASE_PATH);
     }

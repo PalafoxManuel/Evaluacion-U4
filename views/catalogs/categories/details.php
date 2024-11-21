@@ -137,7 +137,7 @@
                                 </li>
                                 <li class="list-group-item px-0">
                                     <div class="row">
-                                    <div class="col-md-6">
+                                    <div class="col-md-12">
                                         <p class="mb-1 text-muted">Descripción</p>
                                         <p class="mb-0"><?= $category->description ?? "" ?></p>
                                     </div>

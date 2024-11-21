@@ -1,10 +1,20 @@
 <?php 
+  session_start();
+
   include_once "../../app/config.php";
 
   include_once "../../app/products/PresentationsController.php";
+  
+  if (($_SESSION['product_id'] != null) && $_POST['product_id'] == '') {
+    $product_id = (int)($_SESSION['product_id']);
+    // var_dump('-------------------------------------------------------------     1   ' . $product_id); 
+  }else {
+    $product_id = (int)($_POST['product_id']);  
+    // var_dump('-------------------------------------------------------------      2    ' . $product_id); 
+  }
 
-  $product_id = $_POST['product_id'];
-
+  // var_dump('-------------------------------------------------------------' . $product_id);  
+  
   $PresentationsController = new PresentationsController();
   $Presentations = $PresentationsController->getPresentationsByProductId($product_id);
 
@@ -101,8 +111,8 @@
                               echo '<div class="prod-action-links">';
                                 echo '<ul class="list-inline me-auto mb-0">';
                                 echo '<li class="list-inline-item align-bottom" data-bs-toggle="tooltip" title="View">';
-                                echo '<form action="' . BASE_PATH . 'products/details" method="POST" enctype="multipart/form-data">';
-                                  echo '<input type="hidden" name="product_id" value="' . $product['id'] . '">';
+                                echo '<form action="' . BASE_PATH . 'presentation-details" method="POST" enctype="multipart/form-data">';
+                                  echo '<input type="hidden" name="product_id" value="' . $presentation['id'] . '">';
                                     echo '<button type="submit" class="avtar avtar-xs btn-link-success btn-pc-default">';
                                       echo '<i class="ti ti-eye f-18"></i>';
                                     echo '</button>';
@@ -112,8 +122,8 @@
 
                                 echo '<li class="list-inline-item align-bottom" data-bs-toggle="tooltip" title="Edit">';
 
-                                  echo '<form action="' . BASE_PATH . 'products/edit_product" method="POST" enctype="multipart/form-data">';
-                                    echo '<input type="hidden" name="product_id" value="' . $product['id'] . '">';
+                                  echo '<form action="' . BASE_PATH . 'products/edit_presentation" method="POST" enctype="multipart/form-data">';
+                                    echo '<input type="hidden" name="presentation_id" value="' . $presentation['id'] . '">';
                                     echo '<button type="submit" class="avtar avtar-xs btn-link-success btn-pc-default">';
                                       echo '<i class="ti ti-edit-circle f-18"></i>';
                                     echo '</a>';
@@ -123,11 +133,11 @@
                                 echo '</li>';
                                 echo '<li class="list-inline-item align-bottom" data-bs-toggle="tooltip" title="Delete">';
 
-                                  echo '<form action="' . BASE_PATH . 'products/" method="POST" enctype="multipart/form-data">';
+                                  echo '<form action="' . BASE_PATH . 'presentation" method="POST" enctype="multipart/form-data">';
 
-                                    echo '<input type="hidden" name="action" value="delete_product">';
+                                    echo '<input type="hidden" name="action" value="delete_presentation">';
                                     echo '<input type="hidden" name="global_token" value="' . $_SESSION['global_token'] . '">';
-                                    echo '<input type="hidden" name="product_id" value="' . $product['id'] . '">';
+                                    echo '<input type="hidden" name="id" value="' . $presentation['id'] . '">';
 
                                     echo '<button type="submit" class="avtar avtar-xs btn-link-danger btn-pc-default">';
                                       echo '<i class="ti ti-trash f-18"></i>';

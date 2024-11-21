@@ -62,7 +62,6 @@
             <div class="col-xl-6">
                 <form action="<?= BASE_PATH ?>presentation/" method="POST" enctype="multipart/form-data">
                     <input type="hidden" name="product_id" value="<?= $product_id ?>">
-                    <p>holaaaa<?= $product_id ?></p>
                     <input type="hidden" name="global_token" value="<?= $_SESSION['global_token'] ?>">
                     <input type="hidden" name="action" value="create_presentation">
 

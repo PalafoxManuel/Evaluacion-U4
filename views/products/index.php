@@ -142,11 +142,17 @@
                                 echo '<p class= "text-center">' . $brand . '</p>';
                                 echo '<div class="prod-action-links">';
                                   echo '<ul class="list-inline me-auto mb-0">';
+
                                     echo '<li class="list-inline-item align-bottom" data-bs-toggle="tooltip" title="View">';
-                                      echo '<a href="' . BASE_PATH . 'products/details" class="avtar avtar-xs btn-link-success btn-pc-default">';
-                                        echo '<i class="ti ti-eye f-18"></i>';
-                                      echo '</a>';
-                                    echo '</li>';
+                                    echo '<form action="' . BASE_PATH . 'products/details" method="POST" enctype="multipart/form-data">';
+                                      echo '<input type="hidden" name="product_id" value="' . $product['id'] . '">';
+                                        echo '<button type="submit" class="avtar avtar-xs btn-link-success btn-pc-default">';
+                                          echo '<i class="ti ti-eye f-18"></i>';
+                                        echo '</button>';
+                                      echo '</li>';
+
+                                    echo '</form>';
+
                                     echo '<li class="list-inline-item align-bottom" data-bs-toggle="tooltip" title="Edit">';
 
                                       echo '<form action="' . BASE_PATH . 'products/edit_product" method="POST" enctype="multipart/form-data">';

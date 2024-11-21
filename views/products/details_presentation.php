@@ -1,5 +1,22 @@
-    <?php 
+<?php 
     include_once "../../app/config.php";
+
+    $product_id = $_POST['product_id'];
+
+    include_once "../../app/products/ProductsController.php";
+
+    $ProductsController = new ProductsController();
+    $Product = $ProductsController->getProductById($product_id);
+
+    $price = "No disponible";
+    if (!empty($Product['presentations']) && !empty($Product['presentations'][0]['price'])) {
+        foreach ($Product['presentations'][0]['price'] as $priceData) {
+            if ($priceData['is_current_price'] == 1) {
+                $price = '$' . number_format($priceData['amount'], 2);
+                break;
+            }
+        }
+    }
 
     ?>
     <!doctype html>
@@ -94,10 +111,10 @@
                                 </ul>
                             </div>
                             <div class="carousel-item active">
-                                <img src="../../assets/images/application/img-prod-1.jpg" class="d-block w-100" alt="Product images" />
+                            <img src="<?= htmlspecialchars($Product['cover']) ?>" class="d-block w-100" alt="Product image" />
                             </div>
                             <div class="carousel-item">
-                                <img src="../../assets/images/application/img-prod-2.jpg" class="d-block w-100" alt="Product images" />
+                            <img src="<?= htmlspecialchars($Product['cover']) ?>" class="d-block w-100" alt="Product image" />
                             </div>
                             </div>
                             <ol class="list-inline carousel-indicators position-relative product-carousel-indicators my-sm-3 mx-0">
@@ -113,7 +130,7 @@
                     </div>
                     <div class="col-md-6">
                         <span class="badge bg-success f-14">Disponible</span>
-                        <h5 class="my-3">Apple Watch SE Smartwatch (GPS, 40mm) (Monitoreo de Frecuencia Cardíaca)</h5>
+                        <h5 class="my-3"><?= $Product['name'] ?></h5>
                         <h5 class="mt-4 mb-sm-1 mb-0">Presentaciones</h5>
                         <div class="offer-check-block">
                         <div class="offer-check border rounded p-3">
@@ -168,32 +185,7 @@
                         </div>
                         </div>
                         <h5 class="mt-4 mb-sm-3 mb-2 f-w-500">Descripción del producto</h5>
-                        <ul>
-                        <li class="mb-2">Instrucciones de cuidado: Solo lavado a mano</li>
-                        <li class="mb-2">Tipo de ajuste: Regular</li>
-                        <li class="mb-2">Jeans para mujer en azul oscuro, corte regular</li>
-                        <li class="mb-2">Composición: 100% algodón</li>
-                        </ul>
-                        <div class="mb-3 row align-items-center">
-                        <label class="col-form-label col-lg-3 col-sm-12">
-                            <span class="d-block">Talla</span></label>
-                        <div class="col-lg-9 col-md-12 col-sm-12">
-                            <div class="row g-2">
-                            <div class="col-auto">
-                                <input type="radio" class="btn-check" id="btnrdolite1" name="btn_radio2" checked />
-                                <label class="btn btn-sm btn-light-primary" for="btnrdolite1">Pequeño</label>
-                            </div>
-                            <div class="col-auto">
-                                <input type="radio" class="btn-check" id="btnrdolite2" name="btn_radio2" />
-                                <label class="btn btn-sm btn-light-primary" for="btnrdolite2">Mediano</label>
-                            </div>
-                            <div class="col-auto">
-                                <input type="radio" class="btn-check" id="btnrdolite3" name="btn_radio2" />
-                                <label class="btn btn-sm btn-light-primary" for="btnrdolite3">Grande</label>
-                            </div>
-                            </div>
-                        </div>
-                        </div>
+                        <p><?= $Product['description'] ?></p>
                         <div class="mb-3 row">
                         <label class="col-form-label col-lg-3 col-sm-12">Cantidad<span class="text-danger">*</span></label>
                         <div class="col-lg-6 col-md-12 col-sm-12">
@@ -214,7 +206,7 @@
                         </div>
                         </div>
                         <h3 class="mb-4"
-                        ><b>$399.00</b></h3>
+                        ><b><?= $price ?></b></h3>
                         <div class="row">
                         <div class="col-6">
                             <div class="d-grid">
@@ -223,7 +215,10 @@
                         </div>
                         <div class="col-6">
                             <div class="d-grid">
-                            <button type="button" class="btn btn-outline-secondary">¿Deberíamos eliminar este?</button>
+                                <form action="<?= BASE_PATH ?>products/presentation" method="POST" enctype="multipart/form-data">
+                                    <input type="hidden" name="product_id" value="<?= $product_id ?>">
+                                    <button type="submit" class="btn btn-outline-secondary">Presentaciones</button>
+                                </form>
                             </div>
                         </div>
                         </div>

@@ -1,5 +1,13 @@
 <?php 
   include_once "../../app/config.php";
+
+  include_once "../../app/products/PresentationsController.php";
+
+  $product_id = $_POST['product_id'];
+
+  $PresentationsController = new PresentationsController();
+  $Presentations = $PresentationsController->getPresentationsByProductId($product_id);
+
 ?>
 <!doctype html>
 <html lang="en">
@@ -57,7 +65,10 @@
             <div class="card table-card">
               <div class="card-body">
                 <div class="text-end p-sm-4 pb-sm-2">
-                  <a href="<?= BASE_PATH ?>products/add_presentation" class="btn btn-primary"> <i class="ti ti-plus f-18"></i> Añadir presentación </a>
+                  <form action="<?= BASE_PATH ?>products/add_presentation" method="POST" enctype="multipart/form-data">
+                    <input type="hidden" name="product_id" value=" <?= $product_id ?>">
+                    <button type="submit" class="btn btn-primary"> <i class="ti ti-plus f-18"></i> Añadir presentación </button>
+                  </form>
                 </div>
                 <div class="table-responsive">
                   <table class="table table-hover tbl-product" id="pc-dt-simple">
@@ -67,85 +78,71 @@
                       </tr>
                     </thead>
                     <tbody>
-                      <tr>
-                        <td>
-                          <div class="row">
-                            <div class="col">
-                              <h6 class="mb-1">JBL Tune 500BT Wireless Headphones</h6>
-                              <p class="text-muted f-12 mb-0">Bluetooth 4.1, Lightweight, Over-ear</p>
-                            </div>
-                          </div>
-                        </td>
-                        <td></td>
-                        <td class="text-end"></td>
-                        <td class="text-end"></td>
-                        <td class="text-center">
-                          <i class="ph-duotone f-24"></i>
-                        </td>
-                        <td class="text-center">
-                          <div class="prod-action-links">
-                            <ul class="list-inline me-auto mb-0">
-                              <li class="list-inline-item align-bottom" data-bs-toggle="tooltip" title="View">
-                                <a href="<?= BASE_PATH ?>products/details_presentation" class="avtar avtar-xs btn-link-success btn-pc-default">
-                                  <i class="ti ti-eye f-18"></i>
-                                </a>
-                              </li>
-                              <li class="list-inline-item align-bottom" data-bs-toggle="tooltip" title="Edit">
-                                <a href="<?= BASE_PATH ?>products/edit_presentation" class="avtar avtar-xs btn-link-success btn-pc-default">
-                                  <i class="ti ti-edit-circle f-18"></i>
-                                </a>
-                              </li>
-                              <li class="list-inline-item align-bottom" data-bs-toggle="tooltip" title="Delete">
-                                <a href="#" class="avtar avtar-xs btn-link-danger btn-pc-default">
-                                  <i class="ti ti-trash f-18"></i>
-                                </a>
-                              </li>
-                            </ul>
-                          </div>
-                        </td>
-                      </tr>
-                      <tr>
-                        <td>
-                          <div class="row">
-                            <div class="col">
-                              <h6 class="mb-1">Sony WH-CH510 Wireless Headphones</h6>
-                              <p class="text-muted f-12 mb-0">Bluetooth 5.0, Lightweight, On-Ear Design</p>
-                            </div>
-                          </div>
-                        </td>
-                        <td></td>
-                        <td class="text-end"></td>
-                        <td class="text-end"></td>
-                        <td class="text-center">
-                          <i class="ph-duotone f-24"></i>
-                        </td>
-                        <td class="text-center">
-                          <div class="prod-action-links">
-                            <ul class="list-inline me-auto mb-0">
-                              <li class="list-inline-item align-bottom" data-bs-toggle="tooltip" title="View">
-                                <a
-                                  href="#"
-                                  class="avtar avtar-xs btn-link-secondary btn-pc-default"
-                                  data-bs-toggle="offcanvas"
-                                  data-bs-target="#productOffcanvas"
-                                >
-                                  <i class="ti ti-eye f-18"></i>
-                                </a>
-                              </li>
-                              <li class="list-inline-item align-bottom" data-bs-toggle="tooltip" title="Edit">
-                                <a href="ecom_product-add.html" class="avtar avtar-xs btn-link-success btn-pc-default">
-                                  <i class="ti ti-edit-circle f-18"></i>
-                                </a>
-                              </li>
-                              <li class="list-inline-item align-bottom" data-bs-toggle="tooltip" title="Delete">
-                                <a href="#" class="avtar avtar-xs btn-link-danger btn-pc-default">
-                                  <i class="ti ti-trash f-18"></i>
-                                </a>
-                              </li>
-                            </ul>
-                          </div>
-                        </td>
-                      </tr>
+
+
+                      <?php 
+                        foreach ($Presentations['data'] as $presentation) {
+                          echo '<tr>';
+                            echo '<td>';
+                              echo '<div class="row">';
+                                echo '<div class="col">';
+                                  echo '<h6 class="mb-1">' . $presentation['code'] . '</h6>';
+                                  echo '<p class="text-muted f-12 mb-0">' . $presentation['description'] . '</p>';
+                                echo '</div>';
+                              echo '</div>';
+                            echo '</td>';
+                            echo '<td></td>';
+                            echo '<td class="text-end"></td>';
+                            echo '<td class="text-end"></td>';
+                            echo '<td class="text-center">';
+                              echo '<i class="ph-duotone f-24"></i>';
+                            echo '</td>';
+                            echo '<td class="text-center">';
+                              echo '<div class="prod-action-links">';
+                                echo '<ul class="list-inline me-auto mb-0">';
+                                echo '<li class="list-inline-item align-bottom" data-bs-toggle="tooltip" title="View">';
+                                echo '<form action="' . BASE_PATH . 'products/details" method="POST" enctype="multipart/form-data">';
+                                  echo '<input type="hidden" name="product_id" value="' . $product['id'] . '">';
+                                    echo '<button type="submit" class="avtar avtar-xs btn-link-success btn-pc-default">';
+                                      echo '<i class="ti ti-eye f-18"></i>';
+                                    echo '</button>';
+                                  echo '</li>';
+
+                                echo '</form>';
+
+                                echo '<li class="list-inline-item align-bottom" data-bs-toggle="tooltip" title="Edit">';
+
+                                  echo '<form action="' . BASE_PATH . 'products/edit_product" method="POST" enctype="multipart/form-data">';
+                                    echo '<input type="hidden" name="product_id" value="' . $product['id'] . '">';
+                                    echo '<button type="submit" class="avtar avtar-xs btn-link-success btn-pc-default">';
+                                      echo '<i class="ti ti-edit-circle f-18"></i>';
+                                    echo '</a>';
+
+                                  echo '</form>';
+
+                                echo '</li>';
+                                echo '<li class="list-inline-item align-bottom" data-bs-toggle="tooltip" title="Delete">';
+
+                                  echo '<form action="' . BASE_PATH . 'products/" method="POST" enctype="multipart/form-data">';
+
+                                    echo '<input type="hidden" name="action" value="delete_product">';
+                                    echo '<input type="hidden" name="global_token" value="' . $_SESSION['global_token'] . '">';
+                                    echo '<input type="hidden" name="product_id" value="' . $product['id'] . '">';
+
+                                    echo '<button type="submit" class="avtar avtar-xs btn-link-danger btn-pc-default">';
+                                      echo '<i class="ti ti-trash f-18"></i>';
+                                    echo '</button>';
+                                  echo '</form>';
+
+                                echo '</li>';
+
+                                echo '</ul>';
+                              echo '</div>';
+                            echo '</td>';
+                          echo '</tr>';
+                        }
+                      ?>
+
                     </tbody>
                   </table>
                 </div>

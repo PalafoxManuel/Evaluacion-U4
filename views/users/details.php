@@ -84,7 +84,7 @@
                           class="rounded-circle img-fluid wid-90 img-thumbnail"
                           src="<?= $user->avatar ?>"
                           alt="User image"
-                          onerror="this.onerror=null; this.src='<?= BASE_PATH . "assets/images/user/avatar-2.jpg" ?>';"
+                          onerror="this.onerror=null; this.src='<?= BASE_PATH ?>assets/images/user/avatar-2.jpg';"
                         /> <!-- mod con ID -->
                         <i class="chat-badge bg-success me-2 mb-2"></i>
                       </div>

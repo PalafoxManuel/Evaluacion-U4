@@ -87,7 +87,8 @@
                                 alt="user image"
                                 class="img-radius align-top m-r-15"
                                 style="width: 40px"
-                                onerror="this.onerror=null; this.src='<?= BASE_PATH . "assets/images/user/avatar-2.jpg" ?>';"
+                                onerror="this.onerror=null; this.src='<?= BASE_PATH ?>assets/images/user/avatar-2.jpg';"
+
                               />
                               <div class="d-inline-block">
                                 <h6 class="m-b-0"><?= $user->name ?></h6>

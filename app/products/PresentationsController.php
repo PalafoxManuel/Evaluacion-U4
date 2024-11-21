@@ -205,6 +205,7 @@ class PresentationsController{
         $responseData = json_decode($response, true);
     
         if (isset($responseData['code']) && $responseData['code'] === 4) {
+            $_SESSION['product_id'] = $productId;
             header("Location: " . BASE_PATH . "views/products/presentation.php");
             exit();
         } else {
@@ -293,6 +294,12 @@ class PresentationsController{
     }
 
     public function delete($id) {
+
+        $Presentations = new PresentationsController();
+        $presentation = $Presentations->getPresentationById($id);
+
+        $_SESSION['product_id'] = $presentation['data']['product']['id'];
+
         $curl = curl_init();
         $url = 'https://crud.jonathansoto.mx/api/presentations/' . $id;
     

@@ -17,60 +17,63 @@ if (isset($_POST['action'])) {
 
     switch ($_POST['action']) {
         case 'create_coupon':
-            $name = strip_tags($_POST['name']);
-            $code = strip_tags($_POST['code']);
-            $percentage_discount = strip_tags($_POST['percentage_discount']);
-            $amount_discount = strip_tags($_POST['amount_discount']);
-            $min_amount_required = strip_tags($_POST['min_amount_required']);
-            $min_product_required = strip_tags($_POST['min_product_required']);
-            $start_date = strip_tags($_POST['start_date']);
-            $end_date = strip_tags($_POST['end_date']);
-            $max_uses = strip_tags($_POST['max_uses']);
-            $valid_only_first_purchase = (int)$_POST['valid_only_first_purchase'];
-            $status = strip_tags($_POST['status']);
-            $couponsController->create(
-                $name,
-                $code,
-                $percentage_discount,
-                $amount_discount,
-                $min_amount_required,
-                $min_product_required,
-                $start_date,
-                $end_date,
-                $max_uses,
-                $valid_only_first_purchase,
-                $status
-            );
-            break;
+        $name = strip_tags($_POST['name']);
+        $code = strip_tags($_POST['code']);
+        $percentage_discount = strip_tags($_POST['percentage_discount']);
+        $amount_discount = strip_tags($_POST['amount_discount']);
+        $min_amount_required = strip_tags($_POST['min_amount_required']);
+        $min_product_required = strip_tags($_POST['min_product_required']);
+        $start_date = strip_tags($_POST['start_date']);
+        $end_date = strip_tags($_POST['end_date']);
+        $max_uses = strip_tags($_POST['max_uses']);
+        $count_uses = strip_tags($_POST['count_uses']);
+        $valid_only_first_purchase = (int)$_POST['valid_only_first_purchase'];
+        $status = strip_tags($_POST['status']);
+        $couponsController->create(
+            $name,
+            $code,
+            $percentage_discount,
+            $min_amount_required,
+            $min_product_required,
+            $start_date,
+            $end_date,
+            $max_uses,
+            $count_uses,
+            $valid_only_first_purchase,
+            $status
+        );
+        break;
 
-        case 'update_coupon':
-            $id = strip_tags($_POST['id']);
-            $name = strip_tags($_POST['name']);
-            $code = strip_tags($_POST['code']);
-            $percentage_discount = strip_tags($_POST['percentage_discount']);
-            $amount_discount = strip_tags($_POST['amount_discount']);
-            $min_amount_required = strip_tags($_POST['min_amount_required']);
-            $min_product_required = strip_tags($_POST['min_product_required']);
-            $start_date = strip_tags($_POST['start_date']);
-            $end_date = strip_tags($_POST['end_date']);
-            $max_uses = strip_tags($_POST['max_uses']);
-            $valid_only_first_purchase = (int)$_POST['valid_only_first_purchase'];
-            $status = strip_tags($_POST['status']);
-            $couponsController->update(
-                $id,
-                $name,
-                $code,
-                $percentage_discount,
-                $amount_discount,
-                $min_amount_required,
-                $min_product_required,
-                $start_date,
-                $end_date,
-                $max_uses,
-                $valid_only_first_purchase,
-                $status
-            );
-            break;
+    case 'update_coupon':
+        $id = strip_tags($_POST['id']);
+        $name = strip_tags($_POST['name']);
+        $code = strip_tags($_POST['code']);
+        $percentage_discount = strip_tags($_POST['percentage_discount']);
+        $amount_discount = strip_tags($_POST['amount_discount']);
+        $min_amount_required = strip_tags($_POST['min_amount_required']);
+        $min_product_required = strip_tags($_POST['min_product_required']);
+        $start_date = strip_tags($_POST['start_date']);
+        $end_date = strip_tags($_POST['end_date']);
+        $max_uses = strip_tags($_POST['max_uses']);
+        $count_uses = strip_tags($_POST['count_uses']);
+        $valid_only_first_purchase = (int)$_POST['valid_only_first_purchase'];
+        $status = strip_tags($_POST['status']);
+        $couponsController->update(
+            $id,
+            $name,
+            $code,
+            $percentage_discount,
+            $amount_discount,
+            $min_amount_required,
+            $min_product_required,
+            $start_date,
+            $end_date,
+            $max_uses,
+            $count_uses,
+            $valid_only_first_purchase,
+            $status
+        );
+        break;
 
         case 'delete_coupon':
             $id = strip_tags($_POST['id']);
@@ -159,7 +162,7 @@ class CouponsController{
         }
     }
 
-    public function create($name, $code, $percentage_discount, $amount_discount, $min_amount_required, $min_product_required, $start_date, $end_date, $max_uses, $valid_only_first_purchase, $status) {
+    public function create($name, $code, $percentage_discount, $min_amount_required, $min_product_required, $start_date, $end_date, $max_uses, $count_uses, $valid_only_first_purchase, $status) {
         $curl = curl_init();
         $url = 'https://crud.jonathansoto.mx/api/coupons';
     
@@ -167,12 +170,12 @@ class CouponsController{
             'name' => $name,
             'code' => $code,
             'percentage_discount' => $percentage_discount,
-            'amount_discount' => $amount_discount,
             'min_amount_required' => $min_amount_required,
             'min_product_required' => $min_product_required,
             'start_date' => $start_date,
             'end_date' => $end_date,
             'max_uses' => $max_uses,
+            'count_uses' => $count_uses,
             'valid_only_first_purchase' => $valid_only_first_purchase,
             'status' => $status
         ];
@@ -180,11 +183,10 @@ class CouponsController{
         curl_setopt_array($curl, [
             CURLOPT_URL => $url,
             CURLOPT_RETURNTRANSFER => true,
-            CURLOPT_POST => true,
+            CURLOPT_CUSTOMREQUEST => 'POST',
             CURLOPT_POSTFIELDS => $postData,
             CURLOPT_HTTPHEADER => [
                 'Authorization: Bearer ' . $_SESSION['user_data']->token,
-                'Content-Type: multipart/form-data',
             ],
         ]);
     
@@ -192,8 +194,8 @@ class CouponsController{
         $httpCode = curl_getinfo($curl, CURLINFO_HTTP_CODE);
         curl_close($curl);
         $responseData = json_decode($response, true);
-    
-        if ($httpCode === 201 && isset($responseData['code']) && $responseData['code'] === 4) {
+
+        if ($httpCode === 200 && isset($responseData['code']) && $responseData['code'] === 4) {
             header("Location: " . BASE_PATH . "views/coupons/coupons.php");
             exit();
         } else {
@@ -203,7 +205,7 @@ class CouponsController{
         }
     }
 
-    public function update($id, $name, $code, $percentage_discount, $amount_discount, $min_amount_required, $min_product_required, $start_date, $end_date, $max_uses, $valid_only_first_purchase, $status) {
+    public function update($id, $name, $code, $percentage_discount, $amount_discount, $min_amount_required, $min_product_required, $start_date, $end_date, $max_uses, $count_uses, $valid_only_first_purchase, $status) {
         $curl = curl_init();
         $url = 'https://crud.jonathansoto.mx/api/coupons';
     
@@ -218,6 +220,7 @@ class CouponsController{
             'start_date' => $start_date,
             'end_date' => $end_date,
             'max_uses' => $max_uses,
+            'count_uses' => $count_uses,
             'valid_only_first_purchase' => $valid_only_first_purchase,
             'status' => $status
         ];

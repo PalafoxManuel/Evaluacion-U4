@@ -39,7 +39,7 @@ RewriteRule ^products/add_presentation$ views/products/add_presentation.php [L]
 RewriteRule ^products/edit_presentation$ views/products/edit_presentation.php [L]
 
 # Ver detalles de la presentación
-RewriteRule ^products/([^/]+)$ views/products/details_presentation.php?id=$1 [L]
+RewriteRule ^presentation-details$ views/products/details_presentation.php?id=$1 [L]
 
 # Ver detalles del producto
 RewriteRule ^products/([^/]+)$ views/products/details.php?id=$1 [L]

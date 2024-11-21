@@ -8,9 +8,18 @@
   if (($_SESSION['product_id'] != null) && $_POST['product_id'] == '') {
     $product_id = (int)($_SESSION['product_id']);
     // var_dump('-------------------------------------------------------------     1   ' . $product_id); 
-  }else {
+  }elseif (!($_POST['product_id'] == '')) {
     $product_id = (int)($_POST['product_id']);  
     // var_dump('-------------------------------------------------------------      2    ' . $product_id); 
+  }else {
+
+    $id_presentation = ((int)($_SESSION['presentation_id']));
+    $PresentationsController = new PresentationsController();
+    $Presentations = $PresentationsController->getPresentationById($id_presentation);
+
+    $product_id = (int)($_POST['presentation_id']);  
+
+    var_dump('-------------------------------------------------------------      3   ' . $Presentations['data']); 
   }
 
   // var_dump('-------------------------------------------------------------' . $product_id);  
@@ -139,7 +148,7 @@
                                     echo '<input type="hidden" name="global_token" value="' . $_SESSION['global_token'] . '">';
                                     echo '<input type="hidden" name="id" value="' . $presentation['id'] . '">';
 
-                                    echo '<button type="submit" class="avtar avtar-xs btn-link-danger btn-pc-default">';
+                                    echo '<button type="submit" class="avtar avtar-xs btn-link-danger btn-pc-default" onclick="handleDelete(' . $presentation['id'] . ', ' . $productId . ')">';
                                       echo '<i class="ti ti-trash f-18"></i>';
                                     echo '</button>';
                                   echo '</form>';

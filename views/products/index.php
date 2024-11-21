@@ -63,6 +63,7 @@
               <div class="card table-card">
                 <div class="card-body">
                   <div class="text-end p-sm-4 pb-sm-2">
+                  <a href="<?= BASE_PATH ?>views/products/table_orders.php" class="btn">Tabla de ordenes</a>
                     <a href="<?= BASE_PATH ?>products/add_product" class="btn btn-primary"> <i class="ti ti-plus f-18"></i>Añadir producto</a>
                   </div>
                   <div class="table-responsive">

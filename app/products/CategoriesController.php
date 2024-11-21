@@ -105,10 +105,10 @@ class CategoriesController{
 
     public function getCategoriesById($id) {
         $curl = curl_init();
-        $url = 'https://crud.jonathansoto.mx/api/categories/';
+        $url = 'https://crud.jonathansoto.mx/api/categories/' . $id;
     
         curl_setopt_array($curl, [
-            CURLOPT_URL => $url . $id,
+            CURLOPT_URL => $url,
             CURLOPT_RETURNTRANSFER => true,
             CURLOPT_ENCODING => '',
             CURLOPT_MAXREDIRS => 10,
@@ -116,23 +116,28 @@ class CategoriesController{
             CURLOPT_FOLLOWLOCATION => true,
             CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
             CURLOPT_CUSTOMREQUEST => 'GET',
+            CURLOPT_HTTPHEADER => [
+                'Authorization: Bearer ' . $_SESSION['user_data']->token, // Obtiene el token desde la sesión
+            ],
         ]);
     
         $response = curl_exec($curl);
         curl_close($curl);
         $responseData = json_decode($response, true);
-
+    
         if (isset($responseData['data'])) {
             return ['success' => true, 'data' => $responseData['data']];
         } else {
-            return false;
+            $errorMsg = $responseData['message'] ?? 'Error desconocido al obtener la categoría.';
+            http_response_code(400);
+            return ['success' => false, 'error' => $errorMsg];
         }
     }
 
     public function create($name, $description, $slug, $categoryId) {
         $curl = curl_init();
         $url = 'https://crud.jonathansoto.mx/api/categories';
-
+    
         curl_setopt_array($curl, [
             CURLOPT_URL => $url,
             CURLOPT_RETURNTRANSFER => true,
@@ -148,12 +153,15 @@ class CategoriesController{
                 'slug' => $slug,
                 'category_id' => $categoryId,
             ],
+            CURLOPT_HTTPHEADER => [
+                'Authorization: Bearer ' . $_SESSION['user_data']->token, // Token de autorización desde la sesión
+            ],
         ]);
-
+    
         $response = curl_exec($curl);
         curl_close($curl);
         $responseData = json_decode($response, true);
-
+    
         if (isset($responseData['data'])) {
             header("Location: " . BASE_PATH . "views/catalogs/categories/categories.php");
             exit();
@@ -166,7 +174,7 @@ class CategoriesController{
     public function update($id, $name, $description, $slug, $categoryId) {
         $curl = curl_init();
         $url = 'https://crud.jonathansoto.mx/api/categories';
-
+    
         curl_setopt_array($curl, [
             CURLOPT_URL => $url,
             CURLOPT_RETURNTRANSFER => true,
@@ -183,13 +191,16 @@ class CategoriesController{
                 'slug' => $slug,
                 'category_id' => $categoryId,
             ]),
-            CURLOPT_HTTPHEADER => ['Content-Type: application/x-www-form-urlencoded'],
+            CURLOPT_HTTPHEADER => [
+                'Content-Type: application/x-www-form-urlencoded',
+                'Authorization: Bearer ' . $_SESSION['user_data']->token, // Token de autorización
+            ],
         ]);
-
+    
         $response = curl_exec($curl);
         curl_close($curl);
         $responseData = json_decode($response, true);
-
+    
         if (isset($responseData['data'])) {
             header("Location: " . BASE_PATH . "views/catalogs/categories/categories.php");
             exit();
@@ -202,7 +213,7 @@ class CategoriesController{
     public function delete($id) {
         $curl = curl_init();
         $url = 'https://crud.jonathansoto.mx/api/categories/';
-
+    
         curl_setopt_array($curl, [
             CURLOPT_URL => $url . $id,
             CURLOPT_RETURNTRANSFER => true,
@@ -212,12 +223,15 @@ class CategoriesController{
             CURLOPT_FOLLOWLOCATION => true,
             CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
             CURLOPT_CUSTOMREQUEST => 'DELETE',
+            CURLOPT_HTTPHEADER => [
+                'Authorization: Bearer ' . $_SESSION['user_data']->token, // Token de autorización
+            ],
         ]);
-
+    
         $response = curl_exec($curl);
         curl_close($curl);
         $responseData = json_decode($response, true);
-
+    
         if (isset($responseData['code']) && $responseData['code'] == 2) {
             header("Location: " . BASE_PATH . "views/catalogs/categories/categories.php");
             exit();

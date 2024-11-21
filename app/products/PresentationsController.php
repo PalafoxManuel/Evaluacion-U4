@@ -186,7 +186,7 @@ class PresentationsController{
             'stock_min' => $stockMin,
             'stock_max' => $stockMax,
             'product_id' => $productId,
-            'price' => $price
+            'amount' => $price
         ];
     
         curl_setopt_array($curl, [

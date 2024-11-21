@@ -6,6 +6,8 @@
     $CouponsController = new CouponsController();
     $Coupons = $CouponsController->get();
 
+    $coupon_id = 0;
+
     ?>
     <!doctype html>
     <html lang="en">
@@ -242,7 +244,7 @@
                             >
                             <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"> </button>
                             </div>
-                            <form>
+                            <form id="editarCupon" action="<?= BASE_PATH ?>coupons/" method="POST" enctype="multipart/form-data">
                             <div class="modal-body">
                                 <small id="emailHelp" class="form-text text-muted mb-2 mt-0"
                                 Completa la información para agregar un nuevo cupón.
@@ -253,7 +255,8 @@
                               <input
                                 type="text"
                                 class="form-control"
-                                id="name"
+                                id="name1"
+                                name="name"
                                 placeholder="Ingresa el nombre del cupón"
                               />
                             </div>
@@ -263,7 +266,8 @@
                                 <input
                                     type="text"
                                     class="form-control"
-                                    id="code"
+                                    id="code1"
+                                    name="code"
                                     placeholder="Ingresa el código del cupón"
                                 />
                                 </div>
@@ -272,7 +276,8 @@
                                 <input
                                     type="number"
                                     class="form-control"
-                                    id="percentage_discount"
+                                    id="percentage_discount1"
+                                    name="percentage_discount"
                                     placeholder="Ingrese el porcentaje de descuento"
                                 />
                                 </div>
@@ -282,7 +287,8 @@
                               <input
                                 type="number"
                                 class="form-control"
-                                id="min_amount_required"
+                                id="min_amount_required1"
+                                name="min_amount_required"
                                 placeholder="Ingrese el monto mínimo necesario"
                               />
                             </div>
@@ -292,7 +298,8 @@
                               <input
                                 type="number"
                                 class="form-control"
-                                id="min_product_required"
+                                id="min_product_required1"
+                                name="min_product_required"
                                 placeholder="Ingrese la cantidad mínima de productos necesarios"
                               />
                             </div>
@@ -302,7 +309,8 @@
                               <input
                                 type="date"
                                 class="form-control"
-                                id="start_date"
+                                id="start_date1"
+                                name="start_date"
                               />
                             </div>
                             <!-- Fecha de finalización -->
@@ -311,7 +319,19 @@
                               <input
                                 type="date"
                                 class="form-control"
-                                id="end_date"
+                                id="end_date1"
+                                name="end_date"
+                              />
+                            </div>
+                            <!-- count uses -->
+                            <div class="mb-3">
+                              <label class="form-label">Conteo de usos</label>
+                              <input
+                                type="number"
+                                class="form-control"
+                                id="count_uses1"
+                                name="count_uses"
+                                placeholder="Ingrese el número limite de usos"
                               />
                             </div>
                             <!-- Máximo de usos -->
@@ -320,14 +340,26 @@
                               <input
                                 type="number"
                                 class="form-control"
-                                id="max_uses"
+                                id="max_uses1"
+                                name="max_uses"
                                 placeholder="Ingrese el número limite de usos"
+                              />
+                            </div>
+                            <!-- Cantidad de descuento -->
+                            <div class="mb-3">
+                              <label class="form-label">Cantidad de descuentos</label>
+                              <input
+                                type="number"
+                                class="form-control"
+                                id="amount_discount1"
+                                name="amount_discount"
+                                placeholder="Ingrese la cantidad de descuentos"
                               />
                             </div>
                             <!-- Válido para la primera compra -->
                             <div class="mb-3">
                               <label class="form-label">Solo aplicable a la primera compra</label>
-                              <select class="form-control" id="valid_only_first_purchase">
+                              <select class="form-control" id="valid_only_first_purchase1" name="valid_only_first_purchase">
                                 <option value="1">Sí</option>
                                 <option value="0">No</option>
                               </select>
@@ -335,7 +367,7 @@
                             <!-- Estado -->
                             <div class="mb-3">
                               <label class="form-label">Estado actual</label>
-                              <select class="form-control" id="status">
+                              <select class="form-control" id="status1" name="status">
                                 <option value="1">Activo</option>
                                 <option value="0">Inactivo</option>
                               </select>
@@ -343,7 +375,10 @@
                             </div>
                             <div class="modal-footer">
                                 <button type="button" class="btn btn-light-danger" data-bs-dismiss="modal">Cerrar</button>
-                                <button type="button" class="btn btn-light-primary">Editar cupon</button>
+                                <input type="hidden" name="id" id="id1">
+                                <input type="hidden" name="action" value="update_coupon">
+                                <input type="hidden" name="global_token" value="<?= $_SESSION['global_token'] ?>">
+                                <button type="submit" class="btn btn-light-primary">Editar cupon</button>
                             </div>
                             </form>
                         </div>
@@ -382,8 +417,23 @@
                             echo '<button type="submit" class="btn btn-sm btn-light-primary"><i class="feather icon-eye"></i></a>';
                             echo '</form>';
 
-                            echo '<button type="submit" class="btn btn-sm btn-light-success me-1" data-bs-toggle="modal" data-bs-target="#editModal">';
-                                echo '<i class="feather icon-edit"></i>';
+                            echo '<button type="submit" class="btn btn-sm btn-light-success me-1" data-bs-toggle="modal" data-bs-target="#editModal" onclick="editCoupon(' .
+                            htmlspecialchars(json_encode($coupon['name'])) . ', ' .
+                            htmlspecialchars(json_encode($coupon['code'])) . ', ' .
+                            htmlspecialchars(json_encode($coupon['percentage_discount'])) . ', ' .
+                            htmlspecialchars(json_encode($coupon['min_amount_required'])) . ', ' .
+                            htmlspecialchars(json_encode($coupon['min_product_required'])) . ', ' .
+                            htmlspecialchars(json_encode($coupon['start_date'])) . ', ' .
+                            htmlspecialchars(json_encode($coupon['end_date'])) . ', ' .
+                            htmlspecialchars(json_encode($coupon['count_uses'])) . ', ' .
+                            htmlspecialchars(json_encode($coupon['max_uses'])) . ', ' .
+                            htmlspecialchars(json_encode($coupon['amount_discount'])) . ', ' .
+                            htmlspecialchars(json_encode($coupon['valid_only_first_purchase'])) . ', ' .
+                            htmlspecialchars(json_encode($coupon['status'])) . ', ' .
+                            htmlspecialchars(json_encode($coupon['id'])) .
+
+                            ')">';
+                            echo '<i class="feather icon-edit"></i>';
                             echo '</button>';
 
                             echo '<form action="' . BASE_PATH . 'coupons/" method="POST" enctype="multipart/form-data">';
@@ -444,6 +494,45 @@
             value--;
             document.getElementById(temp).value = value;
         }
+
+        function editCoupon(
+          name,
+          code,
+          percentage_discount,
+          min_amount_required,
+          min_product_required,
+          start_date,
+          end_date,
+          count_uses,
+          max_uses,
+          amount_discount,
+          valid_only_first_purchase,
+          status,
+          id
+        ) {
+          document.querySelector('#editModal #name1').value = name || '';
+          document.querySelector('#editModal #code1').value = code || '';
+          document.querySelector('#editModal #percentage_discount1').value = percentage_discount || 0;
+          document.querySelector('#editModal #min_amount_required1').value = min_amount_required || 0;
+          document.querySelector('#editModal #min_product_required1').value = min_product_required || 0;
+          document.querySelector('#editModal #start_date1').value = start_date || '';
+          document.querySelector('#editModal #end_date1').value = end_date || '';
+          document.querySelector('#editModal #count_uses1').value = count_uses || 0;
+          document.querySelector('#editModal #max_uses1').value = max_uses || 0;
+          document.querySelector('#editModal #amount_discount1').value = amount_discount || 0;
+          document.querySelector('#editModal #id1').value = id;
+
+
+          // Establece el valor en el select de "Solo aplicable a la primera compra"
+          const validOnlyFirstPurchaseSelect = document.querySelector('#editModal #valid_only_first_purchase1');
+          validOnlyFirstPurchaseSelect.value = valid_only_first_purchase ? valid_only_first_purchase.toString() : '0';
+
+          // Establece el valor en el select de "Estado"
+          const statusSelect = document.querySelector('#editModal #status1');
+          statusSelect.value = status ? status.toString() : '0'
+        }
+
+
         // quantity end
         </script>
         

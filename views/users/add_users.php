@@ -61,7 +61,7 @@
             <!-- [ Main Content ] start -->
             <div class="row">
             <div class="col-12">
-                <form enctype="multipart/form-data" class="card" method="POST" action="users">
+                <form id="formCreate" enctype="multipart/form-data" class="card" method="POST">
                 <div class="card-header">
                     <h5 class="mb-0">Información del usuario</h5>
                 </div>
@@ -97,7 +97,7 @@
                         </div>
                     </div>
                     <div class="col-md-12 text-end">
-                        <button type="submit" name="action" class="btn btn-primary">Crear usuario</button>
+                        <button onclick="createUser()" type="button" name="action" class="btn btn-primary">Crear usuario</button>
                         <input type="hidden" name="action" value="create_user">
                         <input type="hidden" name="role" value="Administrador">
                         <input type="hidden" name="password" value="123456789">
@@ -122,11 +122,53 @@
         include "../layouts/scripts.php";
 
         ?>
+        <script src="https://common.olemiss.edu/_js/sweet-alert/sweet-alert.min.js"></script>
         <script>
         // scroll-block
         var tc = document.querySelectorAll('.scroll-block');
         for (var t = 0; t < tc.length; t++) {
         new SimpleBar(tc[t]);
+        }
+
+
+        function createUser(){
+            let formData = document.getElementById("formCreate");
+
+            if (formData.checkValidity()){
+                let form = new FormData(formData);
+
+                //form.submit();
+
+                fetch('<?= BASE_PATH ?>users', {
+                    method: 'POST',
+                    body: form,
+                })
+                .then(response => {
+                    if (response.ok) {
+                        if (response.redirected){
+                            sweetAlert("ÉXITO", "Se creo de forma correcta", "success");
+                            window.location.href = response.url
+                            return;
+                        }else{
+                            return response.json();
+                        }
+                    }else{
+                        swal("Ocurrio un error", "No fue posible crear al usuario");
+                        throw new Error('Error en el servidor: ' + response.status);
+                    }
+                })
+                .then(data => {
+                    if (data?.error) {
+                        swal("Ocurrio un error", "No fue posible crear al usuario");
+                        console.error(data.error);
+                    }
+                })
+                .catch(error => {
+                    console.error("Error: ",error);
+                })
+            }else{
+                sweetAlert("Error al ingresador los datos", "Llene todos los campos y verifique que sean datos validos", "error");
+            }
         }
         </script>
         <?php 

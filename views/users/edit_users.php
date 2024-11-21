@@ -68,7 +68,7 @@
         <!-- [ Main Content ] start -->
         <div class="row">
           <div class="col-12">
-            <form id="formGeneral" method="POST" enctype="multipart/form-data" action="<?= BASE_PATH ?>users" class="card">
+            <form id="formGeneral" method="POST" enctype="multipart/form-data" class="card">
               <div class="card-header">
                 <h5 class="mb-0">Información del usuario</h5>
               </div>
@@ -131,6 +131,7 @@
     include "../layouts/scripts.php";
 
     ?>
+    <script src="https://common.olemiss.edu/_js/sweet-alert/sweet-alert.min.js"></script>
     <script>
     // scroll-block
     var tc = document.querySelectorAll('.scroll-block');
@@ -161,8 +162,46 @@
         .catch(error => console.error("Error: ",error))
         
       }
-      document.getElementById("formGeneral").submit();
+      updateUser();
     })
+
+    function updateUser(){
+      let formData = document.getElementById("formGeneral");
+
+      if (formData.checkValidity()){
+          let form = new FormData(formData);
+
+          fetch('<?= BASE_PATH ?>users', {
+              method: 'POST',
+              body: form,
+          })
+          .then(response => {
+              if (response.ok) {
+                  if (response.redirected){
+                      sweetAlert("ÉXITO", "Se actualizo de forma correcta", "success");
+                      window.location.href = response.url
+                      return;
+                  }else{
+                      return response.json();
+                  }
+              }else{
+                  swal("Ocurrio un error", "No fue posible actualizar al usuario");
+                  throw new Error('Error en el servidor: ' + response.status);
+              }
+          })
+          .then(data => {
+              if (data?.error) {
+                  swal("Ocurrio un error", "No fue posible actualizar al usuario");
+                  console.error("Error en data: ",data.error);
+              }
+          })
+          .catch(error => {
+              console.error("Error: ",error);
+          })
+      }else{
+          sweetAlert("Error al ingresador los datos", "Llene todos los campos y verifique que sean datos validos", "error");
+      }
+    }
 
     </script>
     <?php 

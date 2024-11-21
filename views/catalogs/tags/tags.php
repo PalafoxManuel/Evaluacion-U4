@@ -1,5 +1,13 @@
 <?php 
   include_once "../../../app/config.php";
+  include_once "../../../app/products/TagsController.php";
+
+  if (isset($_SESSION["user_id"]) && $_SESSION['user_id']!=null) {
+      $controlador = new TagsController();
+      $tags = $controlador->getTags();
+  }else{
+      header('Location: '. BASE_PATH);
+  }
 
 ?>
 <!doctype html>
@@ -79,7 +87,7 @@
                           >
                           <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"> </button>
                         </div>
-                        <form>
+                        <form id="formCreate" method="POST">
                           <div class="modal-body">
                             <small id="emailHelp" class="form-text text-muted mb-2 mt-0"
                               >Completa la información solicitada en el formulario</small
@@ -88,36 +96,44 @@
                               <label class="form-label">Nombre de tag</label>
                               <input
                                 type="text"
+                                name="name"
                                 class="form-control"
                                 id="fname"
                                 aria-describedby="emailHelp"
                                 placeholder="Ingrese el nombre de tag"
+                                required
                               />
                             </div>
                             <div class="mb-3">
                               <label class="form-label">Descripción del tag</label>
                               <input
-                                type="email"
+                                type="text"
+                                name="description"
                                 class="form-control"
                                 id="lname"
                                 aria-describedby="emailHelp"
                                 placeholder="Ingrese la descripción del tag"
+                                required
                               />
                             </div>
                             <div class="mb-3">
                               <label class="form-label">Slug</label>
                               <input
-                                type="email"
+                                type="text"
+                                name="slug"
                                 class="form-control"
                                 id="lname"
                                 aria-describedby="emailHelp"
                                 placeholder="Ingrese el slug"
+                                required
                               />
                             </div>
                           </div>
                           <div class="modal-footer">
                             <button type="button" class="btn btn-light-danger" data-bs-dismiss="modal">Cerrar</button>
-                            <button type="button" class="btn btn-light-primary">Añadir tag</button>
+                            <button onclick="createTag()" type="button" class="btn btn-light-primary">Añadir tag</button>
+                            <input type="hidden" name="global_token" value="<?= $_SESSION['global_token'] ?>">
+                            <input type="hidden" name="action" value="create_tag">
                           </div>
                         </form>
                       </div>
@@ -141,7 +157,7 @@
                           >
                           <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"> </button>
                         </div>
-                        <form>
+                        <form id="formUpdate" method="POST">
                           <div class="modal-body">
                             <small id="emailHelp" class="form-text text-muted mb-2 mt-0"
                               >Completa la información solicitada en el formulario</small
@@ -150,36 +166,45 @@
                               <label class="form-label">Nombre del tag</label>
                               <input
                                 type="text"
+                                name="name"
                                 class="form-control"
-                                id="fname"
+                                id="UpdateName"
                                 aria-describedby="emailHelp"
                                 placeholder="Ingrese el nombre del tag"
+                                required
                               />
                             </div>
                             <div class="mb-3">
                               <label class="form-label">Descripción del tag</label>
                               <input
-                                type="email"
+                                type="text"
+                                name="description"
                                 class="form-control"
-                                id="lname"
+                                id="UpdateDescription"
                                 aria-describedby="emailHelp"
                                 placeholder="Ingrese la descripción del tag"
+                                required
                               />
                             </div>
                             <div class="mb-3">
                               <label class="form-label">Slug</label>
                               <input
-                                type="email"
+                                type="text"
+                                name="slug"
                                 class="form-control"
-                                id="lname"
+                                id="UpdateSlug"
                                 aria-describedby="emailHelp"
                                 placeholder="Ingrese el slug"
+                                required
                               />
                             </div>
                           </div>
                           <div class="modal-footer">
                             <button type="button" class="btn btn-light-danger" data-bs-dismiss="modal">Cerrar</button>
-                            <button type="button" class="btn btn-light-primary">Editar tag</button>
+                            <button onclick="updateTag()" type="button" class="btn btn-light-primary">Editar tag</button>
+                            <input type="hidden" name="global_token" value="<?= $_SESSION['global_token'] ?>">
+                            <input type="hidden" name="action" value="update_tag">
+                            <input id="UpdateId" type="hidden" name="id">
                           </div>
                         </form>
                       </div>
@@ -193,115 +218,25 @@
                     <thead>
                       <tr>
                         <th class="border-top-0">Nombre tag </th>
-                        <th class="border-top-0">Descripcion</th>
+                        <th class="border-top-0">Descripción</th>
                         <th class="border-top-0">Slug</th>
                       </tr>
                     </thead>
                     <tbody>
-                      <tr>
-                         <td>Emily Carter</td>
-                         <td><a href="#" class="link-secondary">emily@carter.com</a></td>
-                         <td>N/A</td>
-                         <td>March 15, 2020 at 10:25 AM</td>
-                        <td>
-                          <a href="<?= BASE_PATH ?>catalogs/tags/details" class="btn btn-sm btn-light-primary"><i class="feather icon-eye"></i></a>
-                          <button type="button" class="btn btn-sm btn-light-success me-1" data-bs-toggle="modal" data-bs-target="#editModal">
-                            <i class="feather icon-edit"></i>
-                          </button>
-                          <a href="#" class="btn btn-sm btn-light-danger"><i class="feather icon-trash-2"></i></a>
-                        </td>
-                      </tr>
-                      <tr>
-                        <td>Michael Davis</td>
-                        <td><a href="#" class="link-secondary">michael.davis@email.com</a></td>
-                        <td>N/A</td>
-                        <td>June 22, 2019 at 08:10 PM</td>
-                        <td>
-                          <a href="#" class="btn btn-sm btn-light-primary"><i class="feather icon-eye"></i></a>
-                          <a href="#" class="btn btn-sm btn-light-success me-1"><i class="feather icon-edit"></i></a>
-                          <a href="#" class="btn btn-sm btn-light-danger"><i class="feather icon-trash-2"></i></a>
-                        </td>
-                      </tr>
-                      <tr>
-                        <td>Sophia Brown</td>
-                        <td><a href="#" class="link-secondary">sophia.brown@mail.com</a></td>
-                        <td>N/A</td>
-                        <td>April 10, 2021 at 02:45 PM</td>
-                        <td>
-                          <a href="#" class="btn btn-sm btn-light-primary"><i class="feather icon-eye"></i></a>
-                          <a href="#" class="btn btn-sm btn-light-success me-1"><i class="feather icon-edit"></i></a>
-                          <a href="#" class="btn btn-sm btn-light-danger"><i class="feather icon-trash-2"></i></a>
-                        </td>
-                      </tr>
-                      <tr>
-                        <td>James Wilson</td>
-                        <td><a href="#" class="link-secondary">james.wilson@domain.com</a></td>
-                        <td>N/A</td>
-                        <td>August 30, 2022 at 11:20 AM</td>
-                        <td>
-                          <a href="#" class="btn btn-sm btn-light-success me-1"><i class="feather icon-edit"></i></a>
-                          <a href="#" class="btn btn-sm btn-light-danger"><i class="feather icon-trash-2"></i></a>
-                        </td>
-                      </tr>
-                      <tr>
-                        <td>Ava Johnson</td>
-                        <td><a href="#" class="link-secondary">ava.johnson@mailbox.com</a></td>
-                        <td>N/A</td>
-                        <td>October 07, 2018 at 04:55 PM</td>
-                          <a href="#" class="btn btn-sm btn-light-success me-1"><i class="feather icon-edit"></i></a>
-                          <a href="#" class="btn btn-sm btn-light-danger"><i class="feather icon-trash-2"></i></a>
-                        </td>
-                      </tr>
-                      <tr>
-                        <td>William Garcia</td>
-                        <td><a href="#" class="link-secondary">william.garcia@webmail.com</a></td>
-                        <td>N/A</td>
-                        <td>May 18, 2023 at 09:30 AM</td>
-                        <td>
-                          <a href="#" class="btn btn-sm btn-light-success me-1"><i class="feather icon-edit"></i></a>
-                          <a href="#" class="btn btn-sm btn-light-danger"><i class="feather icon-trash-2"></i></a>
-                        </td>
-                      </tr>
-                      <tr>
-                        <td>Olivia Martinez</td>
-                        <td><a href="#" class="link-secondary">olivia.martinez@mailservice.com</a></td>
-                        <td>N/A</td>
-                        <td>December 25, 2020 at 07:00 PM</td>
-                        <td>
-                          <a href="#" class="btn btn-sm btn-light-success me-1"><i class="feather icon-edit"></i></a>
-                          <a href="#" class="btn btn-sm btn-light-danger"><i class="feather icon-trash-2"></i></a>
-                        </td>
-                      </tr>
-                      <tr>
-                        <td>Benjamin Lee</td>
-                        <td><a href="#" class="link-secondary">benjamin.lee@inbox.com</a></td>
-                        <td>N/A</td>
-                        <td>February 13, 2019 at 06:40 PM</td>
-                        <td>
-                          <a href="#" class="btn btn-sm btn-light-success me-1"><i class="feather icon-edit"></i></a>
-                          <a href="#" class="btn btn-sm btn-light-danger"><i class="feather icon-trash-2"></i></a>
-                        </td>
-                      </tr>
-                      <tr>
-                        <td>Isabella Smith</td>
-                        <td><a href="#" class="link-secondary">isabella.smith@webmail.com</a></td>
-                        <td>N/A</td>
-                        <td>July 04, 2021 at 03:05 PM</td>
-                        <td>
-                          <a href="#" class="btn btn-sm btn-light-success me-1"><i class="feather icon-edit"></i></a>
-                          <a href="#" class="btn btn-sm btn-light-danger"><i class="feather icon-trash-2"></i></a>
-                        </td>
-                      </tr>
-                      <tr>
-                        <td>Lucas Taylor</td>
-                        <td><a href="#" class="link-secondary">lucas.taylor@domain.com</a></td>
-                        <td>N/A</td>
-                        <td>September 19, 2022 at 05:15 PM</td>
-                        <td>
-                          <a href="#" class="btn btn-sm btn-light-success me-1"><i class="feather icon-edit"></i></a>
-                          <a href="#" class="btn btn-sm btn-light-danger"><i class="feather icon-trash-2"></i></a>
-                        </td>
-                      </tr>
+                      <?php foreach ($tags as $tag): ?>
+                        <tr>
+                          <td><?= $tag->name ?></td>
+                          <td><?= $tag->description ?></td>
+                          <td><?= $tag->slug ?></td>
+                          <td>
+                            <a href="<?= BASE_PATH ?>catalogs/tags/details" class="btn btn-sm btn-light-primary"><i class="feather icon-eye"></i></a>
+                            <button onclick="getTag(<?= $tag->id ?>)" type="button" class="btn btn-sm btn-light-success me-1" data-bs-toggle="modal" data-bs-target="#editModal">
+                              <i class="feather icon-edit"></i>
+                            </button>
+                            <button onclick="deleteTag(<?= $tag->id ?>,'<?= $tag->name ?>')" class="btn btn-sm btn-light-danger"><i class="feather icon-trash-2"></i></button>
+                          </td>
+                        </tr>
+                      <?php endforeach; ?>
                     </tbody>
                   </table>
                 </div>
@@ -312,6 +247,12 @@
         <!-- [ Main Content ] end -->
       </div>
     </div>
+
+    <form id="deleteForm" method="POST" action="<?= BASE_PATH ?>brands">
+      <input type="hidden" name="action" value="delete_tag">
+      <input id="id_delete" type="hidden" name="id">
+      <input type="hidden" name="global_token" value="<?= $_SESSION['global_token'] ?>">
+    </form>
 
     <?php 
 
@@ -325,6 +266,7 @@
 
       ?>
     <!-- [Page Specific JS] start -->
+    <script src="https://common.olemiss.edu/_js/sweet-alert/sweet-alert.min.js"></script>
     <script>
       // scroll-block
       var tc = document.querySelectorAll('.scroll-block');
@@ -347,6 +289,170 @@
         document.getElementById(temp).value = value;
       }
       // quantity end
+
+      function createTag(){
+        let formData = document.getElementById("formCreate");
+
+        if (formData.checkValidity()){
+            let form = new FormData(formData);
+
+            //form.submit();
+
+            fetch('<?= BASE_PATH ?>tags', {
+                method: 'POST',
+                body: form,
+            })
+            .then(response => {
+                if (response.ok) {
+                    if (response.redirected){
+                        sweetAlert("ÉXITO", "Se creo de forma correcta", "success");
+                        window.location.href = response.url
+                        return;
+                    }else{
+                        return response.json();
+                    }
+                }else{
+                    swal("Ocurrio un error", "No fue posible crear el nuevo tag");
+                    throw new Error('Error en el servidor: ' + response.status);
+                }
+            })
+            .then(data => {
+                if (data?.error) {
+                    swal("Ocurrio un error", "No fue posible crear el nuevo tag");
+                    console.error(data.error);
+                }
+            })
+            .catch(error => {
+                console.error("Error: ",error);
+            })
+        }else{
+            sweetAlert("Error al ingresador los datos", "Llene todos los campos y verifique que sean datos validos", "error");
+        }
+      }
+
+      function updateTag(){
+        let formData = document.getElementById("formUpdate");
+
+        if (formData.checkValidity()){
+            let form = new FormData(formData);
+
+            //form.submit();
+
+            fetch('<?= BASE_PATH ?>tags', {
+                method: 'POST',
+                body: form,
+            })
+            .then(response => {
+                if (response.ok) {
+                    if (response.redirected){
+                        sweetAlert("ÉXITO", "Se actualizo de forma correcta", "success");
+                        window.location.href = response.url
+                        return;
+                    }else{
+                        return response.json();
+                    }
+                }else{
+                    swal("Ocurrio un error", "No fue posible actualizar el tag");
+                    throw new Error('Error en el servidor: ' + response.status);
+                }
+            })
+            .then(data => {
+                if (data?.error) {
+                    swal("Ocurrio un error", "No fue posible actualizar el tag");
+                    console.error("Error en data: ",data.error);
+                }
+            })
+            .catch(error => {
+                console.error("Error: ",error);
+            })
+        }else{
+            sweetAlert("Error al ingresador los datos", "Llene todos los campos y verifique que sean datos validos", "error");
+        }
+      }
+
+      function deleteTag(id, name){
+        swal({
+          title: "¿Eliminar a "+name+"?",
+          text: "Esta acción sera permanente",
+          type: "warning",
+          showCancelButton: true,
+          confirmButtonColor: "#DD6B55",
+          confirmButtonText: "Sí, eliminar!",
+          closeOnConfirm: false
+        },
+        function(){
+          document.getElementById("id_delete").value = id;
+
+          let formData = document.getElementById("deleteForm");
+
+          if (formData.checkValidity()){
+              let form = new FormData(formData);
+
+              //form.submit();
+
+              fetch('<?= BASE_PATH ?>tags', {
+                  method: 'POST',
+                  body: form,
+              })
+              .then(response => {
+                  if (response.ok) {
+                      if (response.redirected){
+                          sweetAlert("ÉXITO", "Se elimino de forma correcta", "success");
+                          window.location.href = response.url
+                          return;
+                      }else{
+                          return response.json();
+                      }
+                  }else{
+                      throw new Error('Error en el servidor: ' + response.status);
+                  }
+              })
+              .then(data => {
+                  if (data?.success) {
+                      swal("Ocurrio un error", "No fue posible eliminar la marca");
+                      console.error(data.error);
+                  }
+              })
+              .catch(error => {
+                  console.error("Error: ",error);
+              })
+            }else{
+                sweetAlert("Error al ingresador los datos", "Llene todos los campos y verifique que sean datos validos", "error");
+            }
+        });
+      }
+
+      function getTag(id){
+        let form = new FormData();
+        form.append('id', id);
+        form.append('action', 'get_tag_by_id');
+        form.append('global_token', '<?= $_SESSION['global_token'] ?>');
+        fetch('<?= BASE_PATH ?>tags', {
+            method: 'POST',
+            body: form,
+        })
+        .then(response => {
+            if (!response.ok) {
+                throw new Error(`Error en la solicitud: ${response.status} ${response.statusText}`);
+            }
+            return response.json();
+        })
+        .then(data => {
+            let datos = data.data.data;
+            if (data.success){
+                document.getElementById("UpdateName").value = (datos.name!=undefined)? datos.name : " " ;
+                document.getElementById("UpdateDescription").value = (datos.description!=undefined)? datos.description : " " ;
+                document.getElementById("UpdateSlug").value = (datos.slug!=undefined)? datos.slug : " " ;
+                document.getElementById("UpdateId").value = (datos.id!=undefined)? datos.id : 0 ;
+            }else{
+                swal("Error", "No se pudo obtener la información solicitada", "error")
+            }
+        })
+        .catch(error => {
+            console.error(error);
+        }) 
+      }
+
     </script>
     
     <?php 

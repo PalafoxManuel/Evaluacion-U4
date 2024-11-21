@@ -94,52 +94,40 @@
                                     >Completa la información solicitada en el formulario</small
                                     >
                                     <div class="mb-3">
-                                    <label class="form-label">Nombre de la categoría</label>
-                                    <input
-                                        type="text"
-                                        name="name"
-                                        class="form-control"
-                                        id="fname"
-                                        aria-describedby="emailHelp"
-                                        placeholder="Ingrese el nombre de categoria"
-                                        required
-                                    />
+                                        <label class="form-label">Nombre de la categoría</label>
+                                        <input
+                                            type="text"
+                                            name="name"
+                                            class="form-control"
+                                            id="fname"
+                                            aria-describedby="emailHelp"
+                                            placeholder="Ingrese el nombre de categoria"
+                                            required
+                                        />
                                     </div>
                                     <div class="mb-3">
-                                    <label class="form-label">Descripción de la categoría</label>
-                                    <textarea
-                                        type="text"
-                                        name="description"
-                                        class="form-control"
-                                        id="lname"
-                                        aria-describedby="emailHelp"
-                                        placeholder="Ingrese la descripción de categoría"
-                                        required
-                                    ></textarea>
+                                        <label class="form-label">Descripción de la categoría</label>
+                                        <textarea
+                                            type="text"
+                                            name="description"
+                                            class="form-control"
+                                            id="lname"
+                                            aria-describedby="emailHelp"
+                                            placeholder="Ingrese la descripción de categoría"
+                                            required
+                                        ></textarea>
                                     </div>
                                     <div class="mb-3">
-                                <label class="form-label">Slug</label>
-                                <input
-                                    type="text"
-                                    name="slug"
-                                    class="form-control"
-                                    id="lname"
-                                    aria-describedby="emailHelp"
-                                    placeholder="Slug"
-                                    required
-                                />
-                                </div>
-                                <div class="mb-3">
-                                <label class="form-label">ID de categoría</label>
-                                <input
-                                    type="number"
-                                    name="category_id"
-                                    class="form-control"
-                                    id="lname"
-                                    aria-describedby="emailHelp"
-                                    placeholder="Ingrese el ID de categoría"
-                                    required
-                                />
+                                        <label class="form-label">Slug</label>
+                                        <input
+                                            type="text"
+                                            name="slug"
+                                            class="form-control"
+                                            id="lname"
+                                            aria-describedby="emailHelp"
+                                            placeholder="Slug"
+                                            required
+                                        />
                                     </div>
                                 </div>
                                 <div class="modal-footer">
@@ -147,6 +135,7 @@
                                     <button onclick="createCategory()" type="button" class="btn btn-light-primary">Añadir categoría</button>
                                     <input type="hidden" name="action" value="create_category">
                                     <input type="hidden" name="global_token" value="<?= $_SESSION['global_token'] ?>">
+                                    <input type="hidden" name="category_id" value="1"/>
                                 </div>
                             </form>
                         </div>

@@ -86,23 +86,43 @@
                                 >Completa la información solicitada en el formulario</small
                                 >
                                 <div class="mb-3">
-                                <label class="form-label">Nombre de orden</label>
+                                <label class="form-label">Folio</label>
                                 <input
                                     type="text"
                                     class="form-control"
                                     id="fname"
                                     aria-describedby="emailHelp"
-                                    placeholder="Ingrese el nombre"
+                                    placeholder="Ingresa el folio"
                                 />
                                 </div>
                                 <div class="mb-3">
-                                <label class="form-label">Detalles adicionales</label>
+                                <label class="form-label">Total</label>
                                 <input
                                     type="email"
                                     class="form-control"
                                     id="lname"
                                     aria-describedby="emailHelp"
-                                    placeholder="Ingrese detalles"
+                                    placeholder="Ingrese total"
+                                />
+                                </div>
+                                <div class="mb-3">
+                              <label class="form-label">Nombre</label>
+                              <input
+                                type="email"
+                                class="form-control"
+                                id="lname"
+                                aria-describedby="emailHelp"
+                                placeholder="Ingresa el nombre"
+                              />
+                            </div>
+                            <div class="mb-3">
+                              <label class="form-label">Direcciones</label>
+                              <input
+                                type="email"
+                                class="form-control"
+                                id="lname"
+                                aria-describedby="emailHelp"
+                                placeholder="Ingresa Direcciones"
                                 />
                                 </div>
                             </div>
@@ -138,25 +158,45 @@
                                 >Completa la información solicitada en el formulario</small
                                 >
                                 <div class="mb-3">
-                                <label class="form-label">Nombre de orden</label>
+                                <label class="form-label">Folio</label>
                                 <input
                                     type="text"
                                     class="form-control"
                                     id="fname"
                                     aria-describedby="emailHelp"
-                                    placeholder="Ingresa el nombre"
+                                    placeholder="Ingresa el folio"
                                 />
                                 </div>
                                 <div class="mb-3">
-                                <label class="form-label">Detalles adicionales</label>
+                                <label class="form-label">Total</label>
                                 <input
                                     type="email"
                                     class="form-control"
                                     id="lname"
                                     aria-describedby="emailHelp"
-                                    placeholder="Ingrese detalles"
+                                    placeholder="Ingrese total"
                                 />
                                 </div>
+                                <div class="mb-3">
+                              <label class="form-label">Nombre</label>
+                              <input
+                                type="email"
+                                class="form-control"
+                                id="lname"
+                                aria-describedby="emailHelp"
+                                placeholder="Ingresa el nombre"
+                              />
+                            </div>
+                            <div class="mb-3">
+                              <label class="form-label">Direcciones</label>
+                              <input
+                                type="email"
+                                class="form-control"
+                                id="lname"
+                                aria-describedby="emailHelp"
+                                placeholder="Ingresa Direcciones"
+                              />
+                            </div>
                             </div>
                             <div class="modal-footer">
                                 <button type="button" class="btn btn-light-danger" data-bs-dismiss="modal">Cerrar</button>
@@ -173,11 +213,10 @@
                     <table id="report-table" class="table table-bordered table-striped mb-0">
                         <thead>
                         <tr>
-                        <th class="border-top-0">Nombre(se va a cambiar)</th>
-                            <th class="border-top-0">Correo electronico(se va a cambiar)</th>
-                            <th class="border-top-0">Cuenta(se va a cambiar)</th>
-                            <th class="border-top-0">Fecha de nacimiento(se va a cambiar)</th>
-                            <th class="border-top-0">Acción(se va a cambiar)</th>
+                        <th class="border-top-0">Folio</th>
+                        <th class="border-top-0">Total</th>
+                        <th class="border-top-0">Nombre</th>
+                        <th class="border-top-0">Direcciones</th>
                         </tr>
                         </thead>
                         <tbody>

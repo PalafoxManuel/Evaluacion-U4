@@ -1,5 +1,13 @@
 <?php 
   include_once "../../app/config.php";
+
+  include_once "../../app/sales/OrdersController.php";
+
+  $presentation_id = $_POST['id'];
+  // var_dump('----------------------------------------------------------------------------' . $presentation_id);
+
+  $OrdersController = new OrdersController();
+  $Orders = $OrdersController->get();
 ?>
 <!doctype html>
 <html lang="en">
@@ -63,42 +71,34 @@
                       </tr>
                     </thead>
                     <tbody>
-                      <tr>
-                        <td>
-                          <div class="row">
-                            <div class="col">
-                              <h6 class="mb-1">Sennheiser HD 450BT Wireless</h6>
-                              <p class="text-muted f-12 mb-0">Noise-cancelling, Bluetooth 5.0, Over-ear</p>
-                            </div>
-                          </div>
-                        </td>
-                        <td></td>
-                        <td class="text-end"></td>
-                        <td class="text-end"></td>
-                        <td class="text-center">
-                          <i class="ph-duotone f-24"></i>
-                        </td>
-                        <td class="text-center">
-                        </td>
-                      </tr>
-                      <tr>
-                        <td>
-                          <div class="row">
-                            <div class="col">
-                              <h6 class="mb-1">Bose QuietComfort 35 II</h6>
-                              <p class="text-muted f-12 mb-0">Noise Cancelling, Bluetooth 4.1, Over-ear</p>
-                            </div>
-                          </div>
-                        </td>
-                        <td></td>
-                        <td class="text-end"></td>
-                        <td class="text-end"></td>
-                        <td class="text-center">
-                          <i class="ph-duotone f-24"></i>
-                        </td>
-                        <td class="text-center">
-                        </td>
-                      </tr>
+
+                      <?php
+                        foreach ($Orders['data'] as $order) {
+                          foreach ($order['presentations'] as $presentation) {
+                            // var_dump($presentation['product_id']);
+                            // if ($presentation['id'] == $presentation_id) {
+                              echo '<tr>';
+                                echo '<td>';
+                                  echo '<div class="row">';
+                                    echo '<div class="col">';
+                                      echo '<h6 class="mb-1">Orden: ' . $order['folio'] . '</h6>';
+                                      echo '<p class="text-muted f-12 mb-0">Codigo de presentacion: '. $order['presentations'][0]['code'] .' </p>';
+                                    echo '</div>';
+                                  echo '</div>';
+                                echo '</td>';
+                                echo '<td></td>';
+                                echo '<td class="text-end"></td>';
+                                echo '<td class="text-end"></td>';
+                                echo '<td class="text-center">';
+                                  echo '<i class="ph-duotone f-24"></i>';
+                                echo '</td>';
+                                echo '<td class="text-center">';
+                                echo '</td>';
+                              echo '</tr>';
+                            // }
+                          }
+                        }
+                      ?>
                     </tbody>
                   </table>
                 </div>

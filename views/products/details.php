@@ -1,258 +1,162 @@
-<?php 
-    include_once "../../app/config.php";
+<?php
+include_once "../../app/config.php";
 
-    $product_id = $_POST['product_id'];
+$product_id = $_POST['product_id'];
 
-    include_once "../../app/products/ProductsController.php";
+include_once "../../app/products/ProductsController.php";
 
-    $ProductsController = new ProductsController();
-    $Product = $ProductsController->getProductById($product_id);
+$ProductsController = new ProductsController();
+$Product = $ProductsController->getProductById($product_id);
 
-    $price = "No disponible";
-    if (!empty($Product['presentations']) && !empty($Product['presentations'][0]['price'])) {
-        foreach ($Product['presentations'][0]['price'] as $priceData) {
-            if ($priceData['is_current_price'] == 1) {
-                $price = '$' . number_format($priceData['amount'], 2);
-                break;
-            }
+include_once "../../app/products/PresentationsController.php";
+
+$PresentationsController = new PresentationsController();
+$Presentations = $PresentationsController->getPresentationsByProductId($product_id);
+
+$price = "No disponible";
+if (!empty($Product['presentations']) && !empty($Product['presentations'][0]['price'])) {
+    foreach ($Product['presentations'][0]['price'] as $priceData) {
+        if ($priceData['is_current_price'] == 1) {
+            $price = '$' . number_format($priceData['amount'], 2);
+            break;
         }
     }
+}
+?>
 
-    ?>
-    <!doctype html>
-    <html lang="en">
-    <!-- [Head] start -->
+<!doctype html>
+<html lang="en">
+<!-- [Head] start -->
+<head>
+    <?php include "../layouts/head.php"; ?>
+</head>
+<!-- [Head] end -->
 
-    <head>
-        <?php 
-
-        include "../layouts/head.php";
-
-        ?>
-
-    </head>
-    <!-- [Head] end -->
-    <!-- [Body] Start -->
-
-    <body data-pc-preset="preset-1" data-pc-sidebar-theme="light" data-pc-sidebar-caption="true" data-pc-direction="ltr" data-pc-theme="light">
-        
-
-        <?php 
-
-        include "../layouts/sidebar.php";
-
-        ?>
-
+<!-- [Body] start -->
+<body data-pc-preset="preset-1" data-pc-sidebar-theme="light" data-pc-sidebar-caption="true" data-pc-direction="ltr" data-pc-theme="light">
+    <!-- [Sidebar and Navigation] -->
     <?php 
+        include "../layouts/sidebar.php";
+        include "../layouts/nav.php"; 
+    ?>
 
-        include "../layouts/nav.php";
-
-        ?>
-
-
-        <!-- [ Main Content ] start -->
-        <div class="pc-container">
+    <!-- [Main Content] start -->
+    <div class="pc-container">
         <div class="pc-content">
-            <!-- [ breadcrumb ] start -->
+            <!-- [Breadcrumb] start -->
             <div class="page-header">
-            <div class="page-block">
-                <div class="row align-items-center">
-                <div class="col-md-12">
-                    <ul class="breadcrumb">
-                    <li class="breadcrumb-item"><a href="<?= BASE_PATH ?>home">Inicio</a></li>
-                    <li class="breadcrumb-item"><a href="<?= BASE_PATH ?>products">Productos</a></li>
-                    <li class="breadcrumb-item" aria-current="page">Detalle de presentación</li>
-                    </ul>
-                </div>
-                <div class="col-md-12">
-                    <div class="page-header-title">
-                    <h2 class="mb-0">Detalle de presentación</h2>
+                <div class="page-block">
+                    <div class="row align-items-center">
+                        <div class="col-md-12">
+                            <ul class="breadcrumb">
+                                <li class="breadcrumb-item"><a href="<?= BASE_PATH ?>home">Inicio</a></li>
+                                <li class="breadcrumb-item"><a href="<?= BASE_PATH ?>products">Productos</a></li>
+                                <li class="breadcrumb-item" aria-current="page">Detalles</li>
+                            </ul>
+                        </div>
+                        <div class="col-md-12">
+                            <div class="page-header-title">
+                                <h2 class="mb-0">Detalles</h2>
+                            </div>
+                        </div>
                     </div>
                 </div>
-                </div>
             </div>
-            </div>
-            <!-- [ breadcrumb ] end -->
+            <!-- [Breadcrumb] end -->
 
-            <!-- [ Main Content ] start -->
+            <!-- [Main Product Content] start -->
             <div class="row">
-            <!-- [ sample-page ] start -->
-            <div class="col-sm-12">
-                <div class="card">
-                <div class="card-body">
-                    <div class="row">
-                    <div class="col-md-6">
-                        <div class="sticky-md-top product-sticky">
-                        <div id="carouselExampleCaptions" class="carousel slide ecomm-prod-slider" data-bs-ride="carousel">
-                            <div class="carousel-inner bg-light rounded position-relative">
-                            <div class="card-body position-absolute end-0 top-0">
-                                <div class="form-check prod-likes">
-                                <input type="checkbox" class="form-check-input" />
-                                <i data-feather="heart" class="prod-likes-icon"></i>
+                <div class="col-sm-12">
+                    <div class="card">
+                        <div class="card-body">
+                            <div class="row">
+                                <!-- Product Images -->
+                                <div class="col-md-6">
+                                    <div class="sticky-md-top product-sticky">
+                                        <div id="carouselExampleCaptions" class="carousel slide ecomm-prod-slider" data-bs-ride="carousel">
+                                            <div class="carousel-inner bg-light rounded position-relative">
+                                                <div class="card-body position-absolute end-0 top-0">
+                                                    <div class="form-check prod-likes">
+                                                        <input type="checkbox" class="form-check-input" />
+                                                        <i data-feather="heart" class="prod-likes-icon"></i>
+                                                    </div>
+                                                </div>
+                                                <div class="carousel-item active">
+                                                    <img src="<?= htmlspecialchars($Product['cover']) ?>" class="d-block w-100" alt="Product image" />
+                                                </div>
+                                                <div class="carousel-item">
+                                                    <img src="<?= htmlspecialchars($Product['cover']) ?>" class="d-block w-100" alt="Product image" />
+                                                </div>
+                                            </div>
+                                            <ol class="list-inline carousel-indicators position-relative product-carousel-indicators my-sm-3 mx-0">
+                                                <li data-bs-target="#carouselExampleCaptions" data-bs-slide-to="0" class="list-inline-item w-25 h-auto active">
+                                                    <img src="../../assets/images/application/img-prod-1.jpg" class="d-block wid-50 rounded" alt="Product images" />
+                                                </li>
+                                            </ol>
+                                        </div>
+                                    </div>
+                                </div>
+                                <!-- Product Details -->
+                                <div class="col-md-6">
+                                    <span class="badge bg-success f-14">Disponible</span>
+                                    <h5 class="my-3"><?= $Product['name'] ?></h5>
+                                    <h3 class="mb-4"><b><?= $price ?></b></h3>
+                                    <p><?= $Product['description'] ?></p>
+
+                                    <div class="offer-check-block">
+                                       <?php 
+                                            foreach ($Presentations['data'] as $Presentation) {
+
+                                                echo '<div class="offer-check border rounded p-3">';
+                                                    echo '<div class="form-check">';
+                                                        echo '<input type="radio" name="radio1" class="form-check-input input-primary" id="customCheckdef1" checked="" />';
+                                                        echo '<label class="form-check-label d-block" for="customCheckdef1">';
+                                                            echo '<span class="h6 mb-0 d-block">' . $Presentation['code'] . '</span>';
+                                                            echo '<span class="text-muted offer-details">' . $Presentation['description'] . '</span>';
+                                                            echo '<span class="h6 mb-0 text-primary">1 Oferta <i class="ti ti-arrow-narrow-right"></i></span>';
+                                                        echo '</label>';
+                                                    echo '</div>';
+                                                echo '</div>';
+                                               
+                                            }
+                                       ?>
+                                    </div>
+
+                                    <div class="row">
+                                        <div class="col-6">
+                                            <div class="d-grid">
+                                                <button type="button" class="btn btn-primary">Haz tu pedido aquí</button>
+                                            </div>
+                                        </div>
+                                        <div class="col-6">
+                                            <div class="d-grid">
+                                                <form action="<?= BASE_PATH ?>products/presentation" method="POST" enctype="multipart/form-data">
+                                                    <input type="hidden" name="product_id" value="<?= $product_id ?>">
+                                                    <button type="submit" class="btn btn-outline-secondary">Presentaciones</button>
+                                                </form>
+                                            </div>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
-                            <div class="card-body position-absolute bottom-0 end-0">
-                                <ul class="list-inline ms-auto mb-0 prod-likes">
-                                <li class="list-inline-item m-0">
-                                    <a href="#" class="avtar avtar-xs text-white text-hover-primary">
-                                    <i class="ti ti-zoom-in f-18"></i>
-                                    </a>
-                                </li>
-                                <li class="list-inline-item m-0">
-                                    <a href="#" class="avtar avtar-xs text-white text-hover-primary">
-                                    <i class="ti ti-zoom-out f-18"></i>
-                                    </a>
-                                </li>
-                                <li class="list-inline-item m-0">
-                                    <a href="#" class="avtar avtar-xs text-white text-hover-primary">
-                                    <i class="ti ti-rotate-clockwise f-18"></i>
-                                    </a>
-                                </li>
-                                </ul>
-                            </div>
-                            <div class="carousel-item active">
-                            <img src="<?= htmlspecialchars($Product['cover']) ?>" class="d-block w-100" alt="Product image" />
-                            </div>
-                            <div class="carousel-item">
-                            <img src="<?= htmlspecialchars($Product['cover']) ?>" class="d-block w-100" alt="Product image" />
-                            </div>
-                            </div>
-                            <ol class="list-inline carousel-indicators position-relative product-carousel-indicators my-sm-3 mx-0">
-                            <li data-bs-target="#carouselExampleCaptions" data-bs-slide-to="0" class="list-inline-item w-25 h-auto active">
-                                <img src="../../assets/images/application/img-prod-1.jpg" class="d-block wid-50 rounded" alt="Product images" />
-                            </li>
-                            <li data-bs-target="#carouselExampleCaptions" data-bs-slide-to="1" class="list-inline-item w-25 h-auto">
-                                <img src="../../assets/images/application/img-prod-2.jpg" class="d-block wid-50 rounded" alt="Product images" />
-                            </li>
-                            </ol>
                         </div>
-                        </div>
-                    </div>
-                    <div class="col-md-6">
-                        <span class="badge bg-success f-14">Disponible</span>
-                        <h5 class="my-3"><?= $Product['name'] ?></h5>
-                        <h5 class="mt-4 mb-sm-1 mb-0">Presentaciones</h5>
-                        <div class="offer-check-block">
-                        <div class="offer-check border rounded p-3">
-                            <div class="form-check">
-                            <input type="radio" name="radio1" class="form-check-input input-primary" id="customCheckdef1" checked="" />
-                            <label class="form-check-label d-block" for="customCheckdef1">
-                                <span class="h6 mb-0 d-block">EMI sin costo</span>
-                                <span class="text-muted offer-details"
-                                > Ahorros de hasta ₹2,322.51 en intereses de EMI con tarjetas de crédito seleccionadas</span
-                                >
-                                <span class="h6 mb-0 text-primary">1 Oferta <i class="ti ti-arrow-narrow-right"></i></span>
-                            </label>
-                            </div>
-                        </div>
-                        <div class="offer-check border rounded p-3">
-                            <div class="form-check">
-                            <input type="radio" name="radio1" class="form-check-input input-primary" id="customCheckdef2" />
-                            <label class="form-check-label d-block" for="customCheckdef2">
-                                <span class="h6 mb-0 d-block">Oferta Bancaria</span>
-                                <span class="text-muted offer-details"
-                                > Descuento de hasta ₹1,250.00 en tarjetas de crédito seleccionadas. Ahorro de hasta ₹2,322.51 
-                                en intereses de EMI con tarjetas de crédito seleccionadas.</span
-                                >
-                                <span class="h6 mb-0 text-primary">1 Oferta <i class="ti ti-arrow-narrow-right"></i></span>
-                            </label>
-                            </div>
-                        </div>
-                        <div class="offer-check border rounded p-3">
-                            <div class="form-check">
-                            <input type="radio" name="radio1" class="form-check-input input-primary" id="customCheckdef3" />
-                            <label class="form-check-label d-block" for="customCheckdef3">
-                                <span class="h6 mb-0 d-block">EMI sin costo</span>
-                                <span class="text-muted offer-details"
-                                > Ahorro de hasta ₹2,322.51 en intereses de EMI con tarjetas de crédito seleccionadas.</span
-                                >
-                                <span class="h6 mb-0 text-primary">1 Oferta <i class="ti ti-arrow-narrow-right"></i></span>
-                            </label>
-                            </div>
-                        </div>
-                        <div class="offer-check border rounded p-3">
-                            <div class="form-check">
-                            <input type="radio" name="radio1" class="form-check-input input-primary" id="customCheckdef4" />
-                            <label class="form-check-label d-block" for="customCheckdef4">
-                                <span class="h6 mb-0 d-block">Oferta bancaria</span>
-                                <span class="text-muted offer-details"
-                                > Descuento de hasta ₹1,250.00 en tarjetas de crédito seleccionadas. Ahorro de hasta ₹2,322.51 en 
-                                intereses de EMI con tarjetas de crédito seleccionadas.</span
-                                >
-                                <span class="h6 mb-0 text-primary">1 Oferta <i class="ti ti-arrow-narrow-right"></i></span>
-                            </label>
-                            </div>
-                        </div>
-                        </div>
-                        <h5 class="mt-4 mb-sm-3 mb-2 f-w-500">Descripción del producto</h5>
-                        <p><?= $Product['description'] ?></p>
-                        <div class="mb-3 row">
-                        <label class="col-form-label col-lg-3 col-sm-12">Cantidad<span class="text-danger">*</span></label>
-                        <div class="col-lg-6 col-md-12 col-sm-12">
-                            <div class="btn-group btn-group-sm mb-2 border" role="group">
-                            <button type="button" id="decrease" onclick="decreaseValue('number')" class="btn btn-link-secondary"
-                                ><i class="ti ti-minus"></i
-                            ></button>
-                            <input
-                                class="wid-35 text-center border-0 m-0 form-control rounded-0 shadow-none"
-                                type="text"
-                                id="number"
-                                value="0"
-                            />
-                            <button type="button" id="increase" onclick="increaseValue('number')" class="btn btn-link-secondary"
-                                ><i class="ti ti-plus"></i
-                            ></button>
-                            </div>
-                        </div>
-                        </div>
-                        <h3 class="mb-4"
-                        ><b><?= $price ?></b></h3>
-                        <div class="row">
-                        <div class="col-6">
-                            <div class="d-grid">
-                            <button type="button" class="btn btn-primary">Haz tu pedido aquí</button>
-                            </div>
-                        </div>
-                        <div class="col-6">
-                            <div class="d-grid">
-                                <form action="<?= BASE_PATH ?>products/presentation" method="POST" enctype="multipart/form-data">
-                                    <input type="hidden" name="product_id" value="<?= $product_id ?>">
-                                    <button type="submit" class="btn btn-outline-secondary">Presentaciones</button>
-                                </form>
-                            </div>
-                        </div>
-                        </div>
-                    </div>
                     </div>
                 </div>
-                </div>
             </div>
-            <!-- [ sample-page ] end -->
-            </div>
-            <!-- [ Main Content ] end -->
+            <!-- [Main Product Content] end -->
         </div>
-        </div>
-        
-        <?php 
+    </div>
+    <!-- [Main Content] end -->
 
-        include "../layouts/footer.php";
-
-        ?>
-
+    <!-- [Footer and Scripts] -->
     <?php 
-
+        include "../layouts/footer.php";
         include "../layouts/scripts.php";
+        include "../layouts/modals.php"; 
+    ?>
 
-        ?>
-
-        <!-- [Page Specific JS] start -->
-        <script>
-        // scroll-block
-        var tc = document.querySelectorAll('.scroll-block');
-        for (var t = 0; t < tc.length; t++) {
-            new SimpleBar(tc[t]);
-        }
-        // quantity start
+    <!-- [Page Specific JS] start -->
+    <script>
         function increaseValue(temp) {
             var value = parseInt(document.getElementById(temp).value, 10);
             value = isNaN(value) ? 0 : value;
@@ -267,15 +171,7 @@
             value--;
             document.getElementById(temp).value = value;
         }
-        // quantity end
-        </script>
-        
-        <?php 
-
-        include "../layouts/modals.php";
-
-        ?>
-
-    </body>
-    <!-- [Body] end -->
-    </html>
+    </script>
+</body>
+<!-- [Body] end -->
+</html>

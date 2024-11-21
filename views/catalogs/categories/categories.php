@@ -1,5 +1,14 @@
     <?php 
     include_once "../../../app/config.php";
+    include_once "../../../app/products/CategoriesController.php";
+
+    if (isset($_SESSION["user_id"]) && $_SESSION['user_id']!=null) {
+        $controlador = new CategoriesController();
+        $categories = $controlador->getCategories();
+        //var_dump($categories[0]);
+    }else{
+        header('Location: '. BASE_PATH);
+    }
 
     ?>
     <!doctype html>
@@ -79,56 +88,66 @@
                             >
                             <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"> </button>
                             </div>
-                            <form>
-                            <div class="modal-body">
-                                <small id="emailHelp" class="form-text text-muted mb-2 mt-0"
-                                >Completa la información solicitada en el formulario</small
-                                >
-                                <div class="mb-3">
-                                <label class="form-label">Nombre de la categoría</label>
+                            <form id="formCreate" method="POST">
+                                <div class="modal-body">
+                                    <small id="emailHelp" class="form-text text-muted mb-2 mt-0"
+                                    >Completa la información solicitada en el formulario</small
+                                    >
+                                    <div class="mb-3">
+                                    <label class="form-label">Nombre de la categoría</label>
+                                    <input
+                                        type="text"
+                                        name="name"
+                                        class="form-control"
+                                        id="fname"
+                                        aria-describedby="emailHelp"
+                                        placeholder="Ingrese el nombre de categoria"
+                                        required
+                                    />
+                                    </div>
+                                    <div class="mb-3">
+                                    <label class="form-label">Descripción de la categoría</label>
+                                    <textarea
+                                        type="text"
+                                        name="description"
+                                        class="form-control"
+                                        id="lname"
+                                        aria-describedby="emailHelp"
+                                        placeholder="Ingrese la descripción de categoría"
+                                        required
+                                    ></textarea>
+                                    </div>
+                                    <div class="mb-3">
+                                <label class="form-label">Slug</label>
                                 <input
                                     type="text"
-                                    class="form-control"
-                                    id="fname"
-                                    aria-describedby="emailHelp"
-                                    placeholder="Ingrese el nombre de categoria"
-                                />
-                                </div>
-                                <div class="mb-3">
-                                <label class="form-label">Descripción de la categoría</label>
-                                <input
-                                    type="email"
+                                    name="slug"
                                     class="form-control"
                                     id="lname"
                                     aria-describedby="emailHelp"
-                                    placeholder="Ingrese la descripción de categoría"
+                                    placeholder="Slug"
+                                    required
                                 />
                                 </div>
                                 <div class="mb-3">
-                              <label class="form-label">Slug</label>
-                              <input
-                                type="email"
-                                class="form-control"
-                                id="lname"
-                                aria-describedby="emailHelp"
-                                placeholder="Slug"
-                              />
-                            </div>
-                            <div class="mb-3">
-                              <label class="form-label">ID de categoría</label>
-                              <input
-                                type="email"
-                                class="form-control"
-                                id="lname"
-                                aria-describedby="emailHelp"
-                                placeholder="Ingrese el ID de categoría"
-                              />
+                                <label class="form-label">ID de categoría</label>
+                                <input
+                                    type="number"
+                                    name="category_id"
+                                    class="form-control"
+                                    id="lname"
+                                    aria-describedby="emailHelp"
+                                    placeholder="Ingrese el ID de categoría"
+                                    required
+                                />
+                                    </div>
                                 </div>
-                            </div>
-                            <div class="modal-footer">
-                                <button type="button" class="btn btn-light-danger" data-bs-dismiss="modal">Cerrar</button>
-                                <button type="button" class="btn btn-light-primary">Añadir categoría</button>
-                            </div>
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-light-danger" data-bs-dismiss="modal">Cerrar</button>
+                                    <button onclick="createCategory()" type="button" class="btn btn-light-primary">Añadir categoría</button>
+                                    <input type="hidden" name="action" value="create_category">
+                                    <input type="hidden" name="global_token" value="<?= $_SESSION['global_token'] ?>">
+                                </div>
                             </form>
                         </div>
                         </div>
@@ -210,111 +229,21 @@
                         </tr>
                         </thead>
                         <tbody>
-                        <tr>
-                            <td>Emily Carter</td>
-                            <td><a href="#" class="link-secondary">emily@carter.com</a></td>
-                            <td>N/A</td>
-                            <td>March 15, 2020 at 10:25 AM</td>
-                            <td>
-                            <a href="<?= BASE_PATH ?>catalogs/categories/details" class="btn btn-sm btn-light-primary"><i class="feather icon-eye"></i></a>
-                            <button type="button" class="btn btn-sm btn-light-success me-1" data-bs-toggle="modal" data-bs-target="#editModal">
-                                <i class="feather icon-edit"></i>
-                            </button>
-                            <a href="#" class="btn btn-sm btn-light-danger"><i class="feather icon-trash-2"></i></a>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td>Michael Davis</td>
-                            <td><a href="#" class="link-secondary">michael.davis@email.com</a></td>
-                            <td>N/A</td>
-                            <td>June 22, 2019 at 08:10 PM</td>
-                            <td>
-                            <a href="#" class="btn btn-sm btn-light-primary"><i class="feather icon-eye"></i></a>
-                            <a href="#" class="btn btn-sm btn-light-success me-1"><i class="feather icon-edit"></i></a>
-                            <a href="#" class="btn btn-sm btn-light-danger"><i class="feather icon-trash-2"></i></a>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td>Sophia Brown</td>
-                            <td><a href="#" class="link-secondary">sophia.brown@mail.com</a></td>
-                            <td>N/A</td>
-                            <td>April 10, 2021 at 02:45 PM</td>
-                            <td>
-                            <a href="#" class="btn btn-sm btn-light-primary"><i class="feather icon-eye"></i></a>
-                            <a href="#" class="btn btn-sm btn-light-success me-1"><i class="feather icon-edit"></i></a>
-                            <a href="#" class="btn btn-sm btn-light-danger"><i class="feather icon-trash-2"></i></a>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td>James Wilson</td>
-                            <td><a href="#" class="link-secondary">james.wilson@domain.com</a></td>
-                            <td>N/A</td>
-                            <td>August 30, 2022 at 11:20 AM</td>
-                            <td>
-                            <a href="#" class="btn btn-sm btn-light-success me-1"><i class="feather icon-edit"></i></a>
-                            <a href="#" class="btn btn-sm btn-light-danger"><i class="feather icon-trash-2"></i></a>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td>Ava Johnson</td>
-                            <td><a href="#" class="link-secondary">ava.johnson@mailbox.com</a></td>
-                            <td>N/A</td>
-                            <td>October 07, 2018 at 04:55 PM</td>
-                            <td>
-                            <a href="#" class="btn btn-sm btn-light-success me-1"><i class="feather icon-edit"></i></a>
-                            <a href="#" class="btn btn-sm btn-light-danger"><i class="feather icon-trash-2"></i></a>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td>William Garcia</td>
-                            <td><a href="#" class="link-secondary">william.garcia@webmail.com</a></td>
-                            <td>N/A</td>
-                            <td>May 18, 2023 at 09:30 AM</td>
-                            <td>
-                            <a href="#" class="btn btn-sm btn-light-success me-1"><i class="feather icon-edit"></i></a>
-                            <a href="#" class="btn btn-sm btn-light-danger"><i class="feather icon-trash-2"></i></a>
-                            </td>
-                        </tr>
-                        <tr>
-                        <td>Olivia Martinez</td>
-                            <td><a href="#" class="link-secondary">olivia.martinez@mailservice.com</a></td>
-                            <td>N/A</td>
-                            <td>December 25, 2020 at 07:00 PM</td>
-                            <td>
-                            <a href="#" class="btn btn-sm btn-light-success me-1"><i class="feather icon-edit"></i></a>
-                            <a href="#" class="btn btn-sm btn-light-danger"><i class="feather icon-trash-2"></i></a>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td>Benjamin Lee</td>
-                            <td><a href="#" class="link-secondary">benjamin.lee@inbox.com</a></td>
-                            <td>N/A</td>
-                            <td>February 13, 2019 at 06:40 PM</td>
-                            <td>
-                            <a href="#" class="btn btn-sm btn-light-success me-1"><i class="feather icon-edit"></i></a>
-                            <a href="#" class="btn btn-sm btn-light-danger"><i class="feather icon-trash-2"></i></a>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td>Isabella Smith</td>
-                            <td><a href="#" class="link-secondary">isabella.smith@webmail.com</a></td>
-                            <td>N/A</td>
-                            <td>July 04, 2021 at 03:05 PM</td>
-                            <td>
-                            <a href="#" class="btn btn-sm btn-light-success me-1"><i class="feather icon-edit"></i></a>
-                            <a href="#" class="btn btn-sm btn-light-danger"><i class="feather icon-trash-2"></i></a>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td>Lucas Taylor</td>
-                            <td><a href="#" class="link-secondary">lucas.taylor@domain.com</a></td>
-                            <td>N/A</td>
-                            <td>September 19, 2022 at 05:15 PM</td>
-                            <td>
-                            <a href="#" class="btn btn-sm btn-light-success me-1"><i class="feather icon-edit"></i></a>
-                            <a href="#" class="btn btn-sm btn-light-danger"><i class="feather icon-trash-2"></i></a>
-                            </td>
-                        </tr>
+                            <?php foreach ($categories as $category): ?>
+                                <tr>
+                                    <td><?= $category->name ?? "" ?></td>
+                                    <td><?= $category->description ?? "" ?></td>
+                                    <td><?= $category->slug ?? "" ?></td>
+                                    <td><?= $category->id ?></td>
+                                    <td>
+                                    <a href="<?= BASE_PATH ?>catalogs/categories/details/<?= $category->id ?>" class="btn btn-sm btn-light-primary"><i class="feather icon-eye"></i></a>
+                                    <button type="button" class="btn btn-sm btn-light-success me-1" data-bs-toggle="modal" data-bs-target="#editModal">
+                                        <i class="feather icon-edit"></i>
+                                    </button>
+                                    <button onclick="deleteCategory(<?= $category->id ?>,'<?= $category->name ?>')" class="btn btn-sm btn-light-danger"><i class="feather icon-trash-2"></i></button>
+                                    </td>
+                                </tr>
+                            <?php endforeach; ?>
                         </tbody>
                     </table>
                     </div>
@@ -325,6 +254,12 @@
             <!-- [ Main Content ] end -->
         </div>
         </div>
+
+        <form id="deleteForm" method="POST" action="<?= BASE_PATH ?>categories">
+            <input type="hidden" name="action" value="delete_category">
+            <input id="id_delete" type="hidden" name="id">
+            <input type="hidden" name="global_token" value="<?= $_SESSION['global_token'] ?>">
+        </form>
 
         <?php 
 
@@ -338,6 +273,7 @@
 
         ?>
         <!-- [Page Specific JS] start -->
+        <script src="https://common.olemiss.edu/_js/sweet-alert/sweet-alert.min.js"></script>
         <script>
         // scroll-block
         var tc = document.querySelectorAll('.scroll-block');
@@ -360,6 +296,102 @@
             document.getElementById(temp).value = value;
         }
         // quantity end
+
+        function createCategory(){
+                let formData = document.getElementById("formCreate");
+                fetch("<?= BASE_PATH ?>categories",)
+
+                if (formData.checkValidity()){
+                    let form = new FormData(formData);
+
+                    //form.submit();
+
+                    fetch('<?= BASE_PATH ?>categories', {
+                        method: 'POST',
+                        body: form,
+                    })
+                    .then(response => {
+                        if (response.ok) {
+                            if (response.redirected){
+                                sweetAlert("ÉXITO", "Se creo de forma correcta", "success");
+                                window.location.href = response.url
+                                return;
+                            }else{
+                                return response.json();
+                            }
+                        }else{
+                            swal("Ocurrio un error", "No fue posible crear la nueva categoría");
+                            throw new Error('Error en el servidor: ' + response.status);
+                        }
+                    })
+                    .then(data => {
+                        if (data?.error) {
+                            swal("Ocurrio un error", "No fue posible crear la nueva categoria");
+                            console.error(data.error);
+                        }
+                    })
+                    .catch(error => {
+                        console.error("Error: ",error);
+                    })
+                }else{
+                    sweetAlert("Error al ingresador los datos", "Llene todos los campos y verifique que sean datos validos", "error");
+                }
+        }
+
+        function deleteCategory(id, name){
+            swal({
+                title: "¿Eliminar a "+name+"?",
+                text: "Esta acción sera permanente",
+                type: "warning",
+                showCancelButton: true,
+                confirmButtonColor: "#DD6B55",
+                confirmButtonText: "Sí, eliminar!",
+                closeOnConfirm: false
+            },
+            function(){
+                document.getElementById("id_delete").value = id;
+
+                let formData = document.getElementById("deleteForm");
+                fetch("<?= BASE_PATH ?>categories",)
+
+                if (formData.checkValidity()){
+                    let form = new FormData(formData);
+
+                    //form.submit();
+
+                    fetch('<?= BASE_PATH ?>categories', {
+                        method: 'POST',
+                        body: form,
+                    })
+                    .then(response => {
+                        if (response.ok) {
+                            if (response.redirected){
+                                sweetAlert("ÉXITO", "Se elimino de forma correcta", "success");
+                                window.location.href = response.url
+                                return;
+                            }else{
+                                return response.json();
+                            }
+                        }else{
+                            throw new Error('Error en el servidor: ' + response.status);
+                        }
+                    })
+                    .then(data => {
+                        if (data?.success) {
+                            swal("Ocurrio un error", "No fue posible crear la nueva categoria");
+                            console.error(data.error);
+                        }
+                    })
+                    .catch(error => {
+                        console.error("Error: ",error);
+                    })
+                }else{
+                    sweetAlert("Error al ingresador los datos", "Llene todos los campos y verifique que sean datos validos", "error");
+                }
+                
+                //swal("Eliminada!", "La categoria a sido eliminado con éxito", "success");
+            });
+        }
         </script>
         
         <?php 

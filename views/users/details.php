@@ -9,10 +9,10 @@
       $response = json_decode(json_encode($controlador->getUserById($id)));
       $user = $response->data;
     }else{
-      header('Location: home/');
+      header('Location: '. BASE_PATH);
     }
   }else{
-    header('Location: home/');
+    header('Location: '. BASE_PATH);
   }
 
   function fecha($date){

@@ -1,5 +1,15 @@
     <?php 
     include_once "../../../app/config.php";
+    include_once "../../../app/products/CategoriesController.php";
+
+    if (isset($_SESSION["user_id"]) && $_SESSION['user_id']!=null) {
+
+        $controlador = new CategoriesController();
+        $categories = $controlador->getCategories();
+        //var_dump($categories[0]);
+    }else{
+        header('Location: '. BASE_PATH);
+    }
 
     ?>
     <!doctype html>

@@ -67,7 +67,7 @@
             <div class="col-lg-12">
                 <div class="card shadow-none">
                 <div class="card-header">
-                    <h5>Marcas</h5>
+                    <h5>Categorías</h5>
                     <div class="card-header-right">
                     <button type="button" class="btn btn-light-warning m-0" data-bs-toggle="modal" data-bs-target="#exampleModal">
                         Añadir categorías
@@ -159,46 +159,56 @@
                             >
                             <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"> </button>
                             </div>
-                            <form>
-                            <div class="modal-body">
-                                <small id="emailHelp" class="form-text text-muted mb-2 mt-0"
-                                >Completa la información solicitada en el formulario</small
-                                >
-                                <div class="mb-3">
-                                <label class="form-label">Nombre de la categoría</label>
-                                <input
-                                    type="text"
-                                    class="form-control"
-                                    id="fname"
-                                    aria-describedby="emailHelp"
-                                    placeholder="Ingrese el nombre de categoria"
-                                />
+                            <form id="formUpdate" method="POST">
+                                <div class="modal-body">
+                                    <small id="emailHelp" class="form-text text-muted mb-2 mt-0"
+                                    >Completa la información solicitada en el formulario</small
+                                    >
+                                    <div class="mb-3">
+                                    <label class="form-label">Nombre de la categoría</label>
+                                    <input
+                                        type="text"
+                                        name="name"
+                                        class="form-control"
+                                        id="UpdateName"
+                                        aria-describedby="emailHelp"
+                                        placeholder="Ingrese el nombre de categoria"
+                                        required
+                                    />
+                                    </div>
+                                    <div class="mb-3">
+                                    <label class="form-label">Descripción de la categoría</label>
+                                    <input
+                                        type="text"
+                                        name="description"
+                                        class="form-control"
+                                        id="UpdateDescription"
+                                        aria-describedby="emailHelp"
+                                        placeholder="Ingrese la descripción de categoría"
+                                        required
+                                    />
+                                    </div>
+                                    <div class="mb-3">
+                                        <label class="form-label">Slug</label>
+                                        <input
+                                            type="text"
+                                            name="slug"
+                                            class="form-control"
+                                            id="UpdateSlug"
+                                            aria-describedby="emailHelp"
+                                            placeholder="Ingresa el ID de la categoría"
+                                            required
+                                        />
+                                    </div>
                                 </div>
-                                <div class="mb-3">
-                                <label class="form-label">Descripción de la categoría</label>
-                                <input
-                                    type="email"
-                                    class="form-control"
-                                    id="lname"
-                                    aria-describedby="emailHelp"
-                                    placeholder="Ingrese la descripción de categoría"
-                                />
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-light-danger" data-bs-dismiss="modal">Cerrar</button>
+                                    <button onclick="updateCategory()" type="button" class="btn btn-light-primary">Editar categoría</button>
+                                    <input type="hidden" name="action" value="update_category">
+                                    <input id="UpdateId" type="hidden" name="id">
+                                    <input id="UpdateCategoryId" type="hidden" name="category_id" value="1">
+                                    <input type="hidden" name="global_token" value="<?= $_SESSION['global_token'] ?>">
                                 </div>
-                                <div class="mb-3">
-                              <label class="form-label">Ingresa el ID de la categoría</label>
-                              <input
-                                type="email"
-                                class="form-control"
-                                id="lname"
-                                aria-describedby="emailHelp"
-                                placeholder="Ingresa el ID de la categoría"
-                              />
-                                </div>
-                            </div>
-                            <div class="modal-footer">
-                                <button type="button" class="btn btn-light-danger" data-bs-dismiss="modal">Cerrar</button>
-                                <button type="button" class="btn btn-light-primary">Editar categoría</button>
-                            </div>
                             </form>
                         </div>
                         </div>
@@ -226,7 +236,7 @@
                                     <td><?= $category->id ?></td>
                                     <td>
                                     <a href="<?= BASE_PATH ?>catalogs/categories/details/<?= $category->id ?>" class="btn btn-sm btn-light-primary"><i class="feather icon-eye"></i></a>
-                                    <button type="button" class="btn btn-sm btn-light-success me-1" data-bs-toggle="modal" data-bs-target="#editModal">
+                                    <button onclick="getCategory(<?= $category->id ?>)" type="button" class="btn btn-sm btn-light-success me-1" data-bs-toggle="modal" data-bs-target="#editModal">
                                         <i class="feather icon-edit"></i>
                                     </button>
                                     <button onclick="deleteCategory(<?= $category->id ?>,'<?= $category->name ?>')" class="btn btn-sm btn-light-danger"><i class="feather icon-trash-2"></i></button>
@@ -315,7 +325,7 @@
                     })
                     .then(data => {
                         if (data?.error) {
-                            swal("Ocurrio un error", "No fue posible crear la nueva categoria");
+                            swal("Ocurrio un error", "No fue posible crear la nueva categoría");
                             console.error(data.error);
                         }
                     })
@@ -381,6 +391,80 @@
                 //swal("Eliminada!", "La categoria a sido eliminado con éxito", "success");
             });
         }
+        
+        function updateCategory(){
+            let formData = document.getElementById("formUpdate");
+            fetch("<?= BASE_PATH ?>categories",)
+
+            if (formData.checkValidity()){
+                let form = new FormData(formData);
+
+                //form.submit();
+
+                fetch('<?= BASE_PATH ?>categories', {
+                    method: 'POST',
+                    body: form,
+                })
+                .then(response => {
+                    if (response.ok) {
+                        if (response.redirected){
+                            sweetAlert("ÉXITO", "Se actualizo de forma correcta", "success");
+                            window.location.href = response.url
+                            return;
+                        }else{
+                            return response.json();
+                        }
+                    }else{
+                        swal("Ocurrio un error", "No fue posible actualizar la categoría");
+                        throw new Error('Error en el servidor: ' + response.status);
+                    }
+                })
+                .then(data => {
+                    if (data?.error) {
+                        swal("Ocurrio un error", "No fue posible actualizar la categoría");
+                        console.error("Error en data: ",data.error);
+                    }
+                })
+                .catch(error => {
+                    console.error("Error: ",error);
+                })
+            }else{
+                sweetAlert("Error al ingresador los datos", "Llene todos los campos y verifique que sean datos validos", "error");
+            }
+        }
+
+        function getCategory(id){
+            let form = new FormData();
+            form.append('id', id);
+            form.append('action', 'get_category_by_id');
+            form.append('global_token', '<?= $_SESSION['global_token'] ?>');
+            fetch('<?= BASE_PATH ?>categories', {
+                method: 'POST',
+                body: form,
+            })
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error(`Error en la solicitud: ${response.status} ${response.statusText}`);
+                }
+                return response.json();
+            })
+            .then(data => {
+                let datos = data.data.data;
+                if (data.success){
+                    document.getElementById("UpdateName").value = (datos.name!=undefined)? datos.name : " " ;
+                    document.getElementById("UpdateDescription").value = (datos.description!=undefined)? datos.description : " " ;
+                    document.getElementById("UpdateSlug").value = (datos.slug!=undefined)? datos.slug : " " ;
+                    document.getElementById("UpdateId").value = (datos.id!=undefined)? datos.id : 0 ;
+                    document.getElementById("UpdateCategoryId").value = (datos.id!=undefined)? datos.id : 0 ;
+                }else{
+                    swal("Error", "No se pudo obtener la información solicitada", "error")
+                }
+            })
+            .catch(error => {
+                console.error(error);
+            })
+        }
+
         </script>
         
         <?php 

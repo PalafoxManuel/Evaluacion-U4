@@ -3,10 +3,19 @@
     include_once "../../../app/products/CategoriesController.php";
 
     if (isset($_SESSION["user_id"]) && $_SESSION['user_id']!=null) {
-
-        $controlador = new CategoriesController();
-        $categories = $controlador->getCategories();
-        //var_dump($categories[0]);
+        if (isset($_GET['id'])){
+            $id = $_GET['id'];
+            $controlador = new CategoriesController();
+            $response = json_decode(json_encode($controlador->getCategoriesById($id)));
+            if ($response->success) {
+                $category = $response->data;
+                //var_dump($category);
+            }else{
+                header('Location: '. BASE_PATH);
+            }
+        }else{
+            header('Location: '. BASE_PATH);
+        }
     }else{
         header('Location: '. BASE_PATH);
     }
@@ -68,15 +77,7 @@
                     <div class="card overflow-hidden">
                     <div class="card-body position-relative">
                         <div class="text-center mt-3">
-                        <div class="chat-avtar d-inline-flex mx-auto">
-                            <img
-                            class="rounded-circle img-fluid wid-90 img-thumbnail"
-                            src="../assets/images/user/avatar-1.jpg"
-                            alt="User image"
-                            />
-                            <i class="chat-badge bg-success me-2 mb-2"></i>
-                        </div>
-                        <h5 class="mb-0">Rick G</h5>
+                        <h5 class="mb-0"><?= $category->name ?></h5>
                         </div>
                     </div>
                     <div
@@ -100,16 +101,16 @@
                     </div>
                     <div class="card">
                     <div class="card-header">
-                        <h5>Detalles personales</h5>
+                        <h5>Detalles</h5>
                     </div>
                     <div class="card-body position-relative">
                         <div class="d-inline-flex align-items-center justify-content-between w-100 mb-3">
-                        <p class="mb-0 text-muted me-1">Correo electrónico</p>
-                        <p class="mb-0">Garay2026@gmail.com</p>
+                            <p class="mb-0 text-muted me-1">Nombre de la categoría</p>
+                            <p class="mb-0"><?= $category->name ?? "" ?></p>
                         </div>
                         <div class="d-inline-flex align-items-center justify-content-between w-100 mb-3">
-                        <p class="mb-0 text-muted me-1">Número de telefono</p>
-                        <p class="mb-0">(+52) 613 118 6794</p>
+                            <p class="mb-0 text-muted me-1">Slug</p>
+                            <p class="mb-0"><?= $category->slug ?? "" ?></p>
                         </div>
                     </div>
                     </div>
@@ -119,50 +120,54 @@
                     <div class="tab-pane fade show active" id="user-set-profile" role="tabpanel" aria-labelledby="user-set-profile-tab">
                         <div class="card">
                         <div class="card-header">
-                            <h5>Detalles personales</h5>
+                            <h5>Detalles generales</h5>
                         </div>
                         <div class="card-body">
                             <ul class="list-group list-group-flush">
-                            <li class="list-group-item px-0 pt-0">
-                                <div class="row">
-                                <div class="col-md-6">
-                                    <p class="mb-1 text-muted">Nombre</p>
-                                    <p class="mb-0">Rick</p>
-                                </div>
-                                <div class="col-md-6">
-                                    <p class="mb-1 text-muted">Apellidos</p>
-                                    <p class="mb-0">Garay</p>
-                                </div>
-                                </div>
-                            </li>
-                            <li class="list-group-item px-0">
-                                <div class="row">
-                                <div class="col-md-6">
-                                    <p class="mb-1 text-muted">Número de telefono</p>
-                                    <p class="mb-0">(+52) 613 118 6794</p>
-                                </div>
-                                <div class="col-md-6">
-                                    <p class="mb-1 text-muted">Género</p>
-                                    <p class="mb-0">Masculino</p>
-                                </div>
-                                </div>
-                            </li>
-                            <li class="list-group-item px-0">
-                                <div class="row">
-                                <div class="col-md-6">
-                                <p class="mb-1 text-muted">Corero electrónico</p>
-                                <p class="mb-0">Garay2026@gmail.com</p>
-                                </div>
-                                <div class="col-md-6">
-                                  <p class="mb-1 text-muted">Fecha de nacimiento</p>
-                                  <p class="mb-0">21/10/1985</p>
-                                </div>
-                                </div>
-                            </li>
-                            <li class="list-group-item px-0 pb-0">
-                                <p class="mb-1 text-muted">Fecha de inicio en la empresa</p>
-                                <p class="mb-0">22/03/2026</p>
-                            </li>
+                                <li class="list-group-item px-0 pt-0">
+                                    <div class="row">
+                                    <div class="col-md-6">
+                                        <p class="mb-1 text-muted">Nombre</p>
+                                        <p class="mb-0"><?= $category->name ?? "" ?></p>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <p class="mb-1 text-muted">Slug</p>
+                                        <p class="mb-0"><?= $category->slug ?? "" ?></p>
+                                    </div>
+                                    </div>
+                                </li>
+                                <li class="list-group-item px-0">
+                                    <div class="row">
+                                    <div class="col-md-6">
+                                        <p class="mb-1 text-muted">Descripción</p>
+                                        <p class="mb-0"><?= $category->description ?? "" ?></p>
+                                    </div>
+                                    </div>
+                                </li>
+                                <li class="list-group-item px-0">
+                                    <div class="row">
+                                        <p class="mb-1 text-muted">Productos asociados</p>
+                                    </div>
+                                    <table id="report-table" class="table table-bordered table-striped mb-0">
+                                        <thead>
+                                        <tr>
+                                            <th class="border-top-0">Id</th>
+                                            <th class="border-top-0">Nombre producto</th>
+                                            <th class="border-top-0">Slug</th>
+                                        
+                                        </tr>
+                                        </thead>
+                                        <tbody>
+                                            <?php foreach ($category->products as $product): ?>
+                                                <tr>
+                                                    <td><?= $product->id ?? 0 ?></td>
+                                                    <td><?= $product->name ?? "" ?></td>
+                                                    <td><?= $product->slug ?? "" ?></td>
+                                                </tr>
+                                            <?php endforeach; ?>
+                                        </tbody>
+                                    </table>
+                                </li>
                             </ul>
                         </div>
                         </div>

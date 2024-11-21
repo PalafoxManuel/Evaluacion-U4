@@ -1,6 +1,14 @@
     <?php 
     include_once "../../../app/config.php";
+    include_once "../../../app/products/BrandsController.php";
 
+    if (isset($_SESSION["user_id"]) && $_SESSION['user_id']!=null) {
+        $controlador = new BrandsController();
+        $marcas = $controlador->getBrands();
+        //var_dump($marcas[0]);
+    }else{
+        header('Location: '. BASE_PATH);
+    }
     ?>
     <!doctype html>
     <html lang="en">
@@ -78,7 +86,7 @@
                             >
                             <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"> </button>
                             </div>
-                            <form>
+                            <form id="formCreate" method="POST">
                             <div class="modal-body">
                                 <small id="emailHelp" class="form-text text-muted mb-2 mt-0"
                                 >Completa la información solicitada en el formulario.</small
@@ -87,36 +95,44 @@
                                 <label class="form-label">Nombre de la marca</label>
                                 <input
                                     type="text"
+                                    name="name"
                                     class="form-control"
                                     id="fname"
                                     aria-describedby="emailHelp"
                                     placeholder="Ingresa el nombre de la marca"
+                                    required
                                 />
                                 </div>
                                 <div class="mb-3">
                                 <label class="form-label">Descripción</label>
                                 <input
-                                    type="email"
+                                    type="text"
+                                    name="description"
                                     class="form-control"
                                     id="lname"
                                     aria-describedby="emailHelp"
                                     placeholder="Ingrese la descripción de la marca"
+                                    required
                                     />
                                     </div>
                                     <div class="mb-3">
                                 <label class="form-label">Slug</label>
                                 <input
-                                    type="email"
+                                    type="text"
+                                    name="slug"
                                     class="form-control"
                                     id="lname"
                                     aria-describedby="emailHelp"
                                     placeholder="Slug"
+                                    required
                                 />
                                 </div>
                             </div>
                             <div class="modal-footer">
                                 <button type="button" class="btn btn-light-danger" data-bs-dismiss="modal">Cerrar</button>
-                                <button type="button" class="btn btn-light-primary">Añadir marca</button>
+                                <button onclick="brandCreate()" type="button" class="btn btn-light-primary">Añadir marca</button>
+                                <input type="hidden" name="global_token" value="<?= $_SESSION['global_token'] ?>">
+                                <input type="hidden" name="action" value="create_brand">
                             </div>
                             </form>
                         </div>
@@ -140,45 +156,54 @@
                             >
                             <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"> </button>
                             </div>
-                            <form>
+                            <form id="formUpdate" method="POST">
                             <div class="modal-body">
                                 <small id="emailHelp" class="form-text text-muted mb-2 mt-0"
                                 >Completa la información solicitada en el formulario.</small
                                 >
                                 <div class="mb-3">
-                                <label class="form-label">Nombre de la marca</label>
-                                <input
-                                    type="text"
-                                    class="form-control"
-                                    id="fname"
-                                    aria-describedby="emailHelp"
-                                    placeholder="Ingresa el nombre de la marca"
-                                />
+                                    <label class="form-label">Nombre de la marca</label>
+                                    <input
+                                        type="text"
+                                        name="name"
+                                        class="form-control"
+                                        id="UpdateName"
+                                        aria-describedby="emailHelp"
+                                        placeholder="Ingresa el nombre de la marca"
+                                        required
+                                    />
                                 </div>
                                 <div class="mb-3">
-                                <label class="form-label">Descripción de la marca</label>
-                                <input
-                                    type="email"
-                                    class="form-control"
-                                    id="lname"
-                                    aria-describedby="emailHelp"
-                                    placeholder="Ingresa la descripción de la marca"
-                                />
+                                    <label class="form-label">Descripción de la marca</label>
+                                    <input
+                                        type="text"
+                                        name="description"
+                                        class="form-control"
+                                        id="UpdateDescription"
+                                        aria-describedby="emailHelp"
+                                        placeholder="Ingresa la descripción de la marca"
+                                        required
+                                    />
                                 </div>
                                 <div class="mb-3">
-                              <label class="form-label">Slug</label>
-                              <input
-                                type="email"
-                                class="form-control"
-                                id="lname"
-                                aria-describedby="emailHelp"
-                                placeholder="Slug"
-                              />
+                                    <label class="form-label">Slug</label>
+                                    <input
+                                        type="text"
+                                        name="slug"
+                                        class="form-control"
+                                        id="UpdateSlug"
+                                        aria-describedby="emailHelp"
+                                        placeholder="Slug"
+                                        required
+                                    />
                                 </div>
                             </div>
                             <div class="modal-footer">
                                 <button type="button" class="btn btn-light-danger" data-bs-dismiss="modal">Cerrar</button>
-                                <button type="button" class="btn btn-light-primary">Editar marca</button>
+                                <button onclick="brandUpdate()" type="button" class="btn btn-light-primary">Editar marca</button>
+                                <input type="hidden" name="global_token" value="<?= $_SESSION['global_token'] ?>">
+                                <input type="hidden" name="action" value="update_brand">
+                                <input id="id" type="hidden" name="id">
                             </div>
                             </form>
                         </div>
@@ -192,117 +217,26 @@
                         <thead>
                         <tr>
                             <th class="border-top-0">Nombre brand</th>
-                            <th class="border-top-0">Descripcion</th>
+                            <th class="border-top-0">Descripción</th>
                             <th class="border-top-0">Slug</th>
                         </tr>
                         </thead>
                         <tbody>
-                        <tr>
-                            <td>Emily Carter</td>
-                            <td><a href="#" class="link-secondary">emily@carter.com</a></td>
-                            <td>N/A</td>
-                            <td>March 15, 2020 at 10:25 AM</td>
-                            <td>
-                            <a href="<?= BASE_PATH ?>catalogs/brands/details" class="btn btn-sm btn-light-primary"><i class="feather icon-eye"></i></a>
-                            <button type="button" class="btn btn-sm btn-light-success me-1" data-bs-toggle="modal" data-bs-target="#editModal">
-                                <i class="feather icon-edit"></i>
-                            </button>
-                            <a href="#" class="btn btn-sm btn-light-danger"><i class="feather icon-trash-2"></i></a>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td>Michael Davis</td>
-                            <td><a href="#" class="link-secondary">michael.davis@email.com</a></td>
-                            <td>N/A</td>
-                            <td>June 22, 2019 at 08:10 PM</td>
-                            <td>
-                            <a href="#" class="btn btn-sm btn-light-primary"><i class="feather icon-eye"></i></a>
-                            <a href="#" class="btn btn-sm btn-light-success me-1"><i class="feather icon-edit"></i></a>
-                            <a href="#" class="btn btn-sm btn-light-danger"><i class="feather icon-trash-2"></i></a>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td>Sophia Brown</td>
-                            <td><a href="#" class="link-secondary">sophia.brown@mail.com</a></td>
-                            <td>N/A</td>
-                            <td>April 10, 2021 at 02:45 PM</td>
-                            <td>
-                            <a href="#" class="btn btn-sm btn-light-primary"><i class="feather icon-eye"></i></a>
-                            <a href="#" class="btn btn-sm btn-light-success me-1"><i class="feather icon-edit"></i></a>
-                            <a href="#" class="btn btn-sm btn-light-danger"><i class="feather icon-trash-2"></i></a>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td>James Wilson</td>
-                            <td><a href="#" class="link-secondary">james.wilson@domain.com</a></td>
-                            <td>N/A</td>
-                            <td>August 30, 2022 at 11:20 AM</td>
-                            <td>
-                            <a href="#" class="btn btn-sm btn-light-success me-1"><i class="feather icon-edit"></i></a>
-                            <a href="#" class="btn btn-sm btn-light-danger"><i class="feather icon-trash-2"></i></a>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td>Ava Johnson</td>
-                            <td><a href="#" class="link-secondary">ava.johnson@mailbox.com</a></td>
-                            <td>N/A</td>
-                            <td>October 07, 2018 at 04:55 PM</td>
-                            <td>
-                            <a href="#" class="btn btn-sm btn-light-success me-1"><i class="feather icon-edit"></i></a>
-                            <a href="#" class="btn btn-sm btn-light-danger"><i class="feather icon-trash-2"></i></a>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td>William Garcia</td>
-                            <td><a href="#" class="link-secondary">william.garcia@webmail.com</a></td>
-                            <td>N/A</td>
-                            <td>May 18, 2023 at 09:30 AM</td>
-                            <td>
-                            <a href="#" class="btn btn-sm btn-light-success me-1"><i class="feather icon-edit"></i></a>
-                            <a href="#" class="btn btn-sm btn-light-danger"><i class="feather icon-trash-2"></i></a>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td>Olivia Martinez</td>
-                            <td><a href="#" class="link-secondary">olivia.martinez@mailservice.com</a></td>
-                            <td>N/A</td>
-                            <td>December 25, 2020 at 07:00 PM</td>
-                            <td>
-                            <a href="#" class="btn btn-sm btn-light-success me-1"><i class="feather icon-edit"></i></a>
-                            <a href="#" class="btn btn-sm btn-light-danger"><i class="feather icon-trash-2"></i></a>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td>Benjamin Lee</td>
-                            <td><a href="#" class="link-secondary">benjamin.lee@inbox.com</a></td>
-                            <td>N/A</td>
-                            <td>February 13, 2019 at 06:40 PM</td>
-                            <td>
-                            <a href="#" class="btn btn-sm btn-light-success me-1"><i class="feather icon-edit"></i></a>
-                            <a href="#" class="btn btn-sm btn-light-danger"><i class="feather icon-trash-2"></i></a>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td>Isabella Smith</td>
-                            <td><a href="#" class="link-secondary">isabella.smith@webmail.com</a></td>
-                            <td>N/A</td>
-                            <td>July 04, 2021 at 03:05 PM</td>
-                            <td>
-                            <a href="#" class="btn btn-sm btn-light-success me-1"><i class="feather icon-edit"></i></a>
-                            <a href="#" class="btn btn-sm btn-light-danger"><i class="feather icon-trash-2"></i></a>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td>Lucas Taylor</td>
-                            <td><a href="#" class="link-secondary">lucas.taylor@domain.com</a></td>
-                            <td>N/A</td>
-                            <td>September 19, 2022 at 05:15 PM</td>
-                            <td>
-                            <a href="#" class="btn btn-sm btn-light-success me-1"><i class="feather icon-edit"></i></a>
-                            <a href="#" class="btn btn-sm btn-light-danger"><i class="feather icon-trash-2"></i></a>
-                            </td>
-                         </tr>
-                         </tbody>
+                            <?php foreach ($marcas as $brand): ?>
+                                <tr>
+                                    <td><?= $brand->name ?></td>
+                                    <td><?= $brand->description ?></td>
+                                    <td><?= $brand->slug ?></td>
+                                    <td>
+                                    <a href="<?= BASE_PATH ?>catalogs/brands/details/<?= $brand->id ?>" class="btn btn-sm btn-light-primary"><i class="feather icon-eye"></i></a>
+                                    <button onclick="getBrand(<?= $brand->id ?>)" type="button" class="btn btn-sm btn-light-success me-1" data-bs-toggle="modal" data-bs-target="#editModal">
+                                        <i class="feather icon-edit"></i>
+                                    </button>
+                                    <button onclick="brandDelete(<?= $brand->id ?>,'<?= $brand->name ?>')" class="btn btn-sm btn-light-danger"><i class="feather icon-trash-2"></i></button>
+                                    </td>
+                                </tr>
+                            <?php endforeach; ?>
+                        </tbody>
                      </table>
                     </div>
                  </div>
@@ -312,6 +246,12 @@
             <!-- [ Main Content ] end -->
         </div>
         </div>
+
+        <form id="deleteForm" method="POST" action="<?= BASE_PATH ?>brands">
+            <input type="hidden" name="action" value="delete_brand">
+            <input id="id_delete" type="hidden" name="id">
+            <input type="hidden" name="global_token" value="<?= $_SESSION['global_token'] ?>">
+        </form>
 
         <?php 
 
@@ -327,6 +267,7 @@
 
 
         <!-- [Page Specific JS] start -->
+        <script src="https://common.olemiss.edu/_js/sweet-alert/sweet-alert.min.js"></script>
         <script>
         // scroll-block
         var tc = document.querySelectorAll('.scroll-block');
@@ -349,6 +290,172 @@
             document.getElementById(temp).value = value;
         }
         // quantity end
+
+
+
+        function brandCreate(){
+            let formData = document.getElementById("formCreate");
+
+            if (formData.checkValidity()){
+                let form = new FormData(formData);
+
+                //form.submit();
+
+                fetch('<?= BASE_PATH ?>brands', {
+                    method: 'POST',
+                    body: form,
+                })
+                .then(response => {
+                    if (response.ok) {
+                        if (response.redirected){
+                            sweetAlert("ÉXITO", "Se creo de forma correcta", "success");
+                            window.location.href = response.url
+                            return;
+                        }else{
+                            return response.json();
+                        }
+                    }else{
+                        swal("Ocurrio un error", "No fue posible crear la nueva marca");
+                        throw new Error('Error en el servidor: ' + response.status);
+                    }
+                })
+                .then(data => {
+                    if (data?.error) {
+                        swal("Ocurrio un error", "No fue posible crear la nueva marca");
+                        console.error(data.error);
+                    }
+                })
+                .catch(error => {
+                    console.error("Error: ",error);
+                })
+            }else{
+                sweetAlert("Error al ingresador los datos", "Llene todos los campos y verifique que sean datos validos", "error");
+            }
+        }
+
+        function brandUpdate(){
+            let formData = document.getElementById("formUpdate");
+
+            if (formData.checkValidity()){
+                let form = new FormData(formData);
+
+                //form.submit();
+
+                fetch('<?= BASE_PATH ?>brands', {
+                    method: 'POST',
+                    body: form,
+                })
+                .then(response => {
+                    if (response.ok) {
+                        if (response.redirected){
+                            sweetAlert("ÉXITO", "Se actualizo de forma correcta", "success");
+                            window.location.href = response.url
+                            return;
+                        }else{
+                            return response.json();
+                        }
+                    }else{
+                        swal("Ocurrio un error", "No fue posible actualizar la marca");
+                        throw new Error('Error en el servidor: ' + response.status);
+                    }
+                })
+                .then(data => {
+                    if (data?.error) {
+                        swal("Ocurrio un error", "No fue posible actualizar la marca");
+                        console.error("Error en data: ",data.error);
+                    }
+                })
+                .catch(error => {
+                    console.error("Error: ",error);
+                })
+            }else{
+                sweetAlert("Error al ingresador los datos", "Llene todos los campos y verifique que sean datos validos", "error");
+            }
+        }
+
+        function getBrand(id){
+            let form = new FormData();
+            form.append('id', id);
+            form.append('action', 'get_brand_by_id');
+            form.append('global_token', '<?= $_SESSION['global_token'] ?>');
+            fetch('<?= BASE_PATH ?>brands', {
+                method: 'POST',
+                body: form,
+            })
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error(`Error en la solicitud: ${response.status} ${response.statusText}`);
+                }
+                return response.json();
+            })
+            .then(data => {
+                let datos = data.data.data;
+                if (data.success){
+                    document.getElementById("UpdateName").value = (datos.name!=undefined)? datos.name : " " ;
+                    document.getElementById("UpdateDescription").value = (datos.description!=undefined)? datos.description : " " ;
+                    document.getElementById("UpdateSlug").value = (datos.slug!=undefined)? datos.slug : " " ;
+                    document.getElementById("id").value = (datos.id!=undefined)? datos.id : 0 ;
+                }else{
+                    swal("Error", "No se pudo obtener la información solicitada", "error")
+                }
+            })
+            .catch(error => {
+                console.error(error);
+            }) 
+        }
+
+        function brandDelete(id, name){
+            swal({
+                title: "¿Eliminar a "+name+"?",
+                text: "Esta acción sera permanente",
+                type: "warning",
+                showCancelButton: true,
+                confirmButtonColor: "#DD6B55",
+                confirmButtonText: "Sí, eliminar!",
+                closeOnConfirm: false
+            },
+            function(){
+                document.getElementById("id_delete").value = id;
+
+                let formData = document.getElementById("deleteForm");
+
+                if (formData.checkValidity()){
+                    let form = new FormData(formData);
+
+                    //form.submit();
+
+                    fetch('<?= BASE_PATH ?>brands', {
+                        method: 'POST',
+                        body: form,
+                    })
+                    .then(response => {
+                        if (response.ok) {
+                            if (response.redirected){
+                                sweetAlert("ÉXITO", "Se elimino de forma correcta", "success");
+                                window.location.href = response.url
+                                return;
+                            }else{
+                                return response.json();
+                            }
+                        }else{
+                            throw new Error('Error en el servidor: ' + response.status);
+                        }
+                    })
+                    .then(data => {
+                        if (data?.success) {
+                            swal("Ocurrio un error", "No fue posible eliminar la marca");
+                            console.error(data.error);
+                        }
+                    })
+                    .catch(error => {
+                        console.error("Error: ",error);
+                    })
+                }else{
+                    sweetAlert("Error al ingresador los datos", "Llene todos los campos y verifique que sean datos validos", "error");
+                }
+            });
+        }
+
         </script>
         
         <?php 

@@ -5,7 +5,6 @@
     if (isset($_SESSION["user_id"]) && $_SESSION['user_id']!=null) {
         $controlador = new CategoriesController();
         $categories = $controlador->getCategories();
-        //var_dump($categories[0]);
     }else{
         header('Location: '. BASE_PATH);
     }
@@ -297,44 +296,43 @@
         // quantity end
 
         function createCategory(){
-                let formData = document.getElementById("formCreate");
-                fetch("<?= BASE_PATH ?>categories",)
+            let formData = document.getElementById("formCreate");
 
-                if (formData.checkValidity()){
-                    let form = new FormData(formData);
+            if (formData.checkValidity()){
+                let form = new FormData(formData);
 
-                    //form.submit();
+                //form.submit();
 
-                    fetch('<?= BASE_PATH ?>categories', {
-                        method: 'POST',
-                        body: form,
-                    })
-                    .then(response => {
-                        if (response.ok) {
-                            if (response.redirected){
-                                sweetAlert("ÉXITO", "Se creo de forma correcta", "success");
-                                window.location.href = response.url
-                                return;
-                            }else{
-                                return response.json();
-                            }
+                fetch('<?= BASE_PATH ?>categories', {
+                    method: 'POST',
+                    body: form,
+                })
+                .then(response => {
+                    if (response.ok) {
+                        if (response.redirected){
+                            sweetAlert("ÉXITO", "Se creo de forma correcta", "success");
+                            window.location.href = response.url
+                            return;
                         }else{
-                            swal("Ocurrio un error", "No fue posible crear la nueva categoría");
-                            throw new Error('Error en el servidor: ' + response.status);
+                            return response.json();
                         }
-                    })
-                    .then(data => {
-                        if (data?.error) {
-                            swal("Ocurrio un error", "No fue posible crear la nueva categoría");
-                            console.error(data.error);
-                        }
-                    })
-                    .catch(error => {
-                        console.error("Error: ",error);
-                    })
-                }else{
-                    sweetAlert("Error al ingresador los datos", "Llene todos los campos y verifique que sean datos validos", "error");
-                }
+                    }else{
+                        swal("Ocurrio un error", "No fue posible crear la nueva categoría");
+                        throw new Error('Error en el servidor: ' + response.status);
+                    }
+                })
+                .then(data => {
+                    if (data?.error) {
+                        swal("Ocurrio un error", "No fue posible crear la nueva categoría");
+                        console.error(data.error);
+                    }
+                })
+                .catch(error => {
+                    console.error("Error: ",error);
+                })
+            }else{
+                sweetAlert("Error al ingresador los datos", "Llene todos los campos y verifique que sean datos validos", "error");
+            }
         }
 
         function deleteCategory(id, name){
@@ -351,7 +349,6 @@
                 document.getElementById("id_delete").value = id;
 
                 let formData = document.getElementById("deleteForm");
-                fetch("<?= BASE_PATH ?>categories",)
 
                 if (formData.checkValidity()){
                     let form = new FormData(formData);
@@ -377,7 +374,7 @@
                     })
                     .then(data => {
                         if (data?.success) {
-                            swal("Ocurrio un error", "No fue posible crear la nueva categoria");
+                            swal("Ocurrio un error", "No fue posible eliminar la categoria");
                             console.error(data.error);
                         }
                     })
@@ -387,14 +384,11 @@
                 }else{
                     sweetAlert("Error al ingresador los datos", "Llene todos los campos y verifique que sean datos validos", "error");
                 }
-                
-                //swal("Eliminada!", "La categoria a sido eliminado con éxito", "success");
             });
         }
         
         function updateCategory(){
             let formData = document.getElementById("formUpdate");
-            fetch("<?= BASE_PATH ?>categories",)
 
             if (formData.checkValidity()){
                 let form = new FormData(formData);

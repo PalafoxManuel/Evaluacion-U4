@@ -125,14 +125,9 @@ if (!empty($Product['presentations']) && !empty($Product['presentations'][0]['pr
                                     <div class="row">
                                         <div class="col-6">
                                             <div class="d-grid">
-                                                <button type="button" class="btn btn-primary">Haz tu pedido aquí</button>
-                                            </div>
-                                        </div>
-                                        <div class="col-6">
-                                            <div class="d-grid">
                                                 <form action="<?= BASE_PATH ?>products/presentation" method="POST" enctype="multipart/form-data">
                                                     <input type="hidden" name="product_id" value="<?= $product_id ?>">
-                                                    <button type="submit" class="btn btn-outline-secondary">Presentaciones</button>
+                                                    <button type="submit" class="btn btn-primary">Presentaciones</button>
                                                 </form>
                                             </div>
                                         </div>

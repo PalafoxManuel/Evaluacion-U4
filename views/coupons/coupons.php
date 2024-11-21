@@ -1,5 +1,10 @@
-    <?php 
+<?php 
     include_once "../../app/config.php";
+
+    include_once "../../app/sales/CouponsController.php";
+
+    $CouponsController = new CouponsController();
+    $Coupons = $CouponsController->get();
 
     ?>
     <!doctype html>
@@ -79,7 +84,10 @@
                             >
                             <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"> </button>
                             </div>
-                            <form>
+
+                            <form action="<?= BASE_PATH ?>coupons/" method="POST" enctype="multipart/form-data"> 
+                            <input type="hidden" name="action" value="create_coupon">
+                            <input type="hidden" name="global_token" value="<?= $_SESSION['global_token'] ?>">
                             <div class="modal-body">
                             <small id="emailHelp" class="form-text text-muted mb-2 mt-0">
                               Completa la información para agregar un nuevo cupón.
@@ -91,6 +99,7 @@
                                 type="text"
                                 class="form-control"
                                 id="name"
+                                name="name"
                                 placeholder="Ingresa el nombre del cupón"
                               />
                             </div>
@@ -101,6 +110,7 @@
                                     type="text"
                                     class="form-control"
                                     id="code"
+                                    name="code"
                                     placeholder="Ingresa el código del cupón"
                                 />
                                 </div>
@@ -110,6 +120,7 @@
                                     type="number"
                                     class="form-control"
                                     id="percentage_discount"
+                                    name="percentage_discount"
                                     placeholder="Ingrese el porcentaje de descuento"
                                 />
                                 </div>
@@ -120,6 +131,7 @@
                                 type="number"
                                 class="form-control"
                                 id="min_amount_required"
+                                name="min_amount_required"
                                 placeholder="Ingrese el monto mínimo necesario"
                               />
                             </div>
@@ -130,6 +142,7 @@
                                 type="number"
                                 class="form-control"
                                 id="min_product_required"
+                                name="min_product_required"
                                 placeholder="Ingrese la cantidad mínima de productos necesarios"
                               />
                             </div>
@@ -140,6 +153,7 @@
                                 type="date"
                                 class="form-control"
                                 id="start_date"
+                                name="start_date"
                               />
                             </div>
                             <!-- Fecha de finalización -->
@@ -149,6 +163,18 @@
                                 type="date"
                                 class="form-control"
                                 id="end_date"
+                                name="end_date"
+                              />
+                            </div>
+                            <!-- count uses -->
+                            <div class="mb-3">
+                              <label class="form-label">Conteo de usos</label>
+                              <input
+                                type="number"
+                                class="form-control"
+                                id="count_uses"
+                                name="count_uses"
+                                placeholder="Ingrese el número limite de usos"
                               />
                             </div>
                             <!-- Máximo de usos -->
@@ -158,13 +184,25 @@
                                 type="number"
                                 class="form-control"
                                 id="max_uses"
+                                name="max_uses"
                                 placeholder="Ingrese el número limite de usos"
+                              />
+                            </div>
+                            <!-- Cantidad de descuento -->
+                            <div class="mb-3">
+                              <label class="form-label">Cantidad de descuentos</label>
+                              <input
+                                type="number"
+                                class="form-control"
+                                id="amount_discount"
+                                name="amount_discount"
+                                placeholder="Ingrese la cantidad de descuentos"
                               />
                             </div>
                             <!-- Válido para la primera compra -->
                             <div class="mb-3">
                               <label class="form-label">Solo aplicable a la primera compra</label>
-                              <select class="form-control" id="valid_only_first_purchase">
+                              <select class="form-control" id="valid_only_first_purchase" name="valid_only_first_purchase">
                                 <option value="1">Sí</option>
                                 <option value="0">No</option>
                               </select>
@@ -172,7 +210,7 @@
                             <!-- Estado -->
                             <div class="mb-3">
                               <label class="form-label">Estado actual</label>
-                              <select class="form-control" id="status">
+                              <select class="form-control" id="status" name="status">
                                 <option value="1">Activo</option>
                                 <option value="0">Inactivo</option>
                               </select>
@@ -180,7 +218,7 @@
                             </div>
                             <div class="modal-footer">
                                 <button type="button" class="btn btn-light-danger" data-bs-dismiss="modal">Cerrar</button>
-                                <button type="button" class="btn btn-light-primary">Añadir cupon</button>
+                                <button type="submit" class="btn btn-light-primary">Añadir cupon</button>
                             </div>
                             </form>
                         </div>
@@ -321,114 +359,47 @@
                             <th class="border-top-0">Porcentaje</th>
                             <th class="border-top-0">Inicio</th>
                             <th class="border-top-0">Vencimiento</th>
+                            <th class="border-top-0">Codigo</th>
+                            <th class="border-top-0">Usos Maximos</th>
+                            <th class="border-top-0">Acciones</th>
                         </tr>
                         </thead>
                         <tbody>
-                        <tr>
-                            <td>Emily Carter</td>
-                            <td><a href="#" class="link-secondary">emily@carter.com</a></td>
-                            <td>N/A</td>
-                            <td>March 15, 2020 at 10:25 AM</td>
-                            <td>
-                            <a href="<?= BASE_PATH ?>coupons/details" class="btn btn-sm btn-light-primary"><i class="feather icon-eye"></i></a>
-                            <button type="button" class="btn btn-sm btn-light-success me-1" data-bs-toggle="modal" data-bs-target="#editModal">
-                                <i class="feather icon-edit"></i>
-                            </button>
-                            <a href="#" class="btn btn-sm btn-light-danger"><i class="feather icon-trash-2"></i></a>
-                            </td>
-                        </tr>
-                        <tr>
-                        <td>Michael Davis</td>
-                            <td><a href="#" class="link-secondary">michael.davis@email.com</a></td>
-                            <td>N/A</td>
-                            <td>June 22, 2019 at 08:10 PM</td>
-                            <td>
-                            <a href="#" class="btn btn-sm btn-light-primary"><i class="feather icon-eye"></i></a>
-                            <a href="#" class="btn btn-sm btn-light-success me-1"><i class="feather icon-edit"></i></a>
-                            <a href="#" class="btn btn-sm btn-light-danger"><i class="feather icon-trash-2"></i></a>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td>Sophia Brown</td>
-                            <td><a href="#" class="link-secondary">sophia.brown@mail.com</a></td>
-                            <td>N/A</td>
-                            <td>April 10, 2021 at 02:45 PM</td>
-                            <td>
-                            <a href="#" class="btn btn-sm btn-light-primary"><i class="feather icon-eye"></i></a>
-                            <a href="#" class="btn btn-sm btn-light-success me-1"><i class="feather icon-edit"></i></a>
-                            <a href="#" class="btn btn-sm btn-light-danger"><i class="feather icon-trash-2"></i></a>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td>James Wilson</td>
-                            <td><a href="#" class="link-secondary">james.wilson@domain.com</a></td>
-                            <td>N/A</td>
-                            <td>August 30, 2022 at 11:20 AM</td>
-                            <td>
-                            <a href="#" class="btn btn-sm btn-light-success me-1"><i class="feather icon-edit"></i></a>
-                            <a href="#" class="btn btn-sm btn-light-danger"><i class="feather icon-trash-2"></i></a>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td>Ava Johnson</td>
-                            <td><a href="#" class="link-secondary">ava.johnson@mailbox.com</a></td>
-                            <td>N/A</td>
-                            <td>October 07, 2018 at 04:55 PM</td>
-                            <td>
-                            <a href="#" class="btn btn-sm btn-light-success me-1"><i class="feather icon-edit"></i></a>
-                            <a href="#" class="btn btn-sm btn-light-danger"><i class="feather icon-trash-2"></i></a>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td>William Garcia</td>
-                            <td><a href="#" class="link-secondary">william.garcia@webmail.com</a></td>
-                            <td>N/A</td>
-                            <td>May 18, 2023 at 09:30 AM</td>
-                            <td>
-                            <a href="#" class="btn btn-sm btn-light-success me-1"><i class="feather icon-edit"></i></a>
-                            <a href="#" class="btn btn-sm btn-light-danger"><i class="feather icon-trash-2"></i></a>
-                            </td>
-                        </tr>
-                        <tr>
-                        <td>Olivia Martinez</td>
-                            <td><a href="#" class="link-secondary">olivia.martinez@mailservice.com</a></td>
-                            <td>N/A</td>
-                            <td>December 25, 2020 at 07:00 PM</td>
-                            <td>
-                            <a href="#" class="btn btn-sm btn-light-success me-1"><i class="feather icon-edit"></i></a>
-                            <a href="#" class="btn btn-sm btn-light-danger"><i class="feather icon-trash-2"></i></a>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td>Benjamin Lee</td>
-                            <td><a href="#" class="link-secondary">benjamin.lee@inbox.com</a></td>
-                            <td>N/A</td>
-                            <td>February 13, 2019 at 06:40 PM</td>
-                            <td>
-                            <a href="#" class="btn btn-sm btn-light-success me-1"><i class="feather icon-edit"></i></a>
-                            <a href="#" class="btn btn-sm btn-light-danger"><i class="feather icon-trash-2"></i></a>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td>Isabella Smith</td>
-                            <td><a href="#" class="link-secondary">isabella.smith@webmail.com</a></td>
-                            <td>N/A</td>
-                            <td>July 04, 2021 at 03:05 PM</td>
-                            <td>
-                            <a href="#" class="btn btn-sm btn-light-success me-1"><i class="feather icon-edit"></i></a>
-                            <a href="#" class="btn btn-sm btn-light-danger"><i class="feather icon-trash-2"></i></a>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td>Lucas Taylor</td>
-                            <td><a href="#" class="link-secondary">lucas.taylor@domain.com</a></td>
-                            <td>N/A</td>
-                            <td>September 19, 2022 at 05:15 PM</td>
-                            <td>
-                            <a href="#" class="btn btn-sm btn-light-success me-1"><i class="feather icon-edit"></i></a>
-                            <a href="#" class="btn btn-sm btn-light-danger"><i class="feather icon-trash-2"></i></a>
-                            </td>
-                        </tr>
+                        
+                        <?php
+
+                          foreach ($Coupons['data'] as $coupon) {
+                            echo '<tr>';
+                            echo '<td>' . $coupon['percentage_discount'] . '%</td>';
+                            echo '<td><a href="#" class="link-secondary">' . $coupon['start_date'] . '</a></td>';
+                            echo '<td>' . $coupon['end_date'] . '</td>';
+                            echo '<td>' . $coupon['code'] . '</td>';
+                            echo '<td>' . $coupon['max_uses'] . '</td>';
+                            echo '<td>';
+
+                            echo '<form action="' . BASE_PATH . 'coupons/details" method="POST" enctype="multipart/form-data">';
+                            echo '<input type="hidden" name="coupon_id" value="' . $coupon['id'] . '">';
+                            echo '<button type="submit" class="btn btn-sm btn-light-primary"><i class="feather icon-eye"></i></a>';
+                            echo '</form>';
+
+                            echo '<button type="submit" class="btn btn-sm btn-light-success me-1" data-bs-toggle="modal" data-bs-target="#editModal">';
+                                echo '<i class="feather icon-edit"></i>';
+                            echo '</button>';
+
+                            echo '<form action="' . BASE_PATH . 'coupons/" method="POST" enctype="multipart/form-data">';
+                            echo '<input type="hidden" name="action" value="delete_coupon">';
+                            echo '<input type="hidden" name="global_token" value="' . $_SESSION['global_token'] . '">';
+                            echo '<input type="hidden" name="id" value="' . $coupon['id'] . '">';
+                            echo '<button type="submit" class="avtar avtar-xs btn-link-danger btn-pc-default">';
+                            echo '<i class="ti ti-trash f-18"></i>';
+                            echo '</button>';
+                            echo '</form>';
+                            echo '</td>';
+                            echo '</tr>';
+                          }
+
+                        ?>
+
                         </tbody>
                     </table>
                     </div>

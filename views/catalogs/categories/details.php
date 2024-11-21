@@ -9,7 +9,6 @@
             $response = json_decode(json_encode($controlador->getCategoriesById($id)));
             if ($response->success) {
                 $category = $response->data;
-                //var_dump($category);
             }else{
                 header('Location: '. BASE_PATH);
             }

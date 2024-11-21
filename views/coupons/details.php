@@ -74,6 +74,45 @@
                 </div>
                 <div class="card-body">
                     <div class="dt-responsive table-responsive">
+
+                    <p>Informacion del cupon</p>
+                    <table id="dom-jqry" class="table table-striped table-bordered nowrap">
+                            <thead>
+                                <tr>
+                                    <th>Nombre</th>
+                                    <th>Código</th>
+                                    <th>%</th>
+                                    <th>Fecha de inicio</th>
+                                    <th>Vencimiento</th>
+                                    <th>Uso máximo</th>
+                                    <th>Pago mínimo</th>                                    
+                                    <th>Compra mínima</th>
+                                    <th>Tipo</th> 
+                                    <th>Cuenta de uso</th>                                                                   
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <?php 
+                                $coupon1 = $CouponsController->getCouponById($coupon_id);
+                                $coupon1 = $coupon1['data'];
+                                echo '<tr>';
+                                echo '<td>'. $coupon1['name'] .'</td>';
+                                echo '<td>'. $coupon1['code'] .'</td>';
+                                echo '<td>'. $coupon1['percentage_discount'] .'%</td>';
+                                echo '<td>'. $coupon1['start_date'] .'</td>';
+                                echo '<td>'. $coupon1['end_date'] .'</td>';
+                                echo '<td>'. $coupon1['max_uses'] .'</td>';
+                                echo '<td>'. $coupon1['min_amount_required'] .'</td>';
+                                echo '<td>'. $coupon1['min_product_required'] .'</td>';
+                                echo '<td>'. $coupon1['couponable_type'] .'</td>';
+                                echo '<td>'. $coupon1['count_uses'] .'</td>';
+                                echo '</tr>';
+                                ?>
+                            </tbody>
+                        </table>
+
+                        <p>Ordenes donde se ha usado</p>
+
                         <table id="dom-jqry" class="table table-striped table-bordered nowrap">
                             <thead>
                                 <tr>

@@ -12,32 +12,11 @@
           <a href="<?= BASE_PATH ?>home" class="b-brand text-primary">
             <!-- ========   Change your logo from here   ============ -->
             <img src="<?= BASE_PATH ?>assets/images/logo-dark.svg" alt="logo image" class="logo-lg" />
-            <span class="badge bg-brand-color-2 rounded-pill ms-2 theme-version">v1.2.0</span>
+            <span class="badge bg-brand-color-2 rounded-pill ms-2 theme-version">Team Ivan Guapo Rios</span>
           </a>
         </div>
         <div class="navbar-content">
           <ul class="pc-navbar">
-            <li class="pc-item pc-caption">
-              <label>Navigation</label>
-              <i class="ph-duotone ph-gauge"></i>
-            </li>
-            <li class="pc-item pc-hasmenu">
-              <a href="#!" class="pc-link">
-                <span class="pc-micon">
-                  <i class="ph-duotone ph-gauge"></i>
-                </span>
-                <span class="pc-mtext">Dashboard</span>
-                <span class="pc-arrow"><i data-feather="chevron-right"></i></span>
-                <span class="pc-badge">2</span>
-              </a>
-              <ul class="pc-submenu">
-                <li class="pc-item"><a class="pc-link" href="index.html">Analytics</a></li>
-                <li class="pc-item"><a class="pc-link" href="affiliate.html">Affiliate</a></li>
-                <li class="pc-item"><a class="pc-link" href="finance.html">Finance</a></li>
-                <li class="pc-item"><a class="pc-link" href="../admins/helpdesk-dashboard.html">Helpdesk</a></li>
-                <li class="pc-item"><a class="pc-link" href="invoice.html">Invoice</a></li>
-              </ul>
-            </li>
             <li class="pc-item pc-caption">
               <label>Gestion de usuarios</label>
               <i class="ph-duotone ph-chart-pie"></i>

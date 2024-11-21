@@ -229,7 +229,7 @@
                           <td><?= $tag->description ?></td>
                           <td><?= $tag->slug ?></td>
                           <td>
-                            <a href="<?= BASE_PATH ?>catalogs/tags/details" class="btn btn-sm btn-light-primary"><i class="feather icon-eye"></i></a>
+                            <a href="<?= BASE_PATH ?>catalogs/tags/details/<?= $tag->id ?>" class="btn btn-sm btn-light-primary"><i class="feather icon-eye"></i></a>
                             <button onclick="getTag(<?= $tag->id ?>)" type="button" class="btn btn-sm btn-light-success me-1" data-bs-toggle="modal" data-bs-target="#editModal">
                               <i class="feather icon-edit"></i>
                             </button>

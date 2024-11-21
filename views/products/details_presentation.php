@@ -3,20 +3,19 @@
 
     $product_id = $_POST['product_id'];
 
-    include_once "../../app/products/ProductsController.php";
+    include_once "../../app/products/PresentationsController.php";
 
-    $ProductsController = new ProductsController();
-    $Product = $ProductsController->getProductById($product_id);
+    $PresentationsController = new PresentationsController();
+    $Presentation = $PresentationsController->getPresentationById($product_id);
+    $Presentation = $Presentation['data'];
+
+    // var_dump('------------------------------------------------------------' . $product_id );
+    // var_dump('------------------------------------------------------------' . $Presentation['data']['id'] );
+
 
     $price = "No disponible";
-    if (!empty($Product['presentations']) && !empty($Product['presentations'][0]['price'])) {
-        foreach ($Product['presentations'][0]['price'] as $priceData) {
-            if ($priceData['is_current_price'] == 1) {
-                $price = '$' . number_format($priceData['amount'], 2);
-                break;
-            }
-        }
-    }
+   
+    $price = '$' . number_format($Presentation['current_price']['amount'], 2);
 
     ?>
     <!doctype html>
@@ -111,108 +110,39 @@
                                 </ul>
                             </div>
                             <div class="carousel-item active">
-                            <img src="<?= htmlspecialchars($Product['cover']) ?>" class="d-block w-100" alt="Product image" />
-                            </div>
-                            <div class="carousel-item">
-                            <img src="<?= htmlspecialchars($Product['cover']) ?>" class="d-block w-100" alt="Product image" />
+                            <img src="<?= htmlspecialchars($Presentation['cover']) ?>" class="d-block w-100" alt="Product image" />
                             </div>
                             </div>
-                            <ol class="list-inline carousel-indicators position-relative product-carousel-indicators my-sm-3 mx-0">
-                            <li data-bs-target="#carouselExampleCaptions" data-bs-slide-to="0" class="list-inline-item w-25 h-auto active">
-                                <img src="../../assets/images/application/img-prod-1.jpg" class="d-block wid-50 rounded" alt="Product images" />
-                            </li>
-                            <li data-bs-target="#carouselExampleCaptions" data-bs-slide-to="1" class="list-inline-item w-25 h-auto">
-                                <img src="../../assets/images/application/img-prod-2.jpg" class="d-block wid-50 rounded" alt="Product images" />
-                            </li>
-                            </ol>
                         </div>
                         </div>
                     </div>
                     <div class="col-md-6">
-                        <span class="badge bg-success f-14">Disponible</span>
-                        <h5 class="my-3"><?= $Product['name'] ?></h5>
-                        <h5 class="mt-4 mb-sm-1 mb-0">Presentaciones</h5>
-                        <div class="offer-check-block">
-                        <div class="offer-check border rounded p-3">
-                            <div class="form-check">
-                            <input type="radio" name="radio1" class="form-check-input input-primary" id="customCheckdef1" checked="" />
-                            <label class="form-check-label d-block" for="customCheckdef1">
-                                <span class="h6 mb-0 d-block">EMI sin costo</span>
-                                <span class="text-muted offer-details"
-                                > Ahorros de hasta ₹2,322.51 en intereses de EMI con tarjetas de crédito seleccionadas</span
-                                >
-                                <span class="h6 mb-0 text-primary">1 Oferta <i class="ti ti-arrow-narrow-right"></i></span>
-                            </label>
-                            </div>
-                        </div>
-                        <div class="offer-check border rounded p-3">
-                            <div class="form-check">
-                            <input type="radio" name="radio1" class="form-check-input input-primary" id="customCheckdef2" />
-                            <label class="form-check-label d-block" for="customCheckdef2">
-                                <span class="h6 mb-0 d-block">Oferta Bancaria</span>
-                                <span class="text-muted offer-details"
-                                > Descuento de hasta ₹1,250.00 en tarjetas de crédito seleccionadas. Ahorro de hasta ₹2,322.51 
-                                en intereses de EMI con tarjetas de crédito seleccionadas.</span
-                                >
-                                <span class="h6 mb-0 text-primary">1 Oferta <i class="ti ti-arrow-narrow-right"></i></span>
-                            </label>
-                            </div>
-                        </div>
-                        <div class="offer-check border rounded p-3">
-                            <div class="form-check">
-                            <input type="radio" name="radio1" class="form-check-input input-primary" id="customCheckdef3" />
-                            <label class="form-check-label d-block" for="customCheckdef3">
-                                <span class="h6 mb-0 d-block">EMI sin costo</span>
-                                <span class="text-muted offer-details"
-                                > Ahorro de hasta ₹2,322.51 en intereses de EMI con tarjetas de crédito seleccionadas.</span
-                                >
-                                <span class="h6 mb-0 text-primary">1 Oferta <i class="ti ti-arrow-narrow-right"></i></span>
-                            </label>
-                            </div>
-                        </div>
-                        <div class="offer-check border rounded p-3">
-                            <div class="form-check">
-                            <input type="radio" name="radio1" class="form-check-input input-primary" id="customCheckdef4" />
-                            <label class="form-check-label d-block" for="customCheckdef4">
-                                <span class="h6 mb-0 d-block">Oferta bancaria</span>
-                                <span class="text-muted offer-details"
-                                > Descuento de hasta ₹1,250.00 en tarjetas de crédito seleccionadas. Ahorro de hasta ₹2,322.51 en 
-                                intereses de EMI con tarjetas de crédito seleccionadas.</span
-                                >
-                                <span class="h6 mb-0 text-primary">1 Oferta <i class="ti ti-arrow-narrow-right"></i></span>
-                            </label>
-                            </div>
-                        </div>
-                        </div>
-                        <h5 class="mt-4 mb-sm-3 mb-2 f-w-500">Descripción del producto</h5>
-                        <p><?= $Product['description'] ?></p>
-                        <div class="mb-3 row">
-                        <label class="col-form-label col-lg-3 col-sm-12">Cantidad<span class="text-danger">*</span></label>
-                        <div class="col-lg-6 col-md-12 col-sm-12">
-                            <div class="btn-group btn-group-sm mb-2 border" role="group">
-                            <button type="button" id="decrease" onclick="decreaseValue('number')" class="btn btn-link-secondary"
-                                ><i class="ti ti-minus"></i
-                            ></button>
-                            <input
-                                class="wid-35 text-center border-0 m-0 form-control rounded-0 shadow-none"
-                                type="text"
-                                id="number"
-                                value="0"
-                            />
-                            <button type="button" id="increase" onclick="increaseValue('number')" class="btn btn-link-secondary"
-                                ><i class="ti ti-plus"></i
-                            ></button>
-                            </div>
-                        </div>
-                        </div>
-                        <h3 class="mb-4"
+                        <?php
+                            if (($Presentation['status']) == "activo") {
+                                echo '<span class="badge bg-success f-14">Activo</span>';
+                            } else {
+                                echo '<span class="badge bg-danger f-14">Inactivo</span>';
+                            }
+                        ?>
+                        <h5 class="my-3"><?= $Presentation['code'] ?></h5>
+                        
+                        <h5 class="mt-4 mb-sm-3 mb-2 f-w-500">Descripción de la presentacion</h5>
+                        <p><?= $Presentation['description'] ?></p>
+                        <h5 class="mt-4 mb-sm-3 mb-2 f-w-500">Cantidad</h5>
+                        <label><?= $Presentation['stock'] ?></label>
+                        <h3 class="mt-4 mb-sm-3 mb-2 f-w-500"
                         ><b><?= $price ?></b></h3>
                         <div class="row">
-                        <div class="col-6">
-                            <div class="d-grid">
-                            <button type="button" class="btn btn-primary">Haz tu pedido aquí</button>
-                            </div>
+
+                        <div class="col-6"></div>
+
+                            <form class="d-grid" action="<?=  BASE_PATH ?>products/edit_presentation" method="POST" enctype="multipart/form-data">
+                                <input type="hidden" name="presentation_id" value="<?= $Presentation['id'] ?>">
+                                <button type="submit" class="btn btn-primary">Editar</but>
+                            </form>
+
                         </div>
+                        <h3 class="mt-4 mb-sm-3 mb-2 f-w-500"></h3>
                         <div class="col-6">
                             <div class="d-grid">
                                 <form action="<?= BASE_PATH ?>products/presentation" method="POST" enctype="multipart/form-data">

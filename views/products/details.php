@@ -18,7 +18,6 @@
         }
     }
 
-    var_dump('-----------------------------------------' . $product_id);
     ?>
     <!doctype html>
     <html lang="en">
@@ -216,7 +215,10 @@
                         </div>
                         <div class="col-6">
                             <div class="d-grid">
-                            <button type="button" class="btn btn-outline-secondary">¿Deberíamos eliminar este?</button>
+                                <form action="<?= BASE_PATH ?>products/presentation" method="POST" enctype="multipart/form-data">
+                                    <input type="hidden" name="product_id" value="<?= $product_id ?>">
+                                    <button type="submit" class="btn btn-outline-secondary">Presentaciones</button>
+                                </form>
                             </div>
                         </div>
                         </div>

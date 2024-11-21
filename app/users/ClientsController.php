@@ -147,7 +147,7 @@ class ClientsController {
 
         $responseData = json_decode($response, true);
 
-        if ($httpCode === 201 && isset($responseData['code']) && $responseData['code'] === 4) {
+        if ($httpCode === 200 && isset($responseData['code']) && $responseData['code'] === 4) {
             header("Location: " . BASE_PATH . "views/customer/index.php");
             exit();
         } else {

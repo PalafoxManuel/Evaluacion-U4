@@ -1,6 +1,13 @@
     <?php 
     include_once "../../app/config.php";
 
+    include_once "../../app/sales/OrdersController.php";
+
+    $OrdersController = new OrdersController();
+    $Orders = $OrdersController->get();
+
+    // var_dump($Orders);  
+
     ?>
     <!doctype html>
     <html lang="en">
@@ -60,10 +67,20 @@
                 <div class="card-header">
                     <h5>Ordenes</h5>
                     <div class="card-header-right d-flex align-items-center">
-                    <button type="button" class="btn btn-light-warning m-0 me-2" data-bs-toggle="modal" data-bs-target="#exampleModal">
+                    <button type="button" class="btn btn-primary m-0 me-2" data-bs-toggle="modal" data-bs-target="#exampleModal">
                         Añadir ordenes
                     </button>
-                    <input type="date" class="form-control w-auto" />
+
+                    <form action="<?= BASE_PATH ?>orders/" method="POST" enctype="multipart/form-data">
+                        <button type="submit" class="btn btn-secondary m-0 me-2">
+                            Buscar por fechas
+                        </button>
+                        <input type="date" class="form-control w-auto" id="dateOne" name="start_date" required/>
+                        <input type="date" class="form-control w-auto" id="dateTwo" name="end_date" required/>
+                        <input type="hidden" name="action" value="get_order_dates">
+                        <input type="hidden" name="global_token" value="<?= $_SESSION['global_token'] ?>">
+                    </form>
+
                     <div
                         class="modal fade"
                         id="exampleModal"
@@ -215,116 +232,40 @@
                         <tr>
                         <th class="border-top-0">Folio</th>
                         <th class="border-top-0">Total</th>
-                        <th class="border-top-0">Nombre</th>
-                        <th class="border-top-0">Direcciones</th>
+                        <th class="border-top-0">Cliente</th>
+                        <th class="border-top-0">Correo</th>
+                        <th class="border-top-0">Fecha de inicio</th>
                         </tr>
                         </thead>
                         <tbody>
-                        <tr>
-                            <td>Emily Carter</td>
-                            <td><a href="#" class="link-secondary">emily@carter.com</a></td>
-                            <td>N/A</td>
-                            <td>March 15, 2020 at 10:25 AM</td>
-                            <td>
-                            <a href="<?= BASE_PATH ?>orders/details" class="btn btn-sm btn-light-primary"><i class="feather icon-eye"></i></a>
-                            <button type="button" class="btn btn-sm btn-light-success me-1" data-bs-toggle="modal" data-bs-target="#editModal">
-                                <i class="feather icon-edit"></i>
-                            </button>
-                            <a href="#" class="btn btn-sm btn-light-danger"><i class="feather icon-trash-2"></i></a>
-                            </td>
-                        </tr>
-                        <tr>
-                        <td>Michael Davis</td>
-                            <td><a href="#" class="link-secondary">michael.davis@email.com</a></td>
-                            <td>N/A</td>
-                            <td>June 22, 2019 at 08:10 PM</td>
-                            <td>
-                            <a href="#" class="btn btn-sm btn-light-primary"><i class="feather icon-eye"></i></a>
-                            <a href="#" class="btn btn-sm btn-light-success me-1"><i class="feather icon-edit"></i></a>
-                            <a href="#" class="btn btn-sm btn-light-danger"><i class="feather icon-trash-2"></i></a>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td>Sophia Brown</td>
-                            <td><a href="#" class="link-secondary">sophia.brown@mail.com</a></td>
-                            <td>N/A</td>
-                            <td>April 10, 2021 at 02:45 PM</td>
-                            <td>
-                            <a href="#" class="btn btn-sm btn-light-primary"><i class="feather icon-eye"></i></a>
-                            <a href="#" class="btn btn-sm btn-light-success me-1"><i class="feather icon-edit"></i></a>
-                            <a href="#" class="btn btn-sm btn-light-danger"><i class="feather icon-trash-2"></i></a>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td>James Wilson</td>
-                            <td><a href="#" class="link-secondary">james.wilson@domain.com</a></td>
-                            <td>N/A</td>
-                            <td>August 30, 2022 at 11:20 AM</td>
-                            <td>
-                            <a href="#" class="btn btn-sm btn-light-success me-1"><i class="feather icon-edit"></i></a>
-                            <a href="#" class="btn btn-sm btn-light-danger"><i class="feather icon-trash-2"></i></a>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td>Ava Johnson</td>
-                            <td><a href="#" class="link-secondary">ava.johnson@mailbox.com</a></td>
-                            <td>N/A</td>
-                            <td>October 07, 2018 at 04:55 PM</td>
-                            <td>
-                            <a href="#" class="btn btn-sm btn-light-success me-1"><i class="feather icon-edit"></i></a>
-                            <a href="#" class="btn btn-sm btn-light-danger"><i class="feather icon-trash-2"></i></a>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td>William Garcia</td>
-                            <td><a href="#" class="link-secondary">william.garcia@webmail.com</a></td>
-                            <td>N/A</td>
-                            <td>May 18, 2023 at 09:30 AM</td>
-                            <td>
-                            <a href="#" class="btn btn-sm btn-light-success me-1"><i class="feather icon-edit"></i></a>
-                            <a href="#" class="btn btn-sm btn-light-danger"><i class="feather icon-trash-2"></i></a>
-                            </td>
-                        </tr>
-                        <tr>
-                        <td>Olivia Martinez</td>
-                            <td><a href="#" class="link-secondary">olivia.martinez@mailservice.com</a></td>
-                            <td>N/A</td>
-                            <td>December 25, 2020 at 07:00 PM</td>
-                            <td>
-                            <a href="#" class="btn btn-sm btn-light-success me-1"><i class="feather icon-edit"></i></a>
-                            <a href="#" class="btn btn-sm btn-light-danger"><i class="feather icon-trash-2"></i></a>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td>Benjamin Lee</td>
-                            <td><a href="#" class="link-secondary">benjamin.lee@inbox.com</a></td>
-                            <td>N/A</td>
-                            <td>February 13, 2019 at 06:40 PM</td>
-                            <td>
-                            <a href="#" class="btn btn-sm btn-light-success me-1"><i class="feather icon-edit"></i></a>
-                            <a href="#" class="btn btn-sm btn-light-danger"><i class="feather icon-trash-2"></i></a>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td>Isabella Smith</td>
-                            <td><a href="#" class="link-secondary">isabella.smith@webmail.com</a></td>
-                            <td>N/A</td>
-                            <td>July 04, 2021 at 03:05 PM</td>
-                            <td>
-                            <a href="#" class="btn btn-sm btn-light-success me-1"><i class="feather icon-edit"></i></a>
-                            <a href="#" class="btn btn-sm btn-light-danger"><i class="feather icon-trash-2"></i></a>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td>Lucas Taylor</td>
-                            <td><a href="#" class="link-secondary">lucas.taylor@domain.com</a></td>
-                            <td>N/A</td>
-                            <td>September 19, 2022 at 05:15 PM</td>
-                            <td>
-                            <a href="#" class="btn btn-sm btn-light-success me-1"><i class="feather icon-edit"></i></a>
-                            <a href="#" class="btn btn-sm btn-light-danger"><i class="feather icon-trash-2"></i></a>
-                            </td>
-                        </tr>
+                        <?php
+                            foreach ($Orders['data'] as $order) {
+                                $client = "Sin nombre";
+                                if ($order['client']['name'] != null) {
+                                    $client = $order['client']['name'];
+                                }
+
+                                $email = "Sin correo";
+                                if ($order['client']['email'] != null) {
+                                    $email = $order['client']['email'];
+                                }
+
+                                echo '<tr>';
+                                echo '<td>' . $order['folio'] . '</td>';
+                                echo '<td><a href="#" class="link-secondary">' . $order['total'] . '</a></td>';
+                                echo '<td>' . $client . '</td>';
+                                echo '<td>' . $email . '</td>';
+                                echo '<td>' . $order['coupon']['start_date'] . '</td>';
+                                echo '<td>';
+                                echo '<a href="<?= BASE_PATH ?>orders/details" class="btn btn-sm btn-light-primary"><i class="feather icon-eye"></i></a>';
+                                echo '<button type="button" class="btn btn-sm btn-light-success me-1" data-bs-toggle="modal" data-bs-target="#editModal">';
+                                    echo '<i class="feather icon-edit"></i>';
+                                echo '</button>';
+                                echo '<a href="#" class="btn btn-sm btn-light-danger"><i class="feather icon-trash-2"></i></a>';
+                                echo '</td>';
+                                echo '</tr>';
+                            }
+                        ?>
                         </tbody>
                     </table>
                     </div>

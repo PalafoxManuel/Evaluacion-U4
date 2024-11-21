@@ -24,7 +24,7 @@ if (isset($_POST['action'])) {
             $phone_number = strip_tags($_POST['phone_number']);
             $is_suscribed = isset($_POST['is_suscribed']) ? (int)$_POST['is_suscribed'] : 0;
             $level_id = strip_tags($_POST['level_id']);
-            $clientController->create($name, $email, $phone_number, $is_suscribed, $level_id);
+            $clientsController->create($name, $email, $phone_number, $is_suscribed, $level_id);
             break;
 
         case 'update_client':
@@ -34,21 +34,21 @@ if (isset($_POST['action'])) {
             $phone_number = strip_tags($_POST['phone_number']);
             $is_suscribed = isset($_POST['is_suscribed']) ? (int)$_POST['is_suscribed'] : 0;
             $level_id = strip_tags($_POST['level_id']);
-            $clientController->update($id, $name, $email, $phone_number, $is_suscribed, $level_id);
+            $clientsController->update($id, $name, $email, $phone_number, $is_suscribed, $level_id);
             break;
 
         case 'delete_client':
             $client_id = strip_tags($_POST['client_id']);
-            $clientController->delete($client_id);
+            $clientsController->delete($client_id);
             break;
 
         case 'get_all_client':
-            $clientController->get();
+            $clientsController->get();
             break;
 
         case 'get_client_by_id':
             $client_id = strip_tags($_POST['client_id']);
-            $clientController->getClientById($client_id);
+            $clientsController->getClientById($client_id);
             break;
 
         case 'get_client_widgets':
